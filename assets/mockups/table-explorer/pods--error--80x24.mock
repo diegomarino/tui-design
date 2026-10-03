@@ -1,0 +1,34 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Kube — auth expired: stale rows kept and labeled, unsafe verbs disabled
+#! state: error
+#! region r1 header 0,0,80,1
+#! region r2 table 0,1,80,21 Pods(payments)
+#! region r3 statusbar 0,22,80,1
+#! region r4 keybar 0,23,80,1
+#! focus r2
+#! selected r2 5
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Kube{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}prod-eu{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}›{/}{on:statusbar.bg} {/}{fg.default on:statusbar.bg}payments{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}›{/}{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}pods{/}{on:statusbar.bg}                      {/}{status.warning bold inverse on:statusbar.bg} STALE 3m {/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}admin@prod-eu{/}{on:statusbar.bg} {/}
+{border.focus}╭─ {/}{fg.title bold}Pods{/}{fg.muted}(payments)[9/18] {/}{border.focus}──────────────────────────────────────────────── {/}{keyhint.key bold}/{/}{search.match bold}api {/}{border.focus}─╮{/}
+{border.focus}│ {/}{status.error bold}✗ Unauthorized: {/}{fg.default}credentials for prod-eu expired 3m ago                       {/}{border.focus}│{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│   {/}{accent.primary bold}NAME↑                            {/}{table.header bold}READY STATUS        RS   CPU    MEM  AGE  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-canary-77d5c-hh21q             1/1 Running        0   12m   96Mi   3h  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-docs-5c6d8f-p4wqz              1/1 Running        0    1m   32Mi  21d  {/}{border.focus}│{/}
+{border.focus}│{/}{on:selection.bg} {/}{fg.muted bold on:selection.bg}❯{/}{on:selection.bg} {/}{fg.faint on:selection.bg}api-gateway-7f9c4b-b81dm{/}{on:selection.bg}           {/}{fg.faint on:selection.bg}1/1{/}{on:selection.bg} {/}{fg.faint on:selection.bg}Running{/}{on:selection.bg}        {/}{fg.faint on:selection.bg}0{/}{on:selection.bg}   {/}{fg.faint on:selection.bg}41m{/}{on:selection.bg}  {/}{fg.faint on:selection.bg}212Mi{/}{on:selection.bg}   {/}{fg.faint on:selection.bg}6d{/}{on:selection.bg} {/} {border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-gateway-7f9c4b-x2kqp           1/1 Running        0   38m  198Mi   6d  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-gateway-7f9c4b-x8kdz           1/1 Running        2   44m  230Mi   6d  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-migrate-28911-7zxkf            0/1 · Completed    0    0m    0Mi   2h  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-worker-6b9fd-2mncr             0/1 ✗ CrashLoop…  14    0m   18Mi  47m  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-worker-6b9fd-9tvxa             1/1 Running        0   63m  301Mi  47m  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-worker-6b9fd-qq2lp             0/1 ▲ Pending      0     -      -  12s  {/}{border.focus}│{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}╰──────────────────────────────────────────────────────────────────────────────╯{/}
+ {status.warning}▲ {/}{fg.default}showing pods as of 14:19:02 {/}{fg.muted}· auto-refresh paused{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}r{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}retry{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}:ctx{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}context{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}d{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}describe{/}{on:statusbar.bg}  {/}{fg.faint on:statusbar.bg}l{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}logs{/}{on:statusbar.bg}  {/}{fg.faint on:statusbar.bg}ctrl+d{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}delete{/}{on:statusbar.bg}     {/}{keyhint.key bold on:statusbar.bg}:{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}command{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg} {/}

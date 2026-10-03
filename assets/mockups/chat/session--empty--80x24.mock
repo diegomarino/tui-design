@@ -1,0 +1,36 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Quill — chat / agent session (empty)
+#! state: empty
+#! theme: catppuccin-mocha
+#! note: rubric (visual-craft.md, truecolor and 16 colors): C1 1 C2 2 C3 2 C4 2 C5 2 C6 1 C7 2 C8 1 = 13/16
+#! note: Archetype K reference frame. Content invented for illustration (repo acme/payments, tool rows, timings, token counts); the assistant is named quill.
+#! region r1 log 0,1,80,18 conversation
+#! region r2 header 0,0,80,1
+#! region r3 input 0,19,80,3
+#! region r4 keybar 0,23,80,1
+#! focus r3
+{accent.primary bold on:statusbar.bg} quill {/}{fg.default on:statusbar.bg}~/src/payments {/}{statusbar.fg on:statusbar.bg}· main                                             ctx 0% {/}
+
+{accent.primary bold} quill  {/}{fg.muted}new session · 214 files indexed{/}
+
+{fg.default}        Ask about this repository, or describe a change to make.{/}
+{fg.muted}        Try: why does TestRetryBackoff fail on CI?{/}
+
+{keyhint.key bold}        / {/}{keyhint.desc}commands   {/}{keyhint.key bold}@ {/}{keyhint.desc}mention a file   {/}{keyhint.key bold}! {/}{keyhint.desc}run a shell command{/}
+
+
+{fg.muted bold} recent {/}{fg.default}fix flaky retry test                    {/}{fg.faint}2h ago{/}
+{fg.default}        add idempotency keys to payouts         {/}{fg.faint}1d ago{/}
+{fg.default}        explain the ledger rounding rules       {/}{fg.faint}3d ago{/}
+
+
+
+
+
+
+{border.focus}╭──────────────────────────────────────────────────────────────────────────────╮{/}
+{border.focus}│ {/}{accent.primary bold}❯ {/}{on:cursor.bg} {/}{fg.faint} Ask anything                                                             {/}{border.focus}│{/}
+{border.focus}╰──────────────────────────────────────────────────────────────────────────────╯{/}
+{fg.muted} ready · model large · ask before edits{/}
+{keyhint.key bold on:statusbar.bg} enter {/}{keyhint.desc on:statusbar.bg}send  {/}{keyhint.key bold on:statusbar.bg}ctrl+j {/}{keyhint.desc on:statusbar.bg}newline  {/}{keyhint.key bold on:statusbar.bg}ctrl+r {/}{keyhint.desc on:statusbar.bg}resume                 {/}{keyhint.key bold on:statusbar.bg}f1 {/}{keyhint.desc on:statusbar.bg}help  {/}{keyhint.key bold on:statusbar.bg}ctrl+d {/}{keyhint.desc on:statusbar.bg}quit {/}

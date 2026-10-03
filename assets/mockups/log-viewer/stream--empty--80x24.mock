@@ -1,0 +1,32 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Tail — filter matches nothing; stream still live
+#! state: empty
+#! region r1 header 0,0,80,1
+#! region r3 log 0,1,80,21
+#! region r4 statusbar 0,22,80,1
+#! region r5 keybar 0,23,80,1
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Tail{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}api-gateway{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}3{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}pods{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}prod-eu{/}{on:statusbar.bg}                              {/}{status.success on:statusbar.bg}●{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}following{/}{on:statusbar.bg} {/}
+ {table.header bold}TIME         LVL POD  MESSAGE{/}
+
+
+
+
+
+
+
+                  {fg.default bold}No lines match {/}{search.match bold}/timeout/ {/}{fg.default bold}at level err+{/}
+
+                 {fg.muted}1,204 lines scanned since 14:07 · still following.{/}
+                       {fg.muted}Matching lines will appear here live.{/}
+
+
+
+
+
+
+
+
+
+{on:statusbar.bg} {/}{fg.default on:statusbar.bg}0{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}of{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}1,204{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}lines{/}{on:statusbar.bg}                                  {/}{statusbar.fg on:statusbar.bg}filter{/}{on:statusbar.bg} {/}{search.match on:statusbar.bg}/timeout/{/}{on:statusbar.bg}  {/}{statusbar.fg on:statusbar.bg}level{/}{on:statusbar.bg} {/}{fg.default on:statusbar.bg}err+{/}{on:statusbar.bg} {/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}esc{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}clear{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}filter{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}/{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}edit{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}filter{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}l{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}level{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}t{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}time{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}range{/}{on:statusbar.bg}          {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

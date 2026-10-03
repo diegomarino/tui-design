@@ -1,0 +1,971 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tui-design.local/schemas/tui-description-1.0.json",
+  "title": "TUI description",
+  "description": "Neutral, verifiable description of one terminal screen. Coordinates are 0-based character cells; x = column, y = row; bbox w/h in cells. No evaluative content.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "meta",
+    "regions",
+    "elements",
+    "uncertainties"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "meta": {
+      "$ref": "#/$defs/meta"
+    },
+    "palette": {
+      "description": "Tokens observed on this screen -> raw colour (#rrggbb).",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/hex"
+      }
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/region"
+      }
+    },
+    "elements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/element"
+      }
+    },
+    "screen_text": {
+      "description": "Optional: verbatim text of every row (length == cols after padding). live capture always; screenshot when assembled from pass 2. Wide chars occupy 2 cells; the continuation cell is omitted from the string.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "volatile_cells": {
+      "description": "Cells whose content changed between captures (clocks, graphs, spinners). Live capture: from capture_tui.sh <size>.meta.json; screenshot: only when two screenshots of the same state were diffed. The judge must not report inconsistencies inside these boxes.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/bbox"
+      }
+    },
+    "observations": {
+      "description": "Neutral factual statements useful to the judge (e.g. 'footer text is truncated at column 119'). No adjectives of quality.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^o[0-9]+$"
+          },
+          "text": {
+            "type": "string"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        }
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "note"
+        ],
+        "properties": {
+          "ref": {
+            "$ref": "#/$defs/id"
+          },
+          "field": {
+            "type": "string",
+            "description": "JSON pointer-ish path, e.g. 'text', 'style.fg', 'bbox.w'"
+          },
+          "kind": {
+            "enum": [
+              "unreadable",
+              "ambiguous_glyph",
+              "position",
+              "count",
+              "colour",
+              "attribute",
+              "state",
+              "occluded",
+              "truncated",
+              "volatile",
+              "other",
+              "ink_mismatch",
+              "disagreement"
+            ],
+            "description": "ink_mismatch = pixel ink check contradicts the transcribed text (a claimed blank cell has ink or a claimed glyph has none); disagreement = two passes, or script vs model, give different values (list both in alternatives)."
+          },
+          "note": {
+            "type": "string"
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "$ref": "#/$defs/source",
+            "description": "Who raised it: 'vision' (describer), 'pixel'/'derived' (script or merge step), 'sgr' (live capture)."
+          }
+        }
+      },
+      "description": "Everything the describer or a script could not establish, or where two sources disagree. Required (may be empty). Judges must not turn an uncertain field into a finding without re-describing it."
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[reo][0-9]+$"
+    },
+    "hex": {
+      "type": "string",
+      "pattern": "^#[0-9a-f]{6}$"
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "source": {
+      "enum": [
+        "sgr",
+        "pixel",
+        "vision",
+        "derived",
+        "user"
+      ]
+    },
+    "bbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "w",
+        "h"
+      ],
+      "properties": {
+        "x": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "w": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "h": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "color": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "token": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Canonical theme token from references/themes/_tokens.json (e.g. 'border.focus', 'fg.muted', 'status.error'), or a terminal slot when no token fits: 'term.fg', 'term.bg', 'ansi.red' … 'ansi.bright_white', 'p:208' (256 index); null for an off-palette truecolor."
+        },
+        "token_candidates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "When several tokens share the measured RGB (pixel path)."
+        },
+        "raw": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hex"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Coarse colour name from vision only (fallback until pixels are sampled): black, red, green, yellow, blue, magenta, cyan, white, gray, orange, purple, pink, default. Never a hex value."
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fg": {
+          "$ref": "#/$defs/color"
+        },
+        "bg": {
+          "$ref": "#/$defs/color"
+        },
+        "attrs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "bold",
+              "dim",
+              "italic",
+              "underline",
+              "double_underline",
+              "curly_underline",
+              "blink",
+              "reverse",
+              "hidden",
+              "strike",
+              "overline"
+            ]
+          }
+        },
+        "attrs_source": {
+          "$ref": "#/$defs/source"
+        },
+        "attrs_confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "link": {
+          "type": "string",
+          "description": "OSC 8 hyperlink target (live capture)."
+        }
+      }
+    },
+    "key_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "action"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Normalised key: 'enter', 'esc', 'space', 'ctrl+o', 'q', '?', 'shift+tab', 'f1'."
+        },
+        "key_raw": {
+          "type": "string",
+          "description": "As displayed: '<enter>', '^O', '⏎'."
+        },
+        "action": {
+          "type": "string",
+          "description": "Verbatim label as displayed."
+        },
+        "concept": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional normalised concept: quit, help, confirm, cancel, save, search, filter, refresh, navigate, select, toggle, edit, delete, copy, ..."
+        },
+        "bbox": {
+          "$ref": "#/$defs/bbox"
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "focused": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "selected": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "checked": {
+          "enum": [
+            true,
+            false,
+            "mixed",
+            null
+          ]
+        },
+        "expanded": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "disabled": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "current": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "aria-current analogue: active tab/page."
+        },
+        "busy": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Displayed value of gauge/progress/input, verbatim."
+        },
+        "evidence": {
+          "type": "string",
+          "description": "What on screen signals the state, in observable terms: 'reverse video', 'bg selection.bg + bold', '❯ marker at x=2', 'border.focus fg on border'. Required in practice whenever any other state field is true (enforced by the audit protocol, not the schema)."
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_path",
+        "size"
+      ],
+      "properties": {
+        "source_path": {
+          "enum": [
+            "capture",
+            "screenshot",
+            "A",
+            "B"
+          ],
+          "description": "capture = live capture (the app ran in tmux/an emulator; exact text and SGR colours); screenshot = image only (pixels and vision). 'A' and 'B' are legacy aliases (A = capture, B = screenshot) accepted for old descriptions; new descriptions must not use them."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Command line (A) or image file name (B). Do not guess the app name for B."
+        },
+        "size": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cols",
+            "rows"
+          ],
+          "properties": {
+            "cols": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "rows": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        },
+        "theme_guess": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Theme id from references/themes/ (e.g. 'catppuccin-mocha') chosen by sample_colors.py (screenshot) or by the auditor (live capture); null if no theme fits."
+            },
+            "dark": {
+              "type": "boolean"
+            },
+            "default_fg": {
+              "$ref": "#/$defs/hex"
+            },
+            "default_bg": {
+              "$ref": "#/$defs/hex"
+            },
+            "residual": {
+              "type": "number",
+              "description": "Pixel unmixing residual (B); lower = better fit."
+            },
+            "confidence": {
+              "$ref": "#/$defs/confidence"
+            }
+          }
+        },
+        "capture": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tool": {
+              "type": "string",
+              "examples": [
+                "tmux 3.7c capture-pane -p -e"
+              ]
+            },
+            "env": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "TERM, COLORTERM, NO_COLOR as given to the app."
+            },
+            "keys_sent": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stable": {
+              "type": "boolean"
+            },
+            "quiet_ms": {
+              "type": "integer"
+            },
+            "cursor": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "integer"
+                },
+                "y": {
+                  "type": "integer"
+                },
+                "visible": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "alternate_screen": {
+              "type": "boolean"
+            }
+          }
+        },
+        "image": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "width_px": {
+              "type": "integer"
+            },
+            "height_px": {
+              "type": "integer"
+            },
+            "cell_px": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "origin_px": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "grid_confidence": {
+              "$ref": "#/$defs/confidence"
+            },
+            "preprocessing": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "describer_model": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "bbox"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^r[0-9]+$"
+        },
+        "role": {
+          "enum": [
+            "screen",
+            "header",
+            "menubar",
+            "tabbar",
+            "toolbar",
+            "sidebar",
+            "list",
+            "table",
+            "tree",
+            "detail",
+            "editor",
+            "log",
+            "chart",
+            "form",
+            "input",
+            "statusbar",
+            "footer",
+            "keybar",
+            "modal",
+            "toast",
+            "popup_menu",
+            "tooltip",
+            "panel",
+            "other"
+          ]
+        },
+        "aria_role": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional ARIA 1.2 role mapping, e.g. 'dialog', 'tablist', 'log', 'status'."
+        },
+        "bbox": {
+          "$ref": "#/$defs/bbox",
+          "description": "Includes the border if any."
+        },
+        "border": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "style": {
+              "enum": [
+                "none",
+                "single",
+                "rounded",
+                "double",
+                "heavy",
+                "dashed",
+                "ascii",
+                "block",
+                "mixed"
+              ]
+            },
+            "sides": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "top",
+                  "right",
+                  "bottom",
+                  "left"
+                ]
+              }
+            },
+            "style_attrs": {
+              "$ref": "#/$defs/style"
+            }
+          }
+        },
+        "title": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "position": {
+              "enum": [
+                "top_left",
+                "top_center",
+                "top_right",
+                "bottom_left",
+                "bottom_center",
+                "bottom_right",
+                "inline"
+              ]
+            },
+            "style": {
+              "$ref": "#/$defs/style"
+            }
+          }
+        },
+        "border_labels": {
+          "description": "Other text embedded in the border (e.g. '1 of 3' counters).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "bbox": {
+                "$ref": "#/$defs/bbox"
+              },
+              "style": {
+                "$ref": "#/$defs/style"
+              }
+            }
+          }
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        },
+        "scroll": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scrollbar": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "vertical",
+                "horizontal",
+                "both",
+                null
+              ]
+            },
+            "thumb": {
+              "$ref": "#/$defs/bbox"
+            },
+            "position_text": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "order": {
+          "type": "integer",
+          "description": "Reading order (XY-cut), 0-based."
+        },
+        "z": {
+          "type": "integer",
+          "description": "Stacking: 0 = base layout; >0 overlays (modal, toast, popup)."
+        },
+        "occludes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^r[0-9]+$"
+          }
+        },
+        "volatile": {
+          "type": "boolean"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/region"
+          }
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "region",
+        "type",
+        "bbox",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^e[0-9]+$"
+        },
+        "region": {
+          "type": "string",
+          "pattern": "^r[0-9]+$"
+        },
+        "type": {
+          "enum": [
+            "text",
+            "heading",
+            "label",
+            "value",
+            "button",
+            "link",
+            "key_hint",
+            "tab",
+            "list_item",
+            "table_header",
+            "table_row",
+            "table_cell",
+            "tree_item",
+            "checkbox",
+            "radio",
+            "toggle",
+            "input_field",
+            "placeholder",
+            "cursor",
+            "prompt",
+            "progress_bar",
+            "gauge",
+            "sparkline",
+            "chart",
+            "separator",
+            "scrollbar",
+            "badge",
+            "icon",
+            "spinner",
+            "status_indicator",
+            "breadcrumb",
+            "message",
+            "other"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Generic descriptive name, e.g. 'file list row', 'commit hash'. Never an app-specific claim not printed on screen."
+        },
+        "bbox": {
+          "$ref": "#/$defs/bbox"
+        },
+        "text": {
+          "type": "string",
+          "description": "Verbatim. '[?]' = one unreadable cell; '[?*]' = unreadable run of unknown length. Keep internal spaces."
+        },
+        "truncated": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "start",
+            "end",
+            "both",
+            null
+          ],
+          "description": "Visibly cut (ellipsis or border)."
+        },
+        "spans": {
+          "description": "Style runs inside the element, in order; offsets are cell offsets from bbox.x on the element's first row.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "start",
+              "len"
+            ],
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "len": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "style": {
+                "$ref": "#/$defs/style"
+              }
+            }
+          }
+        },
+        "style": {
+          "$ref": "#/$defs/style"
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        },
+        "interactive": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Only if signalled on screen (key hint, button chrome, cursor)."
+        },
+        "key_hints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/key_hint"
+          }
+        },
+        "order": {
+          "type": "integer"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      }
+    },
+    "anchor_line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "y",
+        "x_start",
+        "text"
+      ],
+      "description": "A single-row run of plain text read with full confidence, copied verbatim; prep_screenshot.py --anchor-line uses it to calibrate column pitch.",
+      "properties": {
+        "y": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "x_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text": {
+          "type": "string",
+          "minLength": 8
+        }
+      }
+    },
+    "describer_pass1": {
+      "title": "Describer pass 1 output (layout only)",
+      "description": "Output of the vision describer on the full screenshot: regions without elements. Validate with {'$ref': '<schema>#/$defs/describer_pass1'}.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "regions",
+        "anchor_lines",
+        "focus_summary",
+        "uncertainties"
+      ],
+      "properties": {
+        "regions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/region"
+          }
+        },
+        "anchor_lines": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/anchor_line"
+          }
+        },
+        "focus_summary": {
+          "type": "string",
+          "description": "Region id that appears focused plus the visible evidence, or 'none visible'."
+        },
+        "uncertainties": {
+          "$ref": "#/properties/uncertainties"
+        }
+      }
+    },
+    "describer_pass2": {
+      "title": "Describer pass 2 output (one region)",
+      "description": "Output of the vision describer on one upscaled region crop. Coordinates are absolute screen cells. Validate with {'$ref': '<schema>#/$defs/describer_pass2'}.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "region",
+        "rows",
+        "elements",
+        "uncertainties"
+      ],
+      "properties": {
+        "region": {
+          "type": "string",
+          "pattern": "^r[0-9]+$"
+        },
+        "rows": {
+          "type": "array",
+          "description": "Verbatim rows of the region's full bbox (border and title cells included), one entry per row y = bbox.y .. bbox.y+h-1, each padded with spaces to bbox.w display cells; merged into screen_text.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "y",
+              "x",
+              "text"
+            ],
+            "properties": {
+              "y": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "x": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Column of the first character of text (normally the region's bbox.x)."
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/element"
+          }
+        },
+        "uncertainties": {
+          "$ref": "#/properties/uncertainties"
+        }
+      }
+    }
+  }
+}

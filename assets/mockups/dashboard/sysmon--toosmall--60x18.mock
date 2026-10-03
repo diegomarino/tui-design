@@ -1,0 +1,23 @@
+#! tui-mockup 1
+#! size: 60x18
+#! title: Pulse — below minimum size: current vs needed, recovery keys
+#! state: toosmall
+#! region r1 screen 0,0,60,18 too small
+
+
+
+
+
+                     {fg.title bold}Terminal too small{/}
+
+                 {fg.muted}Width  {/}{status.error bold}60   {/}{fg.muted}needs {/}{fg.default}80  {/}{status.error}✗{/}
+                 {fg.muted}Height {/}{status.error bold}18   {/}{fg.muted}needs {/}{fg.default}24  {/}{status.error}✗{/}
+
+             {fg.muted}Enlarge the window, or hide a box to fit:{/}
+
+               {keyhint.key bold}1 {/}{keyhint.desc}cpu  {/}{keyhint.key bold}2 {/}{keyhint.desc}mem  {/}{keyhint.key bold}3 {/}{keyhint.desc}net  {/}{keyhint.key bold}4 {/}{keyhint.desc}proc{/}
+
+                          {keyhint.key bold}q {/}{keyhint.desc}quit{/}
+
+
+

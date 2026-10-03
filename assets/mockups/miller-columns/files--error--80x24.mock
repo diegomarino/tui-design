@@ -1,0 +1,35 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Files — preview column shows a local, recoverable error
+#! state: error
+#! region r1 header 0,0,80,1
+#! region r2 sidebar 0,1,10,21 parent
+#! region r3 list 11,1,39,21 payments
+#! region r4 detail 51,1,29,21 preview secrets/
+#! region r5 statusbar 0,22,80,1
+#! region r6 keybar 0,23,80,1
+#! selected r3 2
+{on:statusbar.bg} {/}{fg.muted on:statusbar.bg}/var/lib/{/}{fg.default bold on:statusbar.bg}payments{/}{on:statusbar.bg}                                                              {/}
+ {accent.primary}apt/     {/}{border.default}│ {/}{accent.primary}cache/                                {/}{border.default}│{/}
+ {accent.primary}docker/  {/}{border.default}│ {/}{accent.primary}data/                                 {/}{border.default}│ {/}{status.error bold}✗ Permission denied{/}
+ {accent.primary}dpkg/    {/}{border.default}│{/}{on:selection.bg} {/}{selection.fg bold on:selection.bg}secrets/{/}{on:selection.bg}                              {/}{border.default}│{/}
+{on:selection.inactive.bg} {/}{accent.primary on:selection.inactive.bg}payment…{/}{on:selection.inactive.bg} {/}{border.default}│ {/}{accent.primary}tmp/                                  {/}{border.default}│ {/}{fg.default}Cannot list secrets/{/}
+ {accent.primary}postgre… {/}{border.default}│ {/}{fg.default}app.db                            {/}{fg.muted}48M {/}{border.default}│ {/}{fg.muted}owner root · mode drwx------{/}
+ {accent.primary}systemd/ {/}{border.default}│ {/}{fg.default}app.db-wal                       {/}{fg.muted}4.1M {/}{border.default}│{/}
+          {border.default}│ {/}{fg.default}README                           {/}{fg.muted}1.0K {/}{border.default}│ {/}{fg.muted}Nothing was changed. Open a{/}
+          {border.default}│                                       │ {/}{fg.muted}shell here with : to inspect{/}
+          {border.default}│                                       │ {/}{fg.muted}it with your own privileges.{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+          {border.default}│                                       │{/}
+{accent.primary bold inverse on:statusbar.bg} NOR {/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}drwx------{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}root{/}{on:statusbar.bg}  {/}{fg.default on:statusbar.bg}secrets/{/}{on:statusbar.bg}                                        {/}{fg.default on:statusbar.bg}3/7{/}{on:statusbar.bg}  {/}{statusbar.fg on:statusbar.bg}Top{/}{on:statusbar.bg} {/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}h{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}parent{/}{on:statusbar.bg}  {/}{fg.faint on:statusbar.bg}l{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}open{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}:{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}shell{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}r{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}retry{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}/{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}find{/}{on:statusbar.bg}                     {/}{keyhint.key bold on:statusbar.bg}F1{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

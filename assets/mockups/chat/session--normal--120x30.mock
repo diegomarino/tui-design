@@ -1,0 +1,43 @@
+#! tui-mockup 1
+#! size: 120x30
+#! title: Quill — chat / agent session (normal)
+#! state: normal
+#! theme: catppuccin-mocha
+#! note: rubric (visual-craft.md, truecolor and 16 colors): C1 1 C2 2 C3 2 C4 2 C5 2 C6 2 C7 2 C8 2 = 15/16
+#! note: Archetype K reference frame. Content invented for illustration (repo acme/payments, tool rows, timings, token counts); the assistant is named quill.
+#! region r1 log 0,1,83,24 conversation
+#! region r2 header 0,0,120,1
+#! region r3 input 0,25,120,3
+#! region r4 keybar 0,29,120,1
+#! region r5 sidebar 84,1,36,24 session
+#! focus r3
+{accent.primary bold on:statusbar.bg} quill {/}{fg.default on:statusbar.bg}~/src/payments {/}{statusbar.fg on:statusbar.bg}· main                                                                                    ctx 38% {/}
+{border.default}                                                                                   │{/}
+{border.default}                                                                                   │ {/}{fg.title bold}Changes  {/}{fg.faint}2 files{/}
+{fg.muted bold on:bg.surface} you    {/}{fg.default on:bg.surface}Run the webhook tests a few times and tell me what is flaky.               {/}{border.default}│ {/}{diff.changed}M {/}{fg.default}webhook/retry.go      {/}{diff.added}+12 {/}{diff.removed}−4{/}
+{border.default}                                                                                   │ {/}{diff.changed}M {/}{fg.default}webhook/retry_test.go {/}{diff.added}+31{/}
+{accent.primary bold} quill  {/}{status.success}✓ {/}{fg.muted}run  {/}{fg.default}go test ./internal/webhook -count 5             {/}{fg.faint}4 of 5 passed · 11s {/}{border.default}│{/}
+{fg.default}        Only TestRetryBackoff fails, once in five runs, with a deadline error.     {/}{border.default}│ {/}{fg.title bold}Plan  {/}{fg.faint}3 of 3{/}
+{border.default}                                                                                   │ {/}{status.success}✓ {/}{fg.default}reproduce the CI failure{/}
+{fg.muted bold on:bg.surface} you    {/}{fg.default on:bg.surface}Why does TestRetryBackoff fail on CI but pass locally?                     {/}{border.default}│ {/}{status.success}✓ {/}{fg.default}inject a fake clock{/}
+{border.default}                                                                                   │ {/}{status.success}✓ {/}{fg.default}cover the jitter path{/}
+{accent.primary bold} quill  {/}{fg.default}The test sleeps on the wall clock. CI runners are slower, so the           {/}{border.default}│{/}
+{fg.default}        third retry lands after the 2 s deadline and the test times out.           {/}{border.default}│ {/}{fg.title bold}Context{/}
+{status.success}        ✓ {/}{fg.muted}read {/}{fg.default}internal/webhook/retry_test.go                             {/}{fg.faint}84 lines {/}{border.default}│ {/}{ramp.low}▰▰▰▰▰▰▰▰▰▰{/}{fg.faint}▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱  {/}{fg.default}38%{/}
+{status.error}        ✗ {/}{fg.muted}run  {/}{fg.default}go test ./internal/webhook -run Retry               {/}{status.error}1 failed · 3.1s {/}{border.default}│ {/}{fg.faint}76k of 200k tokens{/}
+{status.success}        ✓ {/}{fg.muted}edit {/}{fg.default}internal/webhook/retry.go                                    {/}{fg.faint}+12 −4 {/}{border.default}│{/}
+{status.success}        ✓ {/}{fg.muted}run  {/}{fg.default}go test ./internal/webhook                         {/}{fg.faint}14 passed · 0.9s {/}{border.default}│ {/}{fg.title bold}Permissions{/}
+{fg.default}        Backoff now takes a clock.Clock; the test advances a fake clock            {/}{border.default}│ {/}{fg.muted}edits     {/}{fg.default}ask first{/}
+{fg.default}        instead of sleeping.                                                       {/}{border.default}│ {/}{fg.muted}shell     {/}{fg.default}ask first{/}
+{border.default}                                                                                   │ {/}{fg.muted}network   off{/}
+{fg.muted bold on:bg.surface} you    {/}{fg.default on:bg.surface}Also cover the jitter path.                                                {/}{border.default}│{/}
+{border.default}                                                                                   │{/}
+{accent.primary bold} quill  {/}{fg.default}Added TestRetryJitter with a seeded source: every delay stays              {/}{border.default}│{/}
+{fg.default}        within 20 % of the base delay.                                             {/}{border.default}│{/}
+{status.success}        ✓ {/}{fg.muted}edit {/}{fg.default}internal/webhook/retry_test.go                                  {/}{fg.faint}+31 {/}{border.default}│{/}
+{status.success}        ✓ {/}{fg.muted}run  {/}{fg.default}go test ./internal/webhook                         {/}{fg.faint}15 passed · 1.0s {/}{border.default}│{/}
+{border.focus}╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮{/}
+{border.focus}│ {/}{accent.primary bold}❯ {/}{fg.default}also run the race detector{/}{on:cursor.bg} {/}{border.focus}                                                                                        │{/}
+{border.focus}╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯{/}
+{status.success} ✓ {/}{fg.default}done in 41s · 2 tools · 1 file changed {/}{fg.faint}· ask before edits{/}
+{keyhint.key bold on:statusbar.bg} enter {/}{keyhint.desc on:statusbar.bg}send  {/}{keyhint.key bold on:statusbar.bg}ctrl+j {/}{keyhint.desc on:statusbar.bg}newline  {/}{keyhint.key bold on:statusbar.bg}/ {/}{keyhint.desc on:statusbar.bg}commands  {/}{keyhint.key bold on:statusbar.bg}pgup {/}{keyhint.desc on:statusbar.bg}history                                              {/}{keyhint.key bold on:statusbar.bg}f1 {/}{keyhint.desc on:statusbar.bg}help  {/}{keyhint.key bold on:statusbar.bg}ctrl+d {/}{keyhint.desc on:statusbar.bg}quit {/}

@@ -1,0 +1,37 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Pulse — multi-pane system dashboard (btop-style boxes)
+#! state: normal
+#! region r1 header 0,0,80,1
+#! region r2 chart 0,1,80,8 1 cpu
+#! region r3 panel 0,9,38,7 2 mem
+#! region r4 chart 0,16,38,6 3 net
+#! region r5 table 38,9,42,13 4 proc
+#! region r6 statusbar 0,22,80,1
+#! region r7 keybar 0,23,80,1
+#! focus r5
+#! selected r5 1
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Pulse{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}build-03{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}linux{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}6.8{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}8{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}cores{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}32{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}GiB{/}{on:statusbar.bg}                       {/}{statusbar.fg on:statusbar.bg}14:22:07{/}{on:statusbar.bg} {/}
+{border.default}╭─ {/}{keyhint.key bold}1 {/}{fg.title bold}cpu {/}{border.default}───────────────────────────────────────────────────────── {/}{fg.muted}every 2.0s {/}{border.default}─╮{/}
+{border.default}│       {/}{ramp.high}⣀               ⡀      ⡀                  {/}{fg.muted}total {/}{ramp.mid}▆▆▆▆▆▆▆▆▆▆▆▆{/}{fg.faint}▆▆▆▆▆▆ {/}{fg.default}64% {/}{border.default}│{/}
+{border.default}│      {/}{ramp.mid}⣰⣿⣆  ⢠     ⢀⣄⣾⣦⣠⣾⣿⣦⣠⣶⣦⣠⣾⣿⣤⣠⣦⣤⣄⣴⣾⣦⣴⣶⣤⣴⣷⣦⣶⣤  {/}{fg.muted}c0 {/}{ramp.mid}▆▆▆▆{/}{fg.faint}▆▆ {/}{fg.default}72%  {/}{fg.muted}c4 {/}{ramp.low}▆▆{/}{fg.faint}▆▆▆▆ {/}{fg.default}35% {/}{border.default}│{/}
+{border.default}│ {/}{ramp.low}⣠⣾⣧⣀⣴⣿⣿⣿⣷⣴⣿ ⡀⣴⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿  {/}{fg.muted}c1 {/}{ramp.low}▆▆{/}{fg.faint}▆▆▆▆ {/}{fg.default}41%  {/}{fg.muted}c5 {/}{ramp.mid}▆▆▆▆{/}{fg.faint}▆▆ {/}{fg.default}67% {/}{border.default}│{/}
+{border.default}│ {/}{ramp.low}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿  {/}{fg.muted}c2 {/}{ramp.high}▆▆▆▆▆{/}{fg.faint}▆ {/}{fg.default}88%  {/}{fg.muted}c6 {/}{ramp.mid}▆▆▆▆▆{/}{fg.faint}▆ {/}{fg.default}79% {/}{border.default}│{/}
+{border.default}│ {/}{fg.faint}-3m                                        now  {/}{fg.muted}c3 {/}{ramp.mid}▆▆▆{/}{fg.faint}▆▆▆ {/}{fg.default}55%  {/}{fg.muted}c7 {/}{ramp.mid}▆▆▆▆{/}{fg.faint}▆▆ {/}{fg.default}60% {/}{border.default}│{/}
+{border.default}│ {/}{fg.muted}load {/}{fg.default}3.42 2.98 2.51  {/}{fg.muted}up {/}{fg.default}12d 4h  {/}{fg.muted}tasks {/}{fg.default}412       3.2 GHz  {/}{fg.muted}temp {/}{status.warning}71 C           {/}{border.default}│{/}
+{border.default}╰──────────────────────────────────────────────────────────────────────────────╯{/}
+{border.default}╭─ {/}{keyhint.key bold}2 {/}{fg.title bold}mem {/}{border.default}─────────────────── {/}{fg.muted}32 GiB {/}{border.default}─╮{/}{border.focus}╭─ {/}{keyhint.key bold}4 {/}{fg.title bold}proc {/}{border.focus}──────────────────── {/}{fg.muted}sort {/}{fg.default}cpu {/}{border.focus}─╮{/}
+{border.default}│ {/}{fg.muted}used  {/}{ramp.mid}▆▆▆▆▆▆▆▆▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆  {/}{fg.default}19.8 GiB {/}{border.default}│{/}{border.focus}│    {/}{table.header bold}PID NAME                {/}{accent.primary bold}CPU%↓  {/}{table.header bold}MEM  {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}cache {/}{ramp.low}▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆   {/}{fg.default}6.1 GiB {/}{border.default}│{/}{border.focus}│{/}{on:selection.bg} {/}{accent.primary bold on:selection.bg}❯{/}{on:selection.bg} {/}{fg.muted on:selection.bg}4182{/}{on:selection.bg} {/}{selection.fg bold on:selection.bg}postgres{/}{on:selection.bg}     {/}{fg.muted on:selection.bg}▆▆▇██{/}{on:selection.bg}   {/}{fg.default on:selection.bg}38.2{/}{on:selection.bg}  {/}{fg.default on:selection.bg}2.1G{/} {border.focus}│{/}
+{border.default}│ {/}{fg.muted}avail {/}{ramp.low}▆▆▆▆▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆  {/}{fg.default}12.2 GiB {/}{border.default}│{/}{border.focus}│   {/}{fg.muted}9120 {/}{fg.default}cargo        {/}{fg.muted}▆▇▆▆▆   {/}{fg.default}21.7  1.4G {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}swap  {/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆       {/}{fg.default}0 B {/}{border.default}│{/}{border.focus}│   {/}{fg.muted}9133 {/}{fg.default}rustc        {/}{fg.muted}▆▆▆▅▅   {/}{fg.default}18.9  910M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}disk  {/}{ramp.mid}▆▆▆▆▆▆▆▆▆▆▆▆▆▆{/}{fg.faint}▆▆▆▆  {/}{fg.default}400/512G {/}{border.default}│{/}{border.focus}│   {/}{fg.muted}2210 {/}{fg.default}node         {/}{fg.muted}▄▅▄▄▃    {/}{fg.default}9.4  612M {/}{border.focus}│{/}
+{border.default}╰────────────────────────────────────╯{/}{border.focus}│   {/}{fg.muted}1877 {/}{fg.default}nginx        {/}{fg.muted}▃▃▃▃▃    {/}{fg.default}3.1   48M {/}{border.focus}│{/}
+{border.default}╭─ {/}{keyhint.key bold}3 {/}{fg.title bold}net {/}{border.default}────────────────────── {/}{fg.muted}en0 {/}{border.default}─╮{/}{border.focus}│   {/}{fg.muted}3301 {/}{fg.default}redis-server {/}{fg.muted}▂▃▃▂▃    {/}{fg.default}2.6  302M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}↓ rx  {/}{accent.primary}▃▃▃▃▄▆█▇▆▅▄▄▅▆▆▇  {/}{fg.default}48.2 MiB/s {/}{border.default}│{/}{border.focus}│   {/}{fg.muted}5520 {/}{fg.default}dockerd      {/}{fg.muted}▂▂▂▃▂    {/}{fg.default}1.9  188M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}↑ tx  {/}{accent.secondary}▂▂▂▂▂▃▃▂▂▂▂▃▃▂▂▂   {/}{fg.default}1.9 MiB/s {/}{border.default}│{/}{border.focus}│   {/}{fg.muted}7781 {/}{fg.default}prometheus   {/}{fg.muted}▂▂▃▂▂    {/}{fg.default}1.2  420M {/}{border.focus}│{/}
+{border.default}│                                    │{/}{border.focus}│   {/}{fg.muted}1203 {/}{fg.default}sshd         {/}{fg.muted}▁▁▁▁▁    {/}{fg.default}0.4   12M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}total {/}{fg.default}↓ 1.82 TiB  ↑ 214 GiB        {/}{border.default}│{/}{border.focus}│   {/}{fg.muted}6610 {/}{fg.default}celery       {/}{fg.muted}▁▂▁▁▁    {/}{fg.default}0.3  214M {/}{border.focus}│{/}
+{border.default}╰────────────────────────────────────╯{/}{border.focus}╰──────────────────────────────── {/}{fg.muted}1/412 {/}{border.focus}─╯{/}
+ {status.warning}▲ {/}{fg.default}cpu above 60% for 5m {/}{fg.faint}· since 14:17{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}↑↓{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}select{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}enter{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}details{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}/{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}filter{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}s{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}sort{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}k{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}kill{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}1-4{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}boxes{/}{on:statusbar.bg}   {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

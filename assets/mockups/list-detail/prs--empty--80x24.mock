@@ -1,0 +1,34 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Review — empty inbox that teaches where to go next
+#! state: empty
+#! region r1 header 0,0,80,1
+#! region r4 statusbar 0,22,80,1
+#! region r2 list 0,1,36,21 Inbox (0)
+#! region r3 detail 36,1,44,21 Details
+#! region r5 keybar 0,23,80,1
+#! focus r2
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Review{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:bg.raised} {/}{tab.active.fg bold on:bg.raised}1{/}{on:bg.raised} {/}{tab.active.fg bold on:bg.raised}Inbox{/}{on:bg.raised} {/}{on:statusbar.bg} {/}{tab.inactive.fg on:statusbar.bg}2{/}{on:statusbar.bg} {/}{tab.inactive.fg on:statusbar.bg}Mine{/}{on:statusbar.bg} {/}{fg.muted on:statusbar.bg}(3){/}{on:statusbar.bg}  {/}{tab.inactive.fg on:statusbar.bg}3{/}{on:statusbar.bg} {/}{tab.inactive.fg on:statusbar.bg}Team{/}{on:statusbar.bg} {/}{fg.muted on:statusbar.bg}(12){/}{on:statusbar.bg}                        {/}{statusbar.fg on:statusbar.bg}acme/payments{/}{on:statusbar.bg} {/}
+{border.focus}╭─ {/}{fg.title bold}Inbox (0) {/}{border.focus}──────────────────────╮{/}{border.default}╭─ {/}{fg.title bold}Details {/}{border.default}────────────────────────────────╮{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│  {/}{fg.default bold}Nothing needs your review.      {/}{border.focus}│{/}{border.default}│  {/}{fg.faint}No pull request selected.               {/}{border.default}│{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│  {/}{fg.muted}Pull requests that ask for your {/}{border.focus}│{/}{border.default}│                                          │{/}
+{border.focus}│  {/}{fg.muted}review or mention you land here.{/}{border.focus}│{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│  {/}{keyhint.key bold}2  {/}{keyhint.desc}your open PRs (3)            {/}{border.focus}│{/}{border.default}│                                          │{/}
+{border.focus}│  {/}{keyhint.key bold}3  {/}{keyhint.desc}team queue (12)              {/}{border.focus}│{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}│                                  │{/}{border.default}│                                          │{/}
+{border.focus}╰──────────────────────────────────╯{/}{border.default}╰──────────────────────────────────────────╯{/}
+ {status.success}✓ {/}{fg.muted}synced 14:22 {/}{fg.faint}· next check in 60s{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}2{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}mine{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}3{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}team{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}r{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}refresh{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}/{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}filter{/}{on:statusbar.bg}                             {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

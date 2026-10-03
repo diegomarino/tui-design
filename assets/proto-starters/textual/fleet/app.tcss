@@ -1,0 +1,38 @@
+/* Fleet layout. Colors come only from theme variables:
+   Textual's own ($background, ...) and the per-token ones ($tok-<token-with-dashes>)
+   registered in fleet/theme.py. */
+
+Screen {
+    background: $tok-bg-base;
+    color: $tok-fg-default;
+}
+#main { width: 100%; height: 100%; }
+#notice { display: none; width: 100%; height: 100%; content-align: center middle; text-align: center; }
+Screen.too-small #main { display: none; }
+Screen.too-small #notice { display: block; }
+
+/* header band */
+#header { height: 1; background: $tok-statusbar-bg; }
+#tabs { width: auto; height: 1; }
+#context { width: 1fr; height: 1; text-align: right; }
+
+/* panes: list fixed at 32, detail flexible */
+#body { height: 1fr; }
+#services, #detail {
+    height: 100%;
+    border: round $tok-border-default;
+    border-title-color: $tok-fg-title;
+    border-title-style: bold;
+    border-title-align: left;
+    background: $tok-bg-base;
+}
+#services { width: 32; }
+#detail { width: 1fr; }
+#services:focus, #detail:focus { border: round $tok-border-focus; }
+
+#message { height: 1; }
+
+/* key-hint bar */
+#keybar { height: 1; background: $tok-statusbar-bg; }
+#hints-left { width: 1fr; height: 1; }
+#hints-right { width: auto; height: 1; }

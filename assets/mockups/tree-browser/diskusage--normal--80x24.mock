@@ -1,0 +1,34 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Usage — tree browser (disk usage: sizes, share bars, tree guides)
+#! state: normal
+#! region r1 header 0,0,80,1
+#! region r2 tree 0,1,80,21 ~/src
+#! region r3 statusbar 0,22,80,1
+#! region r4 keybar 0,23,80,1
+#! focus r2
+#! selected r2 3
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Usage{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}~/src{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}48.2{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}GiB{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}212,904{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}files{/}{on:statusbar.bg}                       {/}{statusbar.fg on:statusbar.bg}scanned{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}in{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}4.1s{/}{on:statusbar.bg} {/}
+{border.focus}╭─ {/}{fg.title bold}~/src {/}{border.focus}──────────────────────────────────────────────────────── {/}{fg.muted}sort {/}{fg.default}size ↓ {/}{border.focus}─╮{/}
+{border.focus}│    {/}{table.header bold}SIZE     % SHARE             NAME                                         {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}48.2G  {/}{fg.muted}100% {/}{accent.primary}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆  {/}{fg.muted}▾ {/}{accent.primary}~/src                                      {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}21.4G   {/}{fg.muted}44% {/}{accent.primary}▆▆▆▆▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆  {/}{border.default}├─ {/}{fg.muted}▾ {/}{accent.primary}monorepo/                               {/}{border.focus}│{/}
+{border.focus}│{/}{on:selection.bg} {/}{accent.primary bold on:selection.bg}❯{/}{on:selection.bg}  {/}{selection.fg bold on:selection.bg}9.8G{/}{on:selection.bg}   {/}{fg.muted on:selection.bg}46%{/}{on:selection.bg} {/}{accent.primary on:selection.bg}▆▆▆▆▆▆▆{/}{fg.faint on:selection.bg}▆▆▆▆▆▆▆▆▆{/}{on:selection.bg}  {/}{border.default on:selection.bg}│{/}{on:selection.bg}  {/}{border.default on:selection.bg}├─{/}{on:selection.bg} {/}{fg.muted on:selection.bg}▸{/}{on:selection.bg} {/}{selection.fg bold on:selection.bg}node_modules/{/}{on:selection.bg}                        {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}6.1G   {/}{fg.muted}29% {/}{accent.primary}▆▆▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}│  ├─ {/}{fg.muted}▸ {/}{accent.primary}.git/                                {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}3.9G   {/}{fg.muted}18% {/}{accent.primary}▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}│  ├─ {/}{fg.muted}▾ {/}{accent.primary}target/                              {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}2.7G   {/}{fg.muted}69% {/}{accent.primary}▆▆▆▆▆▆▆▆▆▆▆{/}{fg.faint}▆▆▆▆▆  {/}{border.default}│  │  ├─ {/}{fg.muted}▸ {/}{accent.primary}debug/                            {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}1.2G   {/}{fg.muted}31% {/}{accent.primary}▆▆▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}│  │  └─ {/}{fg.muted}▸ {/}{accent.primary}release/                          {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}1.6G    {/}{fg.muted}7% {/}{accent.primary}▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}│  └─ {/}{fg.muted}▸ {/}{accent.primary}apps/                                {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}12.9G   {/}{fg.muted}27% {/}{accent.primary}▆▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}├─ {/}{fg.muted}▸ {/}{accent.primary}datasets/                               {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}7.7G   {/}{fg.muted}16% {/}{accent.primary}▆▆▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}├─ {/}{fg.muted}▸ {/}{accent.primary}vms/                                    {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}4.1G    {/}{fg.muted}9% {/}{accent.primary}▆{/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}├─ {/}{fg.muted}▸ {/}{accent.primary}payments/                               {/}{border.focus}│{/}
+{border.focus}│    {/}{fg.default}922M    {/}{fg.muted}2% {/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}├─ {/}{fg.muted}▸ {/}{accent.primary}dotfiles/                               {/}{border.focus}│{/}
+{border.focus}│     {/}{fg.default}12K    {/}{fg.muted}0% {/}{fg.faint}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆  {/}{border.default}└─   {/}{fg.default}notes.md                                {/}{border.focus}│{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}│                                                                              │{/}
+{border.focus}╰─────────────────────────────────────────────────────────────────────── {/}{fg.muted}3/13 {/}{border.focus}─╯{/}
+ {fg.default}~/src/monorepo/node_modules {/}{fg.muted}· 9.8 GiB · 184,211 files · modified 3d ago{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}↑↓{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}move{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}→{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}expand{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}←{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}collapse{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}enter{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}open{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}d{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}delete{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}s{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}sort{/}{on:statusbar.bg}     {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

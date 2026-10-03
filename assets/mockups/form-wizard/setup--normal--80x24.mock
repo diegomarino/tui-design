@@ -1,0 +1,34 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Launch — form/wizard step (labels, inputs, select, radio, checkboxes)
+#! state: normal
+#! region r1 header 0,0,80,1
+#! region r2 toolbar 0,2,80,1 steps
+#! region r3 form 0,4,80,18 Configure
+#! region r4 statusbar 0,22,80,1
+#! region r5 keybar 0,23,80,1
+#! focus r3
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Launch{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}New{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}service{/}{on:statusbar.bg}                                               {/}{statusbar.fg on:statusbar.bg}step{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}2{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}of{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}3{/}{on:statusbar.bg} {/}
+
+   {status.success}✓ {/}{fg.muted}Source  {/}{border.default}────  {/}{accent.primary}● {/}{accent.primary bold}Configure  {/}{border.default}────  {/}{fg.faint}○ Review{/}
+
+   {fg.muted}How payments-worker runs. Everything here can be changed later.{/}
+
+   {accent.primary bold}❯ Name         {/}{on:bg.surface} {/}{fg.default on:bg.surface}payments-worker{/}{on:cursor.bg} {/}{on:bg.surface}                 {/}  {fg.faint}15/32{/}
+                   {fg.faint}lowercase letters, digits and "-"{/}
+
+     {fg.default}Runtime      {/}{on:bg.surface} {/}{fg.default on:bg.surface}Go{/}{on:bg.surface} {/}{fg.default on:bg.surface}1.23{/}{on:bg.surface}                        {/}{fg.muted on:bg.surface}▾{/}{on:bg.surface} {/}  {fg.faint}from go.mod{/}
+
+     {fg.default}Region       {/}{on:bg.surface} {/}{fg.default on:bg.surface}eu-west-1{/}{on:bg.surface} {/}{fg.default on:bg.surface}·{/}{on:bg.surface} {/}{fg.default on:bg.surface}Ireland{/}{on:bg.surface}            {/}{fg.muted on:bg.surface}▾{/}{on:bg.surface} {/}
+                   {fg.faint}same region as payments-db{/}
+
+     {fg.default}Instances    {/}{on:bg.surface} {/}{fg.default on:bg.surface}3{/}{on:bg.surface}    {/}  {fg.faint}min 1 · max 20{/}
+
+     {fg.default}Memory        {/}{fg.muted}○ 256 MiB  {/}{accent.primary}● {/}{fg.default}512 MiB  {/}{fg.muted}○ 1 GiB  ○ 2 GiB{/}
+
+     {fg.default}Options       {/}{accent.primary}[x] {/}{fg.default}Public HTTPS endpoint{/}
+                   {fg.muted}[ ] {/}{fg.default}Attach to payments-db{/}
+                   {accent.primary}[x] {/}{fg.default}Autoscale when CPU > 70%{/}
+                                                       {on:bg.surface} {/}{fg.muted on:bg.surface}Back{/}{on:bg.surface} {/}  {accent.primary bold inverse} Next: Review {/}
+ {status.success}✓ {/}{fg.muted}source github.com/acme/payments {/}{fg.faint}· draft saved 14:21{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}tab{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}next{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}shift+tab{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}prev{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}←→{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}choose{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}enter{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}continue{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}esc{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}back{/}{on:statusbar.bg}    {/}{keyhint.key bold on:statusbar.bg}ctrl+c{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}cancel{/}{on:statusbar.bg} {/}
