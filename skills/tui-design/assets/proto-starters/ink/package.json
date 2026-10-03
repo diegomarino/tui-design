@@ -1,0 +1,24 @@
+{
+  "name": "fleet-ink-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "tui-design proto-starter: the Fleet demo screen in Ink 7 + React 19",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "tsx src/cli.tsx",
+    "frame": "tsx src/cli.tsx --frame",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "chalk": "5.6.2",
+    "ink": "7.1.1",
+    "react": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "19.3.0",
+    "tsx": "4.23.15",
+    "typescript": "^5.6.0"
+  }
+}

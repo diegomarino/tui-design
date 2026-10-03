@@ -1,0 +1,37 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Pulse — degraded: source lost, last sample kept and marked stale
+#! state: error
+#! region r1 header 0,0,80,1
+#! region r2 chart 0,1,80,8 1 cpu
+#! region r3 panel 0,9,38,7 2 mem
+#! region r4 chart 0,16,38,6 3 net
+#! region r5 table 38,9,42,13 4 proc
+#! region r6 statusbar 0,22,80,1
+#! region r7 keybar 0,23,80,1
+#! focus r5
+#! selected r5 1
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Pulse{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}build-03{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}linux{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}6.8{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}8{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}cores{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}32{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}GiB{/}{on:statusbar.bg}           {/}{status.warning bold inverse on:statusbar.bg} STALE 42s {/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}14:22:07{/}{on:statusbar.bg} {/}
+{border.default}╭─ {/}{keyhint.key bold}1 {/}{fg.title bold}cpu {/}{border.default}─────────────────────────────────────────────────── {/}{fg.muted}sampled 14:21:25 {/}{border.default}─╮{/}
+{border.default}│       {/}{fg.faint}⣀               ⡀      ⡀                  total {fg.muted}▆▆▆▆▆▆▆▆▆▆▆▆{/}▆▆▆▆▆▆ 64% {/}{border.default}│{/}
+{border.default}│      {/}{fg.faint}⣰⣿⣆  ⢠     ⢀⣄⣾⣦⣠⣾⣿⣦⣠⣶⣦⣠⣾⣿⣤⣠⣦⣤⣄⣴⣾⣦⣴⣶⣤⣴⣷⣦⣶⣤  c0 {fg.muted}▆▆▆▆{/}▆▆ 72%  c4 {fg.muted}▆▆{/}▆▆▆▆ 35% {/}{border.default}│{/}
+{border.default}│ {/}{fg.faint}⣠⣾⣧⣀⣴⣿⣿⣿⣷⣴⣿ ⡀⣴⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿  c1 {fg.muted}▆▆{/}▆▆▆▆ 41%  c5 {fg.muted}▆▆▆▆{/}▆▆ 67% {/}{border.default}│{/}
+{border.default}│ {/}{fg.faint}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿  c2 {fg.muted}▆▆▆▆▆{/}▆ 88%  c6 {fg.muted}▆▆▆▆▆{/}▆ 79% {/}{border.default}│{/}
+{border.default}│ {/}{fg.faint}-3m                                        now  c3 {fg.muted}▆▆▆{/}▆▆▆ 55%  c7 {fg.muted}▆▆▆▆{/}▆▆ 60% {/}{border.default}│{/}
+{border.default}│ {/}{fg.muted}load {/}{fg.faint}3.42 2.98 2.51  {/}{fg.muted}up {/}{fg.faint}12d 4h  {/}{fg.muted}tasks {/}{fg.faint}412       3.2 GHz  {/}{fg.muted}temp {/}{fg.faint}71 C           {/}{border.default}│{/}
+{border.default}╰──────────────────────────────────────────────────────────────────────────────╯{/}
+{border.default}╭─ {/}{keyhint.key bold}2 {/}{fg.title bold}mem {/}{border.default}─────────────────── {/}{fg.muted}32 GiB {/}{border.default}─╮{/}{border.focus}╭─ {/}{keyhint.key bold}4 {/}{fg.title bold}proc {/}{border.focus}──────────────────── {/}{fg.muted}sort {/}{fg.default}cpu {/}{border.focus}─╮{/}
+{border.default}│ {/}{fg.faint}used  {fg.muted}▆▆▆▆▆▆▆▆▆▆▆{/}▆▆▆▆▆▆▆  19.8 GiB {/}{border.default}│{/}{border.focus}│    {/}{table.header bold}PID NAME                {/}{accent.primary bold}CPU%↓  {/}{table.header bold}MEM  {/}{border.focus}│{/}
+{border.default}│ {/}{fg.faint}cache {fg.muted}▆▆▆{/}▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆   6.1 GiB {/}{border.default}│{/}{border.focus}│{/}{on:selection.bg} {/}{fg.muted bold on:selection.bg}❯{/}{on:selection.bg} {/}{fg.faint on:selection.bg}4182{/}{on:selection.bg} {/}{fg.faint on:selection.bg}postgres{/}{on:selection.bg}     {/}{fg.faint on:selection.bg}▆▆▇██{/}{on:selection.bg}   {/}{fg.faint on:selection.bg}38.2{/}{on:selection.bg}  {/}{fg.faint on:selection.bg}2.1G{/} {border.focus}│{/}
+{border.default}│ {/}{fg.faint}avail {fg.muted}▆▆▆▆▆▆▆{/}▆▆▆▆▆▆▆▆▆▆▆  12.2 GiB {/}{border.default}│{/}{border.focus}│   {/}{fg.faint}9120 cargo        ▆▇▆▆▆   21.7  1.4G {/}{border.focus}│{/}
+{border.default}│ {/}{fg.faint}swap  ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆       0 B {/}{border.default}│{/}{border.focus}│   {/}{fg.faint}9133 rustc        ▆▆▆▅▅   18.9  910M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.faint}disk  {fg.muted}▆▆▆▆▆▆▆▆▆▆▆▆▆▆{/}▆▆▆▆  400/512G {/}{border.default}│{/}{border.focus}│   {/}{fg.faint}2210 node         ▄▅▄▄▃    9.4  612M {/}{border.focus}│{/}
+{border.default}╰────────────────────────────────────╯{/}{border.focus}│   {/}{fg.faint}1877 nginx        ▃▃▃▃▃    3.1   48M {/}{border.focus}│{/}
+{border.default}╭─ {/}{keyhint.key bold}3 {/}{fg.title bold}net {/}{border.default}────────────────────── {/}{fg.muted}en0 {/}{border.default}─╮{/}{border.focus}│   {/}{fg.faint}3301 redis-server ▂▃▃▂▃    2.6  302M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}↓ rx  {/}{fg.faint}▃▃▃▃▄▆█▇▆▅▄▄▅▆▆▇  48.2 MiB/s {/}{border.default}│{/}{border.focus}│   {/}{fg.faint}5520 dockerd      ▂▂▂▃▂    1.9  188M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}↑ tx  {/}{fg.faint}▂▂▂▂▂▃▃▂▂▂▂▃▃▂▂▂   1.9 MiB/s {/}{border.default}│{/}{border.focus}│   {/}{fg.faint}7781 prometheus   ▂▂▃▂▂    1.2  420M {/}{border.focus}│{/}
+{border.default}│                                    │{/}{border.focus}│   {/}{fg.faint}1203 sshd         ▁▁▁▁▁    0.4   12M {/}{border.focus}│{/}
+{border.default}│ {/}{fg.muted}total {/}{fg.faint}↓ 1.82 TiB  ↑ 214 GiB        {/}{border.default}│{/}{border.focus}│   {/}{fg.faint}6610 celery       ▁▂▁▁▁    0.3  214M {/}{border.focus}│{/}
+{border.default}╰────────────────────────────────────╯{/}{border.focus}╰──────────────────────────────── {/}{fg.muted}1/412 {/}{border.focus}─╯{/}
+ {status.error bold}✗ {/}{fg.default}lost connection to build-03 {/}{fg.muted}· showing sample from 14:21:25 · retry in 5s{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}↑↓{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}select{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}enter{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}details{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}r{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}reconnect{/}{on:statusbar.bg}  {/}{fg.faint on:statusbar.bg}k{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}kill{/}{on:statusbar.bg}                   {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

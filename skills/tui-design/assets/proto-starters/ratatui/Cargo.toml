@@ -1,0 +1,10 @@
+[package]
+name = "fleet"
+version = "0.1.0"
+edition = "2024"
+description = "tui-design proto-starter: the canonical Fleet demo screen in Ratatui 0.30"
+
+[dependencies]
+ratatui = "0.30.2"   # re-exports crossterm; TestBackend is used for --frame
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

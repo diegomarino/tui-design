@@ -1,0 +1,35 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Batch jobs — list + detail (build-case design)
+#! state: normal
+#! caps: attrs=bold,dim,inverse colors=truecolor glyphs=unicode source=assumed
+#! region r1 header 0,0,80,1
+#! region r2 list 0,1,28,22 Jobs (6)
+#! region r3 detail 28,1,52,22 geo-import
+#! region r4 keybar 0,23,80,1
+#! focus r2
+#! selected r2 2
+{accent.primary bold on:statusbar.bg} batchctl {/}{statusbar.fg on:statusbar.bg} prod · 6 jobs · 1 failed{/}{on:statusbar.bg}                                             {/}
+{border.focus}╭{/}{fg.title bold}─ Jobs (6) {/}{border.focus}───────────────╮{/}{border.default}╭{/}{fg.title bold}─ geo-import {/}{border.default}─────────────────────────────────────╮{/}
+{border.focus}│{/} {status.success}✓{/}{fg.default} nightly-etl    {/}{fg.muted}     ok {/}{border.focus}│{/}{border.default}│{/} {fg.muted}job      {/}{fg.default}geo-import{/}                              {border.default}│{/}
+{border.focus}│{/} {status.success}✓{/}{fg.default} invoice-run    {/}{fg.muted}     ok {/}{border.focus}│{/}{border.default}│{/} {fg.muted}status   {/}{status.error bold}✗ failed{/}                                {border.default}│{/}
+{border.focus}│{/}{on:selection.bg} {/}{status.error bold on:selection.bg}✗{/}{selection.fg bold on:selection.bg} geo-import      failed {/}{border.focus}│{/}{border.default}│{/} {fg.muted}started  {/}{fg.default}2026-10-02 03:10{/}                        {border.default}│{/}
+{border.focus}│{/} {status.warning}▲{/}{fg.default} thumbs-gen     {/}{fg.muted}   slow {/}{border.focus}│{/}{border.default}│{/} {fg.muted}duration {/}{fg.default}4m12s{/}                                   {border.default}│{/}
+{border.focus}│{/} {status.success}✓{/}{fg.default} mail-digest    {/}{fg.muted}     ok {/}{border.focus}│{/}{border.default}│{/} {fg.muted}exit     {/}{fg.default}1{/}                                       {border.default}│{/}
+{border.focus}│{/} {status.success}✓{/}{fg.default} audit-export   {/}{fg.muted}     ok {/}{border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/} {fg.muted}last log{/}                                         {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/} {fg.faint}03:14:20 {/}{fg.default}fetch tiles: 412/980{/}                    {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/} {fg.faint}03:14:22 {/}{status.error}error: quota exceeded{/}                   {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}│{/}                          {border.focus}│{/}{border.default}│{/}                                                  {border.default}│{/}
+{border.focus}╰──────────────────────────╯{/}{border.default}╰──────────────────────────────────────────────────╯{/}
+{keyhint.key bold} j/k{/}{keyhint.desc} move  {/}{keyhint.key bold}enter{/}{keyhint.desc} open  {/}{keyhint.key bold}r{/}{keyhint.desc} rerun  {/}{keyhint.key bold}l{/}{keyhint.desc} logs{/}                           {keyhint.key bold}?{/}{keyhint.desc} help  {/}{keyhint.key bold}q{/}{keyhint.desc} quit {/}

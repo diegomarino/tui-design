@@ -1,0 +1,16 @@
+{
+  "source": "backupd--normal--80x24.mock rendered with theme tokyonight-night (render_mockup.py + ansi_render.py); the window chrome uses the theme background and border.default, both already in the frame",
+  "theme": "tokyonight-night",
+  "colors": [
+    "#1a1b26",
+    "#343a55",
+    "#545c7e",
+    "#737aa2",
+    "#9ece6a",
+    "#a9b1d6",
+    "#c0caf5",
+    "#e0af68",
+    "#f7768e",
+    "#ff9e64"
+  ]
+}

@@ -1,0 +1,28 @@
+# Raw eval results (event streams, produced files, export state) never go public
+evals/runs/
+evals/results/
+evals/prices-cache.json
+*.events.jsonl
+*.events.jsonl.gz
+export-state.json
+
+# Python and tool caches
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+node_modules/
+target/
+
+# Local agent state and skill copies (the skills CLI would discover them as extra skills)
+.claude/
+.agents/
+.codex/
+.remember/
+.playwright-mcp/
+
+# OS / editor
+.DS_Store
+*.swp

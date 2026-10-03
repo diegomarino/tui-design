@@ -1,0 +1,36 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Quill — chat / agent session (normal)
+#! state: normal
+#! theme: catppuccin-mocha
+#! note: rubric (visual-craft.md, truecolor and 16 colors): C1 2 C2 2 C3 2 C4 2 C5 2 C6 1 C7 2 C8 2 = 15/16
+#! note: Archetype K reference frame. Content invented for illustration (repo acme/payments, tool rows, timings, token counts); the assistant is named quill.
+#! region r1 log 0,1,80,18 conversation
+#! region r2 header 0,0,80,1
+#! region r3 input 0,19,80,3
+#! region r4 keybar 0,23,80,1
+#! focus r3
+{accent.primary bold on:statusbar.bg} quill {/}{fg.default on:statusbar.bg}~/src/payments {/}{statusbar.fg on:statusbar.bg}· main                                            ctx 38% {/}
+{fg.faint}        ↑ 5 earlier lines{/}
+{fg.muted bold on:bg.surface} you    {/}{fg.default on:bg.surface}Why does TestRetryBackoff fail on CI but pass locally?                  {/}
+
+{accent.primary bold} quill  {/}{fg.default}The test sleeps on the wall clock. CI runners are slower, so the{/}
+{fg.default}        third retry lands after the 2 s deadline and the test times out.{/}
+{status.success}        ✓ {/}{fg.muted}read {/}{fg.default}internal/webhook/retry_test.go                          {/}{fg.faint}84 lines{/}
+{status.error}        ✗ {/}{fg.muted}run  {/}{fg.default}go test ./internal/webhook -run Retry            {/}{status.error}1 failed · 3.1s{/}
+{status.success}        ✓ {/}{fg.muted}edit {/}{fg.default}internal/webhook/retry.go                                 {/}{fg.faint}+12 −4{/}
+{status.success}        ✓ {/}{fg.muted}run  {/}{fg.default}go test ./internal/webhook                      {/}{fg.faint}14 passed · 0.9s{/}
+{fg.default}        Backoff now takes a clock.Clock; the test advances a fake clock{/}
+{fg.default}        instead of sleeping.{/}
+
+{fg.muted bold on:bg.surface} you    {/}{fg.default on:bg.surface}Also cover the jitter path.                                             {/}
+
+{accent.primary bold} quill  {/}{fg.default}Added TestRetryJitter with a seeded source: every delay stays{/}
+{fg.default}        within 20 % of the base delay.{/}
+{status.success}        ✓ {/}{fg.muted}edit {/}{fg.default}internal/webhook/retry_test.go                               {/}{fg.faint}+31{/}
+{status.success}        ✓ {/}{fg.muted}run  {/}{fg.default}go test ./internal/webhook                      {/}{fg.faint}15 passed · 1.0s{/}
+{border.focus}╭──────────────────────────────────────────────────────────────────────────────╮{/}
+{border.focus}│ {/}{accent.primary bold}❯ {/}{fg.default}also run the race detector{/}{on:cursor.bg} {/}{border.focus}                                                │{/}
+{border.focus}╰──────────────────────────────────────────────────────────────────────────────╯{/}
+{status.success} ✓ {/}{fg.default}done in 41s · 2 tools · 1 file changed {/}{fg.faint}· ask before edits{/}
+{keyhint.key bold on:statusbar.bg} enter {/}{keyhint.desc on:statusbar.bg}send  {/}{keyhint.key bold on:statusbar.bg}ctrl+j {/}{keyhint.desc on:statusbar.bg}newline  {/}{keyhint.key bold on:statusbar.bg}/ {/}{keyhint.desc on:statusbar.bg}commands  {/}{keyhint.key bold on:statusbar.bg}pgup {/}{keyhint.desc on:statusbar.bg}history      {/}{keyhint.key bold on:statusbar.bg}f1 {/}{keyhint.desc on:statusbar.bg}help  {/}{keyhint.key bold on:statusbar.bg}ctrl+d {/}{keyhint.desc on:statusbar.bg}quit {/}

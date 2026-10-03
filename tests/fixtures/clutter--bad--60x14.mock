@@ -1,0 +1,19 @@
+#! tui-mockup 1
+#! size: 60x14
+#! title: Deliberately cluttered fixture
+#! state: normal
+#! theme: catppuccin-mocha
+{border.default}╭─ {/}{fg.title bold}Jobs {/}{border.default}───────────────────────────────────────────────────╮{/}
+{border.default}│╭─ {/}{fg.title bold}Queue {/}{border.default}────────────────────────────────────────────────╮│{/}
+{border.default}││╭─ {/}{fg.title bold}Rows {/}{border.default}───────────────────────────────────────────────╮││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-1       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-2       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-3       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-4       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-5       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-6       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-7       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}│││ {/}{status.success}● ✓ {/}{fg.default}job-8       {/}{status.success}[OK] ok             {/}{fg.muted}done             {/}{border.default}│││{/}
+{border.default}││╰──────────────────────────────────────────────────────╯││{/}
+{border.default}│╰────────────────────────────────────────────────────────╯│{/}
+{border.default}╰──────────────────────────────────────────────────────────╯{/}

@@ -1,0 +1,40 @@
+#! tui-mockup 1
+#! size: 80x24
+#! caps: attrs=bold,dim,underline,inverse colors=256 glyphs=unicode widgets=list,input source=assumed
+#! title: deploy — approvals
+#! state: normal
+#! theme: catppuccin-mocha
+#! note: Concept C (queue): requests waiting for a human as cards; the selected card joins its evidence.
+#! note: rubric 256: 15/16 (C7 1) · 16: 14/16 (C4 1, C7 1)
+#! note: Data is invented for the showcase (services, versions, people).
+#! region r1 header 0,0,80,1
+#! region r2 list 1,3,34,11 Waiting
+#! region r3 detail 36,2,44,21 payments v1.9.3
+#! region r4 input 38,21,40,1 Note
+#! region r5 keybar 0,23,80,1
+#! focus r2
+#! selected r2 0
+{accent.primary bold}  deploy  {/}{fg.muted}approvals                                    {/}{accent.primary}◇ {/}{accent.primary bold}4 {/}{fg.muted}waiting  oldest {/}{fg.default bold}42m{/}
+
+{fg.title bold}  Waiting  {/}{fg.muted}4 {/}{border.default}───────── {/}{fg.faint}oldest first {/}{on:bg.surface}                                            {/}
+ {accent.primary on:bg.surface}▌ ◇ {/}{fg.default bold on:bg.surface}payments  {/}{fg.muted on:bg.surface}v1.9.3         prod    {/}{fg.default bold on:bg.surface}payments {/}{fg.faint on:bg.surface}› {/}{fg.default on:bg.surface}prod {/}{fg.faint on:bg.surface}› {/}{fg.muted on:bg.surface}v1.9.2 {/}{fg.faint on:bg.surface}→ {/}{fg.default bold on:bg.surface}v1.9.3         {/}
+ {accent.primary on:bg.surface}▌   {/}{fg.default on:bg.surface}fix currency rounding on par⋯    {/}{fg.title bold on:bg.surface}fix currency rounding on partial refunds  {/}
+                                    {fg.muted on:bg.surface}  sam · 42m ago · on staging since 14:05    {/}
+{accent.primary}   ◇ {/}{fg.default}api  {/}{fg.muted}v2.5.0              prod  {/}{on:bg.surface}                                            {/}
+{fg.muted}     paginate /v2/orders, drop th⋯  {/}{fg.title bold on:bg.surface}  Approvals  {/}{fg.muted on:bg.surface}1 of 2 {/}{border.default on:bg.surface}──────────────────────  {/}
+                                    {status.success on:bg.surface}  ✓ {/}{fg.default on:bg.surface}priya    {/}{fg.faint on:bg.surface}approved 20m ago               {/}
+{accent.primary}   ◇ {/}{fg.default}web  {/}{fg.muted}v3.18.1             prod  {/}{accent.primary on:bg.surface}  ◇ {/}{fg.default bold on:bg.surface}you      {/}{accent.primary on:bg.surface}your call                      {/}
+{fg.muted}     checkout banner behind a fea⋯  {/}{on:bg.surface}                                            {/}
+                                    {fg.title bold on:bg.surface}  Checks  {/}{fg.muted on:bg.surface}6/6 {/}{border.default on:bg.surface}────────────────────────────  {/}
+{accent.primary}   ◇ {/}{fg.default}notify  {/}{fg.muted}v0.8.1           prod  {/}{status.success on:bg.surface}  ✓ {/}{fg.muted on:bg.surface}unit · integration · lint               {/}
+{fg.muted}     retry the queue client with ⋯  {/}{status.success on:bg.surface}  ✓ {/}{fg.muted on:bg.surface}migration · canary · security           {/}
+                                    {on:bg.surface}                                            {/}
+{fg.title bold}  Decided today  {/}{fg.muted}5 {/}{border.default}──────────────── {/}{fg.title bold on:bg.surface}  Changes  {/}{fg.muted on:bg.surface}+214 −87 {/}{border.default on:bg.surface}──────────────────────  {/}
+{status.success}    ✓ {/}{fg.default}auth     {/}{fg.faint}v4.2.1        13:10  {/}{fg.muted on:bg.surface}  ⋯c/refunds/rounding.py {/}{diff.added on:bg.surface}■■■■{/}{diff.removed on:bg.surface}■■   {/}{diff.added on:bg.surface}+120 {/}{diff.removed on:bg.surface}−41  {/}
+{status.success}    ✓ {/}{fg.default}worker   {/}{fg.faint}v1.12.4       12:44  {/}{fg.muted on:bg.surface}  ⋯unds/test_rounding.py {/}{diff.added on:bg.surface}■■■{/}{diff.removed on:bg.surface}■      {/}{diff.added on:bg.surface}+74 {/}{diff.removed on:bg.surface}−12  {/}
+{status.success}    ✓ {/}{fg.default}web      {/}{fg.faint}v3.18.0       12:28  {/}{fg.muted on:bg.surface}  ⋯0042_refund_scale.sql {/}{diff.added on:bg.surface}■             +14  {/}
+{status.error}    ✗ {/}{fg.default}worker   {/}{fg.faint}v1.13.0-rc1   11:58  {/}{fg.muted on:bg.surface}  docs/refunds.md        {/}{diff.added on:bg.surface}■{/}{diff.removed on:bg.surface}■         {/}{diff.added on:bg.surface}+6 {/}{diff.removed on:bg.surface}−34  {/}
+{status.success}    ✓ {/}{fg.default}api      {/}{fg.faint}v2.4.1        11:52  {/}{fg.muted on:bg.surface}  Note                                      {/}
+                                    {on:bg.surface}  {/}{fg.faint underline on:bg.raised} optional; required to reject           {/}{on:bg.surface}  {/}
+                                    {on:bg.surface}                                            {/}
+{keyhint.key bold} ↑↓ {/}{keyhint.desc}request  {/}{keyhint.key bold}a {/}{keyhint.desc}approve  {/}{keyhint.key bold}x {/}{keyhint.desc}reject  {/}{keyhint.key bold}d {/}{keyhint.desc}diff                         {/}{keyhint.key bold}? {/}{keyhint.desc}help  {/}{keyhint.key bold}q {/}{keyhint.desc}quit{/}

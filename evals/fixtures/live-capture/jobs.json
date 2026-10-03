@@ -1,0 +1,117 @@
+{
+  "host": "build-07",
+  "jobs": [
+    {
+      "name": "db-backup",
+      "schedule": "0 2 * * *",
+      "last_run": "2026-10-02 00:00",
+      "next_run": "10-03 03:00",
+      "duration": "12s",
+      "state": "ok"
+    },
+    {
+      "name": "log-rotate",
+      "schedule": "0 0 * * *",
+      "last_run": "2026-10-02 01:07",
+      "next_run": "10-03 04:11",
+      "duration": "3m40s",
+      "state": "ok"
+    },
+    {
+      "name": "cert-renew",
+      "schedule": "0 4 * * 1",
+      "last_run": "2026-10-02 02:14",
+      "next_run": "10-03 05:22",
+      "duration": "1m02s",
+      "state": "failed"
+    },
+    {
+      "name": "report-weekly",
+      "schedule": "0 6 * * 1",
+      "last_run": "2026-10-02 03:21",
+      "next_run": "10-03 06:33",
+      "duration": "48s",
+      "state": "ok"
+    },
+    {
+      "name": "cache-warm",
+      "schedule": "*/15 * * * *",
+      "last_run": "2026-10-02 04:28",
+      "next_run": "10-03 07:44",
+      "duration": "2h11m",
+      "state": "running"
+    },
+    {
+      "name": "index-rebuild",
+      "schedule": "30 1 * * *",
+      "last_run": "2026-10-02 05:35",
+      "next_run": "10-03 08:55",
+      "duration": "9s",
+      "state": "late"
+    },
+    {
+      "name": "tmp-cleanup",
+      "schedule": "0 */6 * * *",
+      "last_run": "2026-10-02 06:42",
+      "next_run": "10-03 00:06",
+      "duration": "12s",
+      "state": "ok"
+    },
+    {
+      "name": "metrics-rollup",
+      "schedule": "5 * * * *",
+      "last_run": "2026-10-02 07:49",
+      "next_run": "10-03 01:17",
+      "duration": "3m40s",
+      "state": "ok"
+    },
+    {
+      "name": "invoice-export",
+      "schedule": "0 3 1 * *",
+      "last_run": "2026-10-02 08:56",
+      "next_run": "10-03 02:28",
+      "duration": "1m02s",
+      "state": "failed"
+    },
+    {
+      "name": "mirror-sync",
+      "schedule": "*/30 * * * *",
+      "last_run": "2026-10-02 00:03",
+      "next_run": "10-03 03:39",
+      "duration": "48s",
+      "state": "ok"
+    },
+    {
+      "name": "audit-archive",
+      "schedule": "0 5 * * 0",
+      "last_run": "2026-10-02 01:10",
+      "next_run": "10-03 04:50",
+      "duration": "2h11m",
+      "state": "ok"
+    },
+    {
+      "name": "geoip-update",
+      "schedule": "0 7 * * 3",
+      "last_run": "2026-10-02 02:17",
+      "next_run": "10-03 05:01",
+      "duration": "9s",
+      "state": "late"
+    },
+    {
+      "name": "thumbs-purge",
+      "schedule": "45 2 * * *",
+      "last_run": "2026-10-02 03:24",
+      "next_run": "10-03 06:12",
+      "duration": "12s",
+      "state": "ok"
+    },
+    {
+      "name": "quota-check",
+      "schedule": "*/10 * * * *",
+      "last_run": "2026-10-02 04:31",
+      "next_run": "10-03 07:23",
+      "duration": "3m40s",
+      "state": "ok"
+    }
+  ]
+}

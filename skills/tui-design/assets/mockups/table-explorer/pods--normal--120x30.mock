@@ -1,0 +1,40 @@
+#! tui-mockup 1
+#! size: 120x30
+#! title: Kube — table/grid explorer (k9s-style resource table)
+#! state: normal
+#! region r1 header 0,0,120,1
+#! region r2 table 0,1,120,27 Pods(payments)
+#! region r3 statusbar 0,28,120,1
+#! region r4 keybar 0,29,120,1
+#! focus r2
+#! selected r2 1
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Kube{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}prod-eu{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}›{/}{on:statusbar.bg} {/}{fg.default on:statusbar.bg}payments{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}›{/}{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}pods{/}{on:statusbar.bg}                                                                         {/}{statusbar.fg on:statusbar.bg}admin@prod-eu{/}{on:statusbar.bg} {/}
+{border.focus}╭─ {/}{fg.title bold}Pods{/}{fg.muted}(payments)[18] {/}{border.focus}────────────────────────────────────────────────────────────────────────────────────── {/}{mark}2 marked {/}{border.focus}─╮{/}
+{border.focus}│   {/}{table.header bold}NAME                                         READY STATUS              RS  {/}{accent.primary bold}CPU↓    {/}{table.header bold}MEM  AGE          IP      NODE  {/}{border.focus}│{/}
+{border.focus}│{/}{on:selection.bg} {/}{accent.primary bold on:selection.bg}❯{/}{on:selection.bg} {/}{selection.fg bold on:selection.bg}ledger-0{/}{on:selection.bg}                                       {/}{fg.default on:selection.bg}1/1{/}{on:selection.bg} {/}{fg.default on:selection.bg}Running{/}{on:selection.bg}              {/}{fg.default on:selection.bg}0{/}{on:selection.bg}   {/}{fg.default on:selection.bg}88m{/}{on:selection.bg}  {/}{fg.default on:selection.bg}512Mi{/}{on:selection.bg}  {/}{fg.default on:selection.bg}14d{/}{on:selection.bg}    {/}{fg.default on:selection.bg}10.4.3.5{/}{on:selection.bg}  {/}{fg.default on:selection.bg}pool-a-2{/}{on:selection.bg} {/} {border.focus}│{/}
+{border.focus}│   {/}{fg.default}ledger-1                                       1/1 Running              0   81m  498Mi  14d    10.4.5.6  pool-b-1  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}api-worker-6b9fd-9tvxa                         1/1 Running              0   63m  301Mi  47m   10.4.5.12  pool-b-1  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}api-gateway-7f9c4b-x8kdz                       1/1 Running              2   44m  230Mi   6d   10.4.6.14  pool-b-2  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}api-gateway-7f9c4b-b81dm                       1/1 Running              0   41m  212Mi   6d   10.4.3.27  pool-a-2  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}api-gateway-7f9c4b-x2kqp                       1/1 Running              0   38m  198Mi   6d   10.4.5.30  pool-b-1  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}billing-5d8f7c-4kfjw                           1/1 Running              0   22m  144Mi   2d   10.4.6.21  pool-b-2  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}billing-5d8f7c-r7wnx                           1/1 Running              1   19m  151Mi   2d   10.4.2.33  pool-a-1  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}webhooks-8f7d6-mm9ts                           1/1 Running              {/}{status.warning}3   {/}{fg.default}17m  131Mi   1d   10.4.6.45  pool-b-2  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}webhooks-8f7d6-6jq2c                           1/1 Running              0   15m  120Mi   1d   10.4.5.44  pool-b-1  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}api-canary-77d5c-hh21q                         1/1 Running              0   12m   96Mi   3h   10.4.7.19  pool-b-3  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}payouts-6c4d9-hx2vb                            1/1 Running              0    9m   88Mi   5d   10.4.2.52  pool-a-1  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}redis-0                                        1/1 Running              0    6m  302Mi  30d    10.4.3.2  pool-a-2  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}ledger-2                                       1/1 {/}{status.warning}▲ Terminating        {/}{fg.default}0    3m  470Mi  14d    10.4.6.7  pool-b-2  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.default}api-docs-5c6d8f-p4wqz                          1/1 Running              0    1m   32Mi  21d   10.4.2.11  pool-a-1  {/}{border.focus}│{/}
+{border.focus}│   {/}{fg.faint}api-migrate-28911-7zxkf                        0/1 · Completed          0    0m    0Mi   2h   10.4.2.40  pool-a-1  {/}{border.focus}│{/}
+{border.focus}│{/}{mark}▌  {/}{fg.default}api-worker-6b9fd-2mncr                         {/}{status.error}0/1 {/}{status.error bold}✗ CrashLoopBackOff  {/}{status.warning}14    {/}{fg.default}0m   18Mi  47m    10.4.3.8  pool-a-2  {/}{border.focus}│{/}
+{border.focus}│{/}{mark}▌  {/}{fg.default}api-worker-6b9fd-qq2lp                         {/}{status.error}0/1 {/}{status.warning}▲ Pending            {/}{fg.default}0     -      -  12s           -         -  {/}{border.focus}│{/}
+{border.focus}│                                                                                                                      │{/}
+{border.focus}│                                                                                                                      │{/}
+{border.focus}│                                                                                                                      │{/}
+{border.focus}│                                                                                                                      │{/}
+{border.focus}│                                                                                                                      │{/}
+{border.focus}│                                                                                                                      │{/}
+{border.focus}╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯{/}
+ {status.success}✓ {/}{fg.default}deleted pod api-worker-6b9fd-zz01m {/}{fg.faint}· 4s ago{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}enter{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}containers{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}l{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}logs{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}d{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}describe{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}s{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}shell{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}space{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}mark{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}ctrl+d{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}delete{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}2{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}/{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}filter{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}shift+c{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}sort{/}{on:statusbar.bg}   {/}{keyhint.key bold on:statusbar.bg}:{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}command{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg} {/}

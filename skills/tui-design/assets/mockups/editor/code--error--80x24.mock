@@ -1,0 +1,31 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Editor — :q refused: unsaved buffer reported on the message line
+#! state: error
+#! region r2 editor 0,0,80,22 retry.go
+#! region r3 statusbar 0,22,80,1
+#! region r5 statusbar 0,23,80,1 message line
+  {fg.faint}10  {/}{fg.faint italic}// Retry delivers ev and backs off exponentially on 5xx{/}
+  {fg.faint}11  {/}{fg.faint italic}// responses and timeouts.{/}
+  {fg.faint}12  {/}{accent.secondary}func {/}{fg.default}(c *Client) {/}{accent.primary}Retry{/}{fg.default}(ctx context.Context, ev Event) error {{{/}
+{on:bg.surface}  {/}{fg.default bold on:bg.surface}13{/}{on:bg.surface}      {/}{fg.default on:text-selection.bg}dela{/}{cursor.fg on:cursor.bg}y{/}{on:bg.surface} {/}{fg.default on:bg.surface}:={/}{on:bg.surface} {/}{fg.default on:bg.surface}c.base{/}{on:bg.surface}                                                       {/}
+{status.error}● {/}{fg.faint}14{/}{diff.changed}▍     {/}{accent.secondary}for {/}{fg.default}attempt := 1; attempt <= {/}{status.error underline}maxAttempts{/}{fg.default}; attempt++ {{  {/}{status.error}● undefined: m…{/}
+  {fg.faint}15          {/}{fg.default}res, err := c.send(ctx, ev){/}
+  {fg.faint}16          {/}{accent.secondary}if {/}{fg.default}err == nil && res.StatusCode < 500 {{{/}
+  {fg.faint}17              {/}{accent.secondary}return {/}{fg.default}nil{/}
+  {fg.faint}18          {/}{fg.default}}}{/}
+{status.warning}● {/}{fg.faint}19{/}{diff.added}▍         {/}{fg.default}c.log.{/}{accent.primary}Warn{/}{fg.default}({/}{fg.muted}"delivery failed"{/}{fg.default}, {/}{fg.muted}"attempt"{/}{fg.default}, attempt)  {/}{status.warning}● odd number o…{/}
+  {fg.faint}20          {/}{accent.secondary}select {/}{fg.default}{{{/}
+  {fg.faint}21          {/}{accent.secondary}case {/}{fg.default}<-time.After(delay):{/}
+  {fg.faint}22              {/}{fg.default}delay *= 2{/}
+  {fg.faint}23          {/}{accent.secondary}case {/}{fg.default}<-ctx.Done():{/}
+  {fg.faint}24              {/}{accent.secondary}return {/}{fg.default}ctx.Err(){/}
+  {fg.faint}25          {/}{fg.default}}}{/}
+  {fg.faint}26      {/}{fg.default}}}{/}
+  {fg.faint}27      {/}{accent.secondary}return {/}{fg.default}ErrRetriesExhausted{/}
+  {fg.faint}28  {/}{fg.default}}}{/}
+  {fg.faint}29{/}
+  {fg.faint}30  {/}{accent.secondary}func {/}{fg.default}(c *Client) {/}{accent.primary}send{/}{fg.default}(ctx context.Context, ev Event) (*http.Response, erro{/}
+  {fg.faint}31      {/}{fg.default}body, err := json.{/}{accent.primary}Marshal{/}{fg.default}(ev){/}
+{accent.primary bold inverse on:statusbar.bg} NOR {/}{on:statusbar.bg}  {/}{fg.default on:statusbar.bg}internal/webhook/retry.go{/}{on:statusbar.bg} {/}{status.warning bold on:statusbar.bg}[+]{/}{on:statusbar.bg}                    {/}{status.error on:statusbar.bg}●{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}1{/}{on:statusbar.bg}  {/}{status.warning on:statusbar.bg}●{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}1{/}{on:statusbar.bg}   {/}{statusbar.fg on:statusbar.bg}1{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}sel{/}{on:statusbar.bg}  {/}{statusbar.fg on:statusbar.bg}13:9{/}{on:statusbar.bg}  {/}
+ {status.error bold}✗ {/}{status.error}1 unsaved buffer: retry.go  {/}{fg.muted}:w save · :q! discard{/}

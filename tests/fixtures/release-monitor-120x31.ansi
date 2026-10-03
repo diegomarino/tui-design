@@ -1,0 +1,30 @@
+ [2m 1 Doctor [22m [7m[36m 2 Monitor [27m[33m▲8 [39m[2m 3 Control [22m                                  [2macme-corp/storefront-stage · run 8 · pass 4s ago[22m
+ [2m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[22m
+
+ [1m[36m▾ Needs attention [39m[22m[2m(8)[22m [32m live [39m [2m─────────────────────────────────────────────────────────────────────────────────────────[22m
+  [36m❯ [32m✔ [39m[2m#286[22m  [1mUS2 client — add inline assignment[22m    done · docs not updated                                            [36m ●[39m
+  [36m  [32m✔ [39m[2m#292[22m  US3 client — inline edit + delete     done · docs not updated
+  [36m  [32m✔ [39m[2m#293[22m  i18n parity — add tests/client keys   done · docs not updated
+  [36m  [32m✔ [39m[2m#294[22m  finalize contracts/openapi            done · docs not updated
+  [2m        + 2 more with the same ruling (#295 #299)[22m
+  [36m  [35m■ [39m      architect                             no terminal is hosting this role — relaunch it
+  [36m  [35m■ [39m      coordinator                           no terminal is hosting this role — relaunch it
+
+ ▾ Pull requests [2m(4)[22m [2m──────────────────────────────────────────────────────────────────────────────────────────────────[22m
+  [2m  #288[22m  dependabot/npm_and_yarn/minor-and-patch-9169bc                         [32mCI ✔[39m   [90mreview –[39m              [2m0 threads[22m
+  [2m  #296[22m  dependabot/npm_and_yarn/fastify-security-6369                          [32mCI ✔[39m   [90mreview –[39m              [2m0 threads[22m
+  [2m  #297[22m  dependabot/npm_and_yarn/npm-security-689a3e                            [32mCI ✔[39m   [90mreview –[39m              [2m0 threads[22m
+  [2m  #300[22m  localize 3 hardcoded en-US date/time sites                             [31mCI ✖[39m   [31mchanges requested[39m     [2m2 threads[22m
+
+ ▾ Activity [2m(45)[22m [2m──────────────────────────────────────────────────────────────────────────────────────────────────────[22m
+    [34m→ [39mtask "priceRules.ts validator" dispatched to worker                                                        [2m6h ago[22m
+    [36m» [39mverify-pr #303 — verified + merged (#277 i18n); new tip 5067aed                                            [2m6h ago[22m
+    [34m→ [39mtask "localize checkout-page dates/times" dispatched to worker                                             [2m7h ago[22m
+    [36m» [39mverify-pr #302 — verified + merged (#279 redo); new tip 6b0a497                                            [2m7h ago[22m
+    [36m» [39m[2mverify-pr #300 — NOT merged (unresolved audit P2, thread-race)[22m                                            [2m13h ago[22m
+    [35m⇈ [39m[2mPR #300 opened · localize 3 hardcoded en-US sites[22m                                                         [2m13h ago[22m
+    [35m⇈ [39m[2mPR #299 opened · author tests/e2e/checkout.spec.ts[22m                                                        [2m13h ago[22m
+    [36m» [39m[2mverify-pr #295 (reworked) — verified + merged[22m                                                             [2m15h ago[22m
+  [2m    … 37 older hidden · press a to expand[22m
+ [2m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[22m
+ [2mj/k focus section · space collapse · a all activity[22m                                          [2m1·2·3/tab switch · q quit[22m

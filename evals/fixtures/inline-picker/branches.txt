@@ -1,0 +1,10 @@
+main
+develop
+release/2026.10
+feature/csv-export
+feature/dark-header
+feature/retry-backoff
+fix/login-timeout
+fix/null-avatar
+chore/bump-deps
+docs/install-guide

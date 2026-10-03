@@ -1,0 +1,299 @@
+{
+  "version": 1,
+  "description": "Canonical semantic color tokens for TUIs. Single source of truth for theme JSONs and scripts. Tier 1 = every theme maps it explicitly; tier 2 = mapped when evidence exists, otherwise resolved through `fallback`. `ansi16` = default rendering in 16-color mode: '<color> [attrs...]' where color is 0-15, 'default' (terminal default fg/bg) 'reverse' (swap fg/bg of the cell) or, for fg tokens, 'bg' (text in the terminal background color on the fill: drawn as the fill's slot + SGR 7); themes may override per token.",
+  "neutral_ladder": "N0 bg.inset < N1 bg.base < N2 bg.surface < N3 bg.raised < N4 fg.faint < N5 fg.muted < N6 fg.default (dark themes; light themes invert lightness but keep the same roles)",
+  "tokens": {
+    "bg.base": {
+      "tier": 1,
+      "kind": "bg",
+      "role": "App background (N1). Most panes sit directly on it.",
+      "ansi16": "default"
+    },
+    "bg.inset": {
+      "tier": 1,
+      "kind": "bg",
+      "role": "Below-base chrome (N0): header/status bands, sidebars, secondary panes.",
+      "ansi16": "default"
+    },
+    "bg.surface": {
+      "tier": 1,
+      "kind": "bg",
+      "role": "Raised fill (N2): filled panels, inputs, popups, menus, modal bodies, cursor line.",
+      "ansi16": "default"
+    },
+    "bg.raised": {
+      "tier": 1,
+      "kind": "bg",
+      "role": "Highest neutral fill (N3): neutral selection, hovered/active row, active tab background.",
+      "ansi16": "default"
+    },
+    "bg.overlay": {
+      "tier": 2,
+      "kind": "bg",
+      "role": "Floating layers (modal, dropdown, toast) when they need to differ from bg.surface.",
+      "fallback": "bg.surface",
+      "ansi16": "default"
+    },
+    "bg.stripe": {
+      "tier": 2,
+      "kind": "bg",
+      "role": "Zebra-stripe fill for alternate records in wide tables and logs. Weakest fill on screen (contrast vs bg.base below selection.inactive.bg); dark themes go darker than base so lighter steps stay for meaning. Decoration only: never carries meaning (vanishes in 16 colors and NO_COLOR).",
+      "fallback": "bg.inset",
+      "ansi16": "default"
+    },
+    "fg.default": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Body text (N6).",
+      "ansi16": "default"
+    },
+    "fg.muted": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Secondary text (N5): labels, descriptions, timestamps, unfocused pane text.",
+      "ansi16": "default dim"
+    },
+    "fg.faint": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Tertiary text (N4): disabled items, placeholders, guides, separators, line numbers.",
+      "ansi16": "8"
+    },
+    "fg.on-accent": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Text drawn on chromatic fills: chips, badges, accent selection, mode pills.",
+      "ansi16": "bg"
+    },
+    "fg.title": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Panel and section titles (usually fg.default + bold).",
+      "fallback": "fg.default",
+      "ansi16": "default bold"
+    },
+    "border.default": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Inactive borders, rules and dividers.",
+      "ansi16": "8"
+    },
+    "border.focus": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Border of the focused pane.",
+      "fallback": "accent.primary",
+      "ansi16": "4"
+    },
+    "accent.primary": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Identity accent: active tab, cursor glyph, spinner, primary button, focus.",
+      "ansi16": "4"
+    },
+    "accent.secondary": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Second identity hue: secondary highlights, categorical contrast with accent.primary.",
+      "ansi16": "5"
+    },
+    "selection.bg": {
+      "tier": 1,
+      "kind": "bg",
+      "role": "Background of the focused list/table cursor row.",
+      "ansi16": "reverse"
+    },
+    "selection.fg": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Text on selection.bg.",
+      "fallback": "fg.default",
+      "ansi16": "reverse"
+    },
+    "selection.inactive.bg": {
+      "tier": 2,
+      "kind": "bg",
+      "role": "Cursor row background in an unfocused pane.",
+      "fallback": "bg.surface",
+      "ansi16": "default"
+    },
+    "text-selection.bg": {
+      "tier": 2,
+      "kind": "bg",
+      "role": "Selected text range inside inputs/editors.",
+      "fallback": "selection.bg",
+      "ansi16": "reverse"
+    },
+    "cursor.bg": {
+      "tier": 2,
+      "kind": "bg",
+      "role": "Text-input cursor block.",
+      "fallback": "fg.default",
+      "ansi16": "reverse"
+    },
+    "cursor.fg": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Glyph under the text cursor.",
+      "fallback": "bg.base",
+      "ansi16": "reverse"
+    },
+    "status.error": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Errors, failures, destructive actions.",
+      "ansi16": "1"
+    },
+    "status.warning": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Warnings, degraded, needs attention.",
+      "ansi16": "3"
+    },
+    "status.success": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Success, healthy, done.",
+      "ansi16": "2"
+    },
+    "status.info": {
+      "tier": 1,
+      "kind": "fg",
+      "role": "Neutral information, hints.",
+      "ansi16": "6"
+    },
+    "search.match": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Search/filter match highlight in text.",
+      "fallback": "status.warning",
+      "ansi16": "3 bold"
+    },
+    "link": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Hyperlinks (OSC 8) and URL text.",
+      "fallback": "accent.primary",
+      "ansi16": "4 underline"
+    },
+    "keyhint.key": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "The key in a key hint ('q' in 'q quit').",
+      "fallback": "accent.primary",
+      "ansi16": "4"
+    },
+    "keyhint.desc": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "The action label in a key hint.",
+      "fallback": "fg.muted",
+      "ansi16": "default dim"
+    },
+    "statusbar.bg": {
+      "tier": 2,
+      "kind": "bg",
+      "role": "Status/footer/header bar fill.",
+      "fallback": "bg.inset",
+      "ansi16": "default"
+    },
+    "statusbar.fg": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Status/footer/header bar text.",
+      "fallback": "fg.muted",
+      "ansi16": "default"
+    },
+    "tab.active.fg": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Label of the active tab.",
+      "fallback": "accent.primary",
+      "ansi16": "4 bold"
+    },
+    "tab.active.bg": {
+      "tier": 2,
+      "kind": "bg",
+      "role": "Fill of the active tab (Rosé Pine spec: active tab = Text on Overlay, i.e. a raised neutral).",
+      "fallback": "bg.raised",
+      "ansi16": "default"
+    },
+    "tab.inactive.fg": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Labels of inactive tabs.",
+      "fallback": "fg.muted",
+      "ansi16": "default dim"
+    },
+    "table.header": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Table column headers (consensus: body text, 5/7 ports; style them bold).",
+      "fallback": "fg.default",
+      "ansi16": "default bold"
+    },
+    "mark": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Marked / multi-selected item indicator.",
+      "fallback": "accent.secondary",
+      "ansi16": "5"
+    },
+    "scrollbar.thumb": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Scrollbar thumb.",
+      "fallback": "fg.faint",
+      "ansi16": "default"
+    },
+    "scrollbar.track": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Scrollbar track.",
+      "fallback": "border.default",
+      "ansi16": "8"
+    },
+    "diff.added": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Added lines/items.",
+      "fallback": "status.success",
+      "ansi16": "2"
+    },
+    "diff.removed": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Removed lines/items.",
+      "fallback": "status.error",
+      "ansi16": "1"
+    },
+    "diff.changed": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Changed lines/items.",
+      "fallback": "status.info",
+      "ansi16": "4"
+    },
+    "ramp.low": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Severity gauge, low end (good).",
+      "fallback": "status.success",
+      "ansi16": "2"
+    },
+    "ramp.mid": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Severity gauge, middle.",
+      "fallback": "status.warning",
+      "ansi16": "3"
+    },
+    "ramp.high": {
+      "tier": 2,
+      "kind": "fg",
+      "role": "Severity gauge, high end (bad).",
+      "fallback": "status.error",
+      "ansi16": "1"
+    }
+  }
+}

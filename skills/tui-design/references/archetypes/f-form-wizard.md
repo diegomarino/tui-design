@@ -1,0 +1,36 @@
+# F. Form / wizard
+
+Part of [layout-archetypes.md](../layout-archetypes.md) (rules L1–L14 in §2). Sketch rows: `H` header, `M` message line, `K` keybar. § numbers on the **Exemplars** line are sections of [exemplars.md](../exemplars.md).
+
+**Use** to collect a handful of inputs once, with validation. **Avoid** for settings people tweak often (use B: list of settings + detail editor).
+
+```text
+H  Launch │ New service                                    step 2 of 3
+   ✓ Source  ────  ● Configure  ────  ○ Review          <- stepper
+ ❯ Name          payments-worker█             15/32      <- focused field
+                 lowercase letters, digits and "-"       <- help / error row
+   Runtime       Go 1.23                   ▾   from go.mod
+   Memory        ○ 256 MiB  ● 512 MiB  ○ 1 GiB
+   Options       [x] Public HTTPS endpoint
+                                          Back    Next: Review
+K  tab next  shift+tab prev  ←→ choose  enter continue  esc back   ctrl+c cancel
+```
+- **Grid**: label column fixed (14), field column fixed width (≈34 at 80 cols, filled `bg.surface` so empty fields are visible), help/error row directly under its field, asides (counter, units) right of the field in `fg.faint`.
+- **Focus**: one field at a time in reading order; `tab`/`shift+tab` move, `←→` change radio/select, `space` toggles checkboxes, `enter` advances (submit on the last field), `esc` = previous step. Focus = `❯` + label in `accent.primary` + text cursor (`cursor.bg`).
+- **Keys**: printable keys type into the field; global hints must use non-printable keys (`ctrl+c cancel`, `F1 help`), never `?` or `q` (printable keys edit text, so `q`, `j`, `/` must not fire globally).
+- **Responsive**: 80x24 = single column, stepper inline (`setup--normal--80x24`); 120x30 = steps sidebar + form + live preview of the result (`service.yaml`, `setup--normal--120x30`); 170x40 = same, form never wider than ~64 cols (L7). Min: fields + buttons must fit; otherwise scroll the form, keep stepper and footer fixed.
+- **States**: error on submit = summary line at top (`✗ 2 fields need attention`), label + message in `status.error` under each invalid field, focus moved to the first invalid field (`setup--error--80x24`); busy submit = button label becomes `⠹ Creating…`, inputs read-only.
+- **Pitfalls**: validating on every keystroke with red text before the user finished; errors only in a modal; losing entered values when going back a step; hidden required fields below the fold without a hint.
+- **Exemplars**: huh (gum) forms, posting (catalog); lazygit commit popups (§2).
+
+**Forms and settings screens** (rules for F, and for a settings screen built as B: list of settings + editor). Sources checked 2026-10.
+
+| # | Rule | When | Concrete example | Source |
+|---|---|---|---|---|
+| F1 | **Validate on blur or submit, never per keystroke.** Once an error shows, re-check on each change so it clears the moment the value is valid; remote or slow checks (name taken?) only on submit, or debounced | every text field | Port: typing `80` shows nothing; leaving the field with `80800` shows `✗ must be 1-65535` under it; editing to `8080` clears it at once | huh `field_input.go` (`Blur()` runs `validate`; Next/Submit validate; a key press clears `err`); Clack `prompt.ts` and @inquirer/input `index.ts` (validate only on Enter) |
+| F2 | **Framework defaults that validate too early**: Textual `Input` validates on `"blur"`, `"changed"` **and** `"submitted"` unless told otherwise; pass `validate_on=["blur", "submitted"]`. huh, Clack and @inquirer validate late already (F1). Single-prompt libraries have no blur: one prompt = one field | Textual forms | `Input(validators=[Integer(1, 65535)], validate_on=["blur", "submitted"])` | Textual 8.2.8 `widgets/_input.py`: "The default is to do validation for all messages" |
+| F3 | **Mark required fields yourself, in words.** No framework here draws a required marker: huh has no `Required()`, and its `" *"` after a title is the **error indicator**, shown only while the field has an error. Write `(required)` after the label, or an `*` explained once at the top; color may add, never carry, the meaning | forms with optional fields | `Name (required)`; or header `* required` and `Name *`; do not reuse huh's red ` *` for it | huh `theme.go` (`ErrorIndicator … SetString(" *")`), `field_text.go` (appended only when `err != nil`) |
+| F4 | **Conditional fields appear after their trigger and never move the focus.** Hide or show whole steps when you can; a hidden field keeps its value but is not validated or submitted (`derived:`). huh hides only **groups** (`Group.WithHideFunc(func() bool)`), and recomputes a select's options with `OptionsFunc(fn, &binding)`; Textual: a `reactive` attribute plus `watch_<name>` setting `widget.display = False` (removes it from layout) | fields that depend on another answer | `Runtime: Go` shows `Go version`; switching to `Python` hides it and shows `Python version` in the same row; focus stays on Runtime | huh `group.go`, `field_select.go`; [Textual reactivity guide](https://textual.textualize.io/guide/reactivity/) |
+| F5 | **Choose the persistence model per screen and say it on screen.** (a) **live-apply**: each change takes effect at once, no dirty state, no discard (htop's F2 setup applies at once and writes `htoprc` only on a clean exit; "Sending any signal will cause all configuration changes to be lost"); (b) **explicit save**: Apply/Save/Cancel when fields are validated together, written atomically, trigger an expensive reload or a remote call; (c) **defer to `$EDITOR`**: open the config file in the user's editor (lazygit Status panel `e` "Edit config file"), then reload it (LC3). No convention is settled; pick by the cost of a bad value | every settings screen | live: `Theme ▸ nord` recolors at once, message line `saved`; explicit: footer `ctrl+s save  esc discard…` | [htop(1)](https://github.com/htop-dev/htop/blob/main/htop.1.in) "CONFIG FILE"; lazygit `docs/keybindings` "Status" |
+| F6 | **Dirty state is visible and leaving it is designed.** With explicit save: a `●` or `modified` mark in the title, `2 unsaved changes` in the message line, the save key active only when dirty. Esc on a clean form leaves at once; on a dirty one it asks, with the count and three outs: `Discard 2 unsaved changes?  s save  d discard  esc keep editing`. Ctrl-C still exits (it is not a discard confirmation, LC1) but says what was lost on stderr | explicit-save forms, multi-step wizards | the wizard's step 3 `esc` returns to step 2 with values kept (F pitfalls); quitting from step 3 asks once | `derived:`; friction rules in [interaction.md](../interaction.md) §4 |
+| F7 | **Writes are atomic, and a failed or partial environment never rewrites saved settings.** Write a temp file and rename; a failed save keeps the form dirty with every value; a source missing at load (device, server, plugin) shows as unavailable and stays in the saved config | anything that writes config | btop drops `gpu0` from `shown_boxes` when that GPU is temporarily missing (open bug); do the opposite: `gpu0  ▲ not detected` in the list, config untouched | [btop #906](https://github.com/aristocratos/btop/issues/906); `derived:` temp + rename |

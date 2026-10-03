@@ -1,0 +1,187 @@
+{
+  "skill_name": "tui-design",
+  "notes": "Trigger evaluations for the tui-design skill description. No measured trigger rate is claimed until the full set is run (see README.md). T = should trigger, N = near-miss that should not.",
+  "harness": "evals/run_trigger_evals.py --harness claude|codex (sequential, fresh temp project per query)",
+  "queries": [
+    {
+      "id": "T01",
+      "query": "I'm building a terminal app to manage my docker containers. Can you design the layout, keybindings and empty/error states before I write any code?",
+      "should_trigger": true,
+      "area": "design a TUI"
+    },
+    {
+      "id": "T02",
+      "query": "Quiero hacer una TUI para gestionar mis notas en el terminal, con lista a la izquierda y preview a la derecha. Diseñame el layout y los atajos de teclado.",
+      "should_trigger": true,
+      "area": "design a TUI (es)"
+    },
+    {
+      "id": "T03",
+      "query": "Here's a screenshot of my terminal app, the status bar looks off and I can't tell which pane is focused. What would you change? [screenshot of a two-pane terminal UI attached]",
+      "should_trigger": true,
+      "area": "review screenshot"
+    },
+    {
+      "id": "T04",
+      "query": "Te paso una captura de mi TUI en Ratatui: los paneles se ven muy cargados y el foco no se distingue. ¿Qué mejorarías?",
+      "should_trigger": true,
+      "area": "review screenshot (es)"
+    },
+    {
+      "id": "T05",
+      "query": "I'm writing a herdr plugin that shows a side panel with the running agents and their status. How should I lay out the panel so it reads well in a narrow 40-column pane?",
+      "should_trigger": true,
+      "area": "host plugin panel"
+    },
+    {
+      "id": "T06",
+      "query": "I want a tmux popup (display-popup) that lists my git branches and lets me switch with j/k and enter. Help me design how it should look and behave.",
+      "should_trigger": true,
+      "area": "tmux/nvim popup"
+    },
+    {
+      "id": "T07",
+      "query": "Estoy haciendo un plugin de Neovim que abre una ventana flotante con una lista de tareas navegable con teclado. ¿Cómo diseño la interfaz para que sea clara y no se rompa al redimensionar?",
+      "should_trigger": true,
+      "area": "nvim plugin panel (es)"
+    },
+    {
+      "id": "T08",
+      "query": "The columns in my table view are misaligned whenever a row has a Japanese filename, everything after it shifts right. How do I fix the widths?",
+      "should_trigger": true,
+      "area": "misaligned columns"
+    },
+    {
+      "id": "T09",
+      "query": "Mi lista en la terminal se descuadra cuando hay emojis en los nombres, el borde derecho queda desalineado. ¿Cómo calculo el ancho correcto de las celdas?",
+      "should_trigger": true,
+      "area": "emoji width (es)"
+    },
+    {
+      "id": "T10",
+      "query": "My interactive terminal dashboard should respect NO_COLOR and still be usable when colors are off. Which states rely on color alone right now and what should replace them?",
+      "should_trigger": true,
+      "area": "NO_COLOR"
+    },
+    {
+      "id": "T11",
+      "query": "In Bubble Tea, how should I structure the model and Update for a three-pane file browser so that resizing and focus changes don't glitch the layout?",
+      "should_trigger": true,
+      "area": "Bubble Tea build"
+    },
+    {
+      "id": "T12",
+      "query": "I'm building a Textual app for browsing logs. Help me pick the screen layout, the footer key hints and how to show a loading and empty state.",
+      "should_trigger": true,
+      "area": "Textual build"
+    },
+    {
+      "id": "T13",
+      "query": "Con Ink estoy haciendo un asistente interactivo para configurar proyectos; ¿cómo organizo los pasos, los atajos y los mensajes de error para que se sienta pulido?",
+      "should_trigger": true,
+      "area": "Ink / gum build (es)"
+    },
+    {
+      "id": "T14",
+      "query": "Map the Catppuccin Mocha palette onto my terminal UI: which colors for borders, selected row, dim text, warnings and errors so contrast stays readable on 16-color terminals?",
+      "should_trigger": true,
+      "area": "color scheme"
+    },
+    {
+      "id": "T15",
+      "query": "I want my Kubernetes pod viewer to feel like k9s or lazygit: dense panes, a one-line key hint bar, a command prompt. Where do I start with the layout?",
+      "should_trigger": true,
+      "area": "lazygit/k9s look"
+    },
+    {
+      "id": "T16",
+      "query": "Build me an fzf-style fuzzy picker in Go with a prompt line, a filtered list that highlights the matches and a preview window on the right. Make the UI feel right.",
+      "should_trigger": true,
+      "area": "fzf-like picker"
+    },
+    {
+      "id": "T17",
+      "query": "I need a live terminal dashboard showing CPU, memory and a request log, like btop. How should I arrange the widgets and what refresh behavior avoids flicker?",
+      "should_trigger": true,
+      "area": "terminal dashboard"
+    },
+    {
+      "id": "N01",
+      "query": "Design a responsive admin dashboard in React with a sidebar, a data table and dark mode toggle using Tailwind.",
+      "should_trigger": false,
+      "area": "web UI"
+    },
+    {
+      "id": "N02",
+      "query": "I'm building a macOS app in SwiftUI with a sidebar and a detail view. How do I handle window resizing and toolbar items?",
+      "should_trigger": false,
+      "area": "native GUI"
+    },
+    {
+      "id": "N03",
+      "query": "Can you give me a Ghostty config with a Catppuccin theme, JetBrains Mono at 14pt and a bit of window padding?",
+      "should_trigger": false,
+      "area": "emulator theme"
+    },
+    {
+      "id": "N04",
+      "query": "¿Cómo cambio la paleta de colores de iTerm2 a Dracula y activo la transparencia de la ventana?",
+      "should_trigger": false,
+      "area": "kitty/iTerm2 theme (es)"
+    },
+    {
+      "id": "N05",
+      "query": "I want to write my own Neovim colorscheme in Lua. How do I define highlight groups for Treesitter and LSP diagnostics?",
+      "should_trigger": false,
+      "area": "nvim colorscheme"
+    },
+    {
+      "id": "N06",
+      "query": "How do I set up a Nerd Font in the VS Code integrated terminal so the icons show up?",
+      "should_trigger": false,
+      "area": "vscode nerd font"
+    },
+    {
+      "id": "N07",
+      "query": "Write a bash script that backs up a directory to a tarball, rotates the last 7 copies and logs to a file. No interaction needed, it runs from cron.",
+      "should_trigger": false,
+      "area": "plain bash script"
+    },
+    {
+      "id": "N08",
+      "query": "Add pagination and rate limiting to my Express REST API for the /orders endpoint. Show the route handlers and the middleware.",
+      "should_trigger": false,
+      "area": "REST API"
+    },
+    {
+      "id": "N09",
+      "query": "Necesito un dashboard en CSS puro con grid, tarjetas de métricas y gráficos responsivos que se vean bien en móvil.",
+      "should_trigger": false,
+      "area": "CSS dashboard (es)"
+    },
+    {
+      "id": "N10",
+      "query": "In my Jupyter notebook the matplotlib plots are tiny and the legend overlaps the lines. How do I fix the figure size and layout?",
+      "should_trigger": false,
+      "area": "jupyter plots"
+    },
+    {
+      "id": "N11",
+      "query": "How do I add subcommands and a --verbose flag to my Python CLI with argparse, and generate the --help text automatically?",
+      "should_trigger": false,
+      "area": "arg parser"
+    },
+    {
+      "id": "N12",
+      "query": "Help me theme my starship prompt: show git branch, python version and a right-aligned clock with a gruvbox-like color palette.",
+      "should_trigger": false,
+      "area": "starship prompt"
+    },
+    {
+      "id": "N13",
+      "query": "What's the cleanest way to rebase a feature branch onto main, squash the fixup commits and force-push safely?",
+      "should_trigger": false,
+      "area": "git workflow"
+    }
+  ]
+}

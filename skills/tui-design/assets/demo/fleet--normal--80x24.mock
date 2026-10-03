@@ -1,0 +1,35 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Fleet — list + detail demo (canonical starter screen)
+#! state: normal
+#! region r1 header 0,0,80,1
+#! region r2 list 0,1,32,21 Services (6)
+#! region r3 detail 32,1,48,21 api-gateway
+#! region r4 statusbar 0,22,80,1
+#! region r5 keybar 0,23,80,1
+#! focus r2
+#! selected r2 0
+{accent.primary bold on:statusbar.bg} Fleet {/}{border.default on:statusbar.bg}│{/}{tab.active.fg bold on:tab.active.bg} 1 Services {/}{tab.inactive.fg on:statusbar.bg} 2 Logs {/}{tab.inactive.fg on:statusbar.bg} 3 Config {/}{on:statusbar.bg}                       {/}{statusbar.fg on:statusbar.bg}prod-eu · 12:04:31 {/}
+{border.focus}╭─{/}{fg.title bold} Services (6) {/}{border.focus}───────────────╮{/}{border.default}╭─{/}{fg.title bold} api-gateway {/}{border.default}────────────────────────────────╮{/}
+{border.focus}│{/}{on:selection.bg} {/}{accent.primary bold on:selection.bg}❯{/}{on:selection.bg} {/}{status.success on:selection.bg}●{/}{on:selection.bg} {/}{selection.fg bold on:selection.bg}api-gateway   {/}{status.success on:selection.bg}running   {/}{on:selection.bg} {/}{border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}│{/}   {status.success}●{/} {fg.default}auth          {/}{fg.muted}running   {/} {border.focus}│{/}{border.default}│{/} {fg.muted}Status    {/}{status.success}● running{/}{fg.muted} · 3/3 replicas{/}           {border.default}│{/}
+{border.focus}│{/}   {status.warning}▲{/} {fg.default}billing       {/}{status.warning}degraded  {/} {border.focus}│{/}{border.default}│{/} {fg.muted}Version   {/}{fg.default}v2.4.1{/}                             {border.default}│{/}
+{border.focus}│{/}   {status.error}✗{/} {fg.default}search        {/}{status.error}failed    {/} {border.focus}│{/}{border.default}│{/} {fg.muted}Uptime    {/}{fg.default}6d 4h{/}                              {border.default}│{/}
+{border.focus}│{/}   {status.success}●{/} {fg.default}worker        {/}{fg.muted}running   {/} {border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}│{/}   {fg.faint}·{/} {fg.faint}cron          {/}{fg.faint}stopped   {/} {border.focus}│{/}{border.default}│{/} {fg.muted}CPU       {/}{ramp.low}██████{/}{fg.faint}░░░░░░░░░░░░░░{/}{fg.default} 31%{/}           {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/} {fg.muted}Memory    {/}{ramp.mid}█████████████{/}{fg.faint}░░░░░░░{/}{fg.default} 68%{/}           {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/} {fg.muted}Errors    {/}{ramp.high}██████████████████{/}{fg.faint}░░{/}{fg.default} 92%{/}           {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/} {fg.title bold}Recent events{/}                                {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/} {fg.faint}12:01  {/}{status.success}✓{/}{fg.default} deploy v2.4.1 finished{/}              {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/} {fg.faint}11:58  {/}{status.warning}▲{/}{fg.default} p95 latency 820 ms{/}                  {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/} {fg.faint}11:40  {/}{fg.faint}·{/}{fg.muted} scaled 2 → 3 replicas{/}               {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/} {fg.faint}11:02  {/}{status.error}✗{/}{fg.default} health check timeout{/}                {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}│{/}                              {border.focus}│{/}{border.default}│{/}                                              {border.default}│{/}
+{border.focus}╰──────────────────────────────╯{/}{border.default}╰──────────────────────────────────────────────╯{/}
+ {status.success}✓{/}{fg.default} deployed api-gateway v2.4.1{/}{fg.faint} · 2m ago{/}                                         
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}↑↓{/}{keyhint.desc on:statusbar.bg} select  {/}{keyhint.key bold on:statusbar.bg}enter{/}{keyhint.desc on:statusbar.bg} open  {/}{keyhint.key bold on:statusbar.bg}/{/}{keyhint.desc on:statusbar.bg} filter  {/}{keyhint.key bold on:statusbar.bg}r{/}{keyhint.desc on:statusbar.bg} restart  {/}{keyhint.key bold on:statusbar.bg}tab{/}{keyhint.desc on:statusbar.bg} pane  {/}{on:statusbar.bg}          {/}{keyhint.key bold on:statusbar.bg}?{/}{keyhint.desc on:statusbar.bg} help  {/}{keyhint.key bold on:statusbar.bg}q{/}{keyhint.desc on:statusbar.bg} quit {/}

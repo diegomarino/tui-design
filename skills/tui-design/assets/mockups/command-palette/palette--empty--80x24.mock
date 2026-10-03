@@ -1,0 +1,32 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Command palette — no matches; teaches the matching rule
+#! state: empty
+#! region r9 modal 8,3,64,15 Command palette
+#! region r10 input 9,4,62,1 query
+#! region r11 keybar 0,23,80,1
+#! focus r9
+{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}Fleet{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}│{/} {fg.faint}1 Services {/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}2{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}Logs{/}{on:statusbar.bg}  {/}{fg.faint on:statusbar.bg}3{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}Config{/}{on:statusbar.bg}                        {/}{fg.faint on:statusbar.bg}prod-eu{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}·{/}{on:statusbar.bg} {/}{fg.faint on:statusbar.bg}12:04:31{/}{on:statusbar.bg} {/}
+{fg.faint}╭─ Services (6) ───────────────╮╭─ api-gateway ────────────────────────────────╮{/}
+{fg.faint}│ ❯ ● api-gateway   running    ││                                              │{/}
+{fg.faint}│   ● au{/}{border.focus on:bg.overlay}╭─{/}{on:bg.overlay} {/}{fg.title bold on:bg.overlay}Command{/}{on:bg.overlay} {/}{fg.title bold on:bg.overlay}palette{/}{on:bg.overlay} {/}{border.focus on:bg.overlay}───────────────────────────────────{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}ctrl+p{/}{on:bg.overlay} {/}{border.focus on:bg.overlay}─╮{/}       {fg.faint}│{/}
+{fg.faint}│   ▲ bi{/}{border.focus on:bg.overlay}│{/}{on:bg.overlay} {/}{accent.primary bold on:bg.overlay}❯{/}{on:bg.overlay} {/}{fg.default on:bg.overlay}xyzzy{/}{on:cursor.bg} {/}{on:bg.overlay}                                           {/}{fg.faint on:bg.overlay}0{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}of{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}112{/}{on:bg.overlay}  {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│   ✗ se{/}{border.default on:bg.overlay}├──────────────────────────────────────────────────────────────┤{/}       {fg.faint}│{/}
+{fg.faint}│   ● wo{/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}                                                              {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│   · cr{/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}                                                              {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}   {/}{fg.default bold on:bg.overlay}No{/}{on:bg.overlay} {/}{fg.default bold on:bg.overlay}commands{/}{on:bg.overlay} {/}{fg.default bold on:bg.overlay}match{/}{on:bg.overlay} {/}{search.match bold on:bg.overlay}"xyzzy"{/}{on:bg.overlay}                                  {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}                                                              {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}   {/}{fg.muted on:bg.overlay}Letters{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}match{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}in{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}order,{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}so{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}"rst"{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}finds{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}Restart.{/}{on:bg.overlay}            {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}   {/}{fg.muted on:bg.overlay}Delete{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}letters{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}with{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}backspace,{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}or{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}clear{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}with{/}{on:bg.overlay} {/}{fg.muted on:bg.overlay}ctrl+u.{/}{on:bg.overlay}       {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}                                                              {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}                                                              {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay}                                                              {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.default on:bg.overlay}├──────────────────────────────────────────────────────────────┤{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}│{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}112{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}commands{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}·{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}every{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}key{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}binding{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}is{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}listed{/}{on:bg.overlay} {/}{fg.faint on:bg.overlay}here{/}{on:bg.overlay}              {/}{border.focus on:bg.overlay}│{/}       {fg.faint}│{/}
+{fg.faint}│       {/}{border.focus on:bg.overlay}╰──────────────────────────────────────────────────────────────╯{/}       {fg.faint}│{/}
+{fg.faint}│                              ││                                              │{/}
+{fg.faint}│                              ││                                              │{/}
+{fg.faint}│                              ││                                              │{/}
+{fg.faint}╰──────────────────────────────╯╰──────────────────────────────────────────────╯{/}
+ {fg.faint}✓ deployed api-gateway v2.4.1 · 2m ago{/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}↑↓{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}select{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}enter{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}run{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}tab{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}complete{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}ctrl+u{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}clear{/}{on:statusbar.bg}                     {/}{keyhint.key bold on:statusbar.bg}esc{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}close{/}{on:statusbar.bg} {/}

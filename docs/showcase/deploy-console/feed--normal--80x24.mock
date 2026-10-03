@@ -1,0 +1,38 @@
+#! tui-mockup 1
+#! size: 80x24
+#! caps: attrs=bold,dim,underline,inverse colors=256 glyphs=unicode widgets=list,input source=assumed
+#! title: deploy — release feed
+#! state: normal
+#! theme: catppuccin-mocha
+#! note: Concept A (feed): events newest first; live rollouts pinned on top; the selected event opens in place.
+#! note: rubric 256: 15/16 (C7 1) · 16: 15/16 (C7 1)
+#! note: Data is invented for the showcase (services, versions, people).
+#! region r1 header 0,0,80,1
+#! region r2 list 1,7,78,16 Release feed
+#! region r3 keybar 0,23,80,1
+#! focus r2
+#! selected r2 0
+{accent.primary bold}  deploy  {/}{fg.muted}feed                         {/}{status.info}● {/}{fg.default bold}2 {/}{fg.muted}rolling  {/}{accent.primary}◇ {/}{accent.primary bold}4 {/}{fg.muted}to approve  {/}{status.error}✗ {/}{fg.default bold}1 {/}{fg.muted}failed{/}
+
+{fg.title bold}  Rolling now  {/}{fg.muted}2 {/}{border.default}─────────────────────────────────────────────────────────────{/}
+{status.info}        ● {/}{fg.default bold}search   {/}{fg.muted}prod     {/}{status.info}━━━━━━━{/}{fg.faint}━━━━━  {/}{fg.default bold}3/5 {/}{fg.muted}pods{/}
+{status.info}        ● {/}{fg.default bold}web      {/}{fg.muted}staging  {/}{status.info}━━━━━━{/}{fg.faint}━━━━━━  {/}{fg.default bold}1/2 {/}{fg.muted}pods{/}
+
+{fg.title bold}  Today  {/}{fg.muted}12 {/}{border.default}───────────────────────────────────────────────────── {/}{fg.faint}newest first{/}
+ {selection.fg on:selection.bg} 14:21 ✗ {/}{selection.fg bold on:selection.bg}notify   {/}{selection.fg on:selection.bg}prod    v0.8.0   health check failed on 2 of 4 pods, rolle⋯ {/}
+ {selection.fg on:selection.bg}       │ 503 on 2 of 4 pods · rolled back to v0.7.9 at 14:23                  {/}
+{fg.faint}  14:05 {/}{accent.primary}◇ {/}{fg.default}payments {/}{fg.muted}staging {/}{fg.faint}v1.9.3   {/}{fg.muted}deployed, approval requested for prod{/}
+{fg.faint}  13:58 {/}{accent.primary}◇ {/}{fg.default}api      {/}{fg.muted}staging {/}{fg.faint}v2.5.0   {/}{fg.muted}deployed, approval requested for prod{/}
+{fg.faint}  13:40 {/}{status.warning}▲ {/}{fg.default}payments {/}{fg.muted}prod    {/}{fg.faint}v1.9.2   {/}{fg.default}error rate 1.8% over the 1.0% alert line{/}
+{fg.faint}  13:12 {/}{status.success}✓ {/}{fg.default}auth     {/}{fg.muted}prod    {/}{fg.faint}v4.2.1   {/}{fg.muted}deployed, approved by priya{/}
+{fg.faint}  12:47 {/}{status.success}✓ {/}{fg.default}worker   {/}{fg.muted}prod    {/}{fg.faint}v1.12.4  {/}{fg.muted}deployed, approved by sam{/}
+{fg.faint}  12:30 {/}{status.success}✓ {/}{fg.default}web      {/}{fg.muted}prod    {/}{fg.faint}v3.18.0  {/}{fg.muted}deployed, approved by alex{/}
+{fg.faint}  11:55 {/}{status.success}✓ {/}{fg.default}api      {/}{fg.muted}prod    {/}{fg.faint}v2.4.1   {/}{fg.muted}hotfix deployed, approved by sam{/}
+{fg.faint}  11:20 {/}{status.success}✓ {/}{fg.default}search   {/}{fg.muted}staging {/}{fg.faint}v0.14.0  {/}{fg.muted}deployed{/}
+{fg.faint}  10:48 {/}{status.success}✓ {/}{fg.default}notify   {/}{fg.muted}staging {/}{fg.faint}v0.8.0   {/}{fg.muted}deployed{/}
+{fg.faint}  10:02 {/}{status.success}✓ {/}{fg.default}worker   {/}{fg.muted}staging {/}{fg.faint}v1.12.4  {/}{fg.muted}deployed{/}
+{fg.faint}  09:40 {/}{status.success}✓ {/}{fg.default}auth     {/}{fg.muted}staging {/}{fg.faint}v4.2.1   {/}{fg.muted}deployed{/}
+{fg.title bold}  Yesterday  {/}{fg.muted}4 {/}{border.default}───────────────────────────────────────────────────────────────{/}
+{fg.faint}  18:12 {/}{status.success}✓ {/}{fg.default}payments {/}{fg.muted}prod    {/}{fg.faint}v1.9.2   {/}{fg.muted}deployed, approved by priya{/}
+{fg.faint}  17:30 {/}{status.success}✓ {/}{fg.default}web      {/}{fg.muted}staging {/}{fg.faint}v3.18.0  {/}{fg.muted}deployed{/}
+{keyhint.key bold} ↑↓ {/}{keyhint.desc}move  {/}{keyhint.key bold}enter {/}{keyhint.desc}expand  {/}{keyhint.key bold}l {/}{keyhint.desc}logs  {/}{keyhint.key bold}/ {/}{keyhint.desc}filter                         {/}{keyhint.key bold}? {/}{keyhint.desc}help  {/}{keyhint.key bold}q {/}{keyhint.desc}quit{/}

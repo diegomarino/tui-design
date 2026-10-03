@@ -1,0 +1,32 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Tail — log/stream viewer (columns, hanging indent, follow vs paused)
+#! state: normal
+#! region r1 header 0,0,80,1
+#! region r3 log 0,1,80,21
+#! region r4 statusbar 0,22,80,1
+#! region r5 keybar 0,23,80,1
+{on:statusbar.bg} {/}{accent.primary bold on:statusbar.bg}Tail{/}{on:statusbar.bg} {/}{border.default on:statusbar.bg}│{/}{on:statusbar.bg} {/}{fg.default bold on:statusbar.bg}api-gateway{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}3{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}pods{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}prod-eu{/}{on:statusbar.bg}                              {/}{status.success on:statusbar.bg}●{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}following{/}{on:statusbar.bg} {/}
+ {table.header bold}TIME         LVL POD  MESSAGE{/}
+ {fg.faint}14:21:59.002 {/}{status.info}INF {/}{fg.muted}b81d {/}{fg.default}GET /v1/customers/cus_91 {/}{fg.muted}200 {/}{fg.faint}23ms{/}
+ {fg.faint}14:21:59.517 {/}{status.warning}WRN {/}{fg.muted}x2kq {/}{fg.default}upstream slow {/}{fg.faint}svc={/}{fg.default}ledger {/}{fg.faint}p95={/}{fg.default}820ms{/}
+ {fg.faint}14:21:59.870 {/}{status.info}INF {/}{fg.muted}7f9c {/}{fg.default}POST /v1/refunds {/}{fg.muted}201 {/}{fg.faint}132ms{/}
+ {fg.faint}14:22:00.311 {/}{status.error bold}ERR {/}{fg.muted}b81d {/}{fg.default}POST /v1/charges {/}{status.error}502 {/}{fg.faint}3012ms upstream={/}{fg.default}ledger {/}{fg.faint}err={/}{fg.default}"context{/}
+                       {fg.default}deadline exceeded" {/}{fg.faint}retry={/}{fg.default}1/5{/}
+ {fg.faint}14:22:00.402 {/}{status.info}INF {/}{fg.muted}x2kq {/}{fg.default}GET /v1/charges/ch_3Pq81 {/}{fg.muted}200 {/}{fg.faint}19ms{/}
+ {fg.faint}14:22:01.090 {/}{status.info}INF {/}{fg.muted}b81d {/}{fg.default}retrying delivery {/}{fg.faint}attempt={/}{fg.default}2 {/}{fg.faint}delay={/}{fg.default}2s{/}
+ {fg.faint}14:22:01.733 {/}{status.info}INF {/}{fg.muted}7f9c {/}{fg.default}GET /v1/balance {/}{fg.muted}200 {/}{fg.faint}12ms{/}
+ {fg.faint}14:22:02.118 {/}{status.warning}WRN {/}{fg.muted}7f9c {/}{fg.default}rate limit near {/}{fg.faint}key={/}{fg.default}pk_live_…a91 {/}{fg.faint}used={/}{status.warning}92%{/}
+ {fg.faint}14:22:02.554 {/}{status.info}INF {/}{fg.muted}x2kq {/}{fg.default}POST /v1/charges {/}{fg.muted}201 {/}{fg.faint}97ms{/}
+ {fg.faint}14:22:03.007 {/}{status.info}INF {/}{fg.muted}b81d {/}{fg.default}POST /v1/charges {/}{fg.muted}201 {/}{fg.faint}2241ms retry={/}{fg.default}2/5{/}
+ {fg.faint}14:22:03.640 DBG {/}{fg.muted}x2kq pool stats {/}{fg.faint}open={/}{fg.muted}18 {/}{fg.faint}idle={/}{fg.muted}4{/}
+ {fg.faint}14:22:04.211 {/}{status.info}INF {/}{fg.muted}7f9c {/}{fg.default}GET /v1/charges {/}{fg.muted}200 {/}{fg.faint}38ms{/}
+ {fg.faint}14:22:04.980 {/}{status.error bold}ERR {/}{fg.muted}x2kq {/}{fg.default}POST /v1/payouts {/}{status.error}500 {/}{fg.faint}61ms err={/}{fg.default}"pq: duplicate key value{/}
+                       {fg.default}violates unique constraint payouts_idem_key"{/}
+ {fg.faint}14:22:05.402 {/}{status.info}INF {/}{fg.muted}b81d {/}{fg.default}GET /v1/charges {/}{fg.muted}200 {/}{fg.faint}44ms{/}
+ {fg.faint}14:22:06.119 {/}{status.info}INF {/}{fg.muted}7f9c {/}{fg.default}POST /v1/refunds {/}{fg.muted}201 {/}{fg.faint}120ms{/}
+ {fg.faint}14:22:06.733 {/}{status.info}INF {/}{fg.muted}x2kq {/}{fg.default}GET /v1/customers/cus_14 {/}{fg.muted}200 {/}{fg.faint}21ms{/}
+ {fg.faint}14:22:07.412 {/}{status.info}INF {/}{fg.muted}b81d {/}{fg.default}GET /v1/charges {/}{fg.muted}200 {/}{fg.faint}40ms{/}
+ {fg.faint}14:22:07.880 {/}{status.info}INF {/}{fg.muted}7f9c {/}{fg.default}POST /v1/charges {/}{fg.muted}201 {/}{fg.faint}76ms{/}
+{on:statusbar.bg} {/}{fg.default on:statusbar.bg}1,204{/}{on:statusbar.bg} {/}{fg.default on:statusbar.bg}lines{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}12/s{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}·{/}{on:statusbar.bg} {/}{status.error on:statusbar.bg}✗{/}{on:statusbar.bg} {/}{status.error on:statusbar.bg}9{/}{on:statusbar.bg}  {/}{status.warning on:statusbar.bg}▲{/}{on:statusbar.bg} {/}{status.warning on:statusbar.bg}23{/}{on:statusbar.bg}                            {/}{statusbar.fg on:statusbar.bg}level{/}{on:statusbar.bg} {/}{fg.default on:statusbar.bg}info+{/}{on:statusbar.bg}  {/}{statusbar.fg on:statusbar.bg}wrap{/}{on:statusbar.bg} {/}{fg.default on:statusbar.bg}on{/}{on:statusbar.bg} {/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}/{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}filter{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}n{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}next{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}match{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}f{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}follow{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}w{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}wrap{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}l{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}level{/}{on:statusbar.bg}               {/}{keyhint.key bold on:statusbar.bg}?{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

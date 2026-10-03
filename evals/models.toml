@@ -1,0 +1,156 @@
+# Models, presets, judges and adapter settings for run_behavior_evals.py (read with tomllib: Python >= 3.11).
+#
+# One [[models]] table per model. `id` is what you pass to --models and what every run records (run ids, identity,
+# summaries), so do not rename an id that has results you want to resume or compare. Fields:
+#
+#   id            required. The name used on the command line and in results.
+#   adapter       required. omp | claude | codex | command (or a Python adapter registered from evals/adapters/).
+#   model         the string the CLI takes (default: id).
+#   effort        default reasoning effort (omp --thinking, claude --effort, codex model_reasoning_effort);
+#                 "none" omits the flag. Override per run with ID@EFFORT.
+#   cost_basis    billed (real money, e.g. OpenRouter through omp) | api-equivalent (subscription, priced at API
+#                 rates by the CLI) | equivalent (computed here from tokens x price) | unknown.
+#   price         USD per million tokens: input, cached_input (cache read; omit = billed as input), cache_write,
+#                 output. Used for `equivalent` costs and by the --dry-run estimator.
+#   openrouter_id the OpenRouter model id whose public price --refresh-prices fetches into prices-cache.json.
+#   timeout       seconds per agent run for this model (a case's own `timeout` still wins; default --timeout).
+#   flags         extra argv appended to the adapter's command (before the prompt input).
+#   env           extra environment for the agent; values may use ${VAR} (expanded at run time, never recorded)
+#                 and the placeholders {home} {workdir} {run_dir}.
+#   provider      provider recorded in the run identity (default: the adapter's: openrouter / anthropic / openai).
+#   label         human name shown by --list-models.
+#
+# The `command` adapter takes more keys (command, prompt_via, answer, usage, skill_path, skill_args, baseline_args,
+# version_command); see the example-echo model at the end and README.md "Extending".
+
+[defaults]
+models = "frontier4"          # what --models means when omitted
+
+[judges]
+text = "haiku"                # yes/no judge questions (claude or omp model)
+vision = "sonnet"             # vision_rubric frames (claude model: reads the PNGs with the Read tool).
+                              # haiku missed dead bands a sonnet judge saw (smoke 2026-10-02), same cost.
+
+[presets]
+frontier4 = ["z-ai/glm-5.3", "qwen/qwen3.8-max-0902", "opus", "gpt-6.1-sol"]   # the published comparison
+smoke = ["z-ai/glm-5.3-flash@low"]
+cheap = ["z-ai/glm-5.3-flash@low", "haiku@low", "gpt-6.1-sol@low"]             # one per adapter, low effort
+
+# ---------------------------------------------------------------- adapter settings (isolation recipes)
+# Every adapter also takes: home = "temp" | "real" (a fresh empty HOME per run, or the user's when the CLI needs
+# it for its login), confine_reads (macOS sandbox-exec: no reads of the project checkout, the source skill, the
+# results or the evals env file) and pass_env (extra variable names to pass through; secret-looking names are
+# refused). Agents never inherit the orchestrator's environment and never get a secret in argv.
+
+[adapters.omp]
+profile = "tui-design-evals"       # omp --profile: the OpenRouter key lives in this profile's vault (README setup)
+home = "real"                      # omp finds its profiles under ~/.omp
+confine_reads = true
+# skill_hint = "..."               # told to the skill arm (--append-system-prompt FILE); {skill_name} {skill_dir}
+
+[adapters.claude]
+config_dir = "~/.claude-eval"      # CLAUDE_CONFIG_DIR: a separate login without your skills, plugins, hooks, memory
+allowed_tools = ["Bash(python3:*)", "Bash(uv run:*)"]
+home = "real"                      # Claude Code looks its login up in the keychain through HOME
+confine_reads = true
+
+[adapters.codex]
+codex_home = "~/.codex-eval"       # CODEX_HOME: a separate login; HOME is a fresh empty dir per run
+disable = ["plugins", "remote_plugin", "apps"]
+confine_reads = false              # codex sandboxes its own commands with seatbelt; a nested sandbox-exec fails
+
+[sandbox]                          # applies to adapters with confine_reads = true (macOS sandbox-exec)
+deny_read = ["~/.claude/skills", "~/.agents/skills"]   # your own skills; add other copies of the skill here, or
+                                   # machine-local paths in EVAL_DENY_READ (env or ~/.config/tui-design-evals/env)
+deny_spotlight = true              # no mdfind: a baseline agent once found an old copy of the skill through Spotlight
+
+# ---------------------------------------------------------------- OpenRouter models through omp (billed)
+
+[[models]]
+id = "z-ai/glm-5.3"
+adapter = "omp"
+effort = "high"               # GLM-5.3 has no "medium"; high is the closest that still reasons
+cost_basis = "billed"
+price = { input = 1.40, output = 4.40 }
+openrouter_id = "z-ai/glm-5.3"
+label = "GLM-5.3 (OpenRouter)"
+
+[[models]]
+id = "qwen/qwen3.8-max-0902"
+adapter = "omp"
+effort = "medium"
+cost_basis = "billed"
+price = { input = 2.00, output = 6.00 }
+openrouter_id = "qwen/qwen3.8-max-0902"
+timeout = 2400                # the slowest model: longer than the default 900 s per run
+label = "Qwen3.8 Max (OpenRouter)"
+
+[[models]]
+id = "z-ai/glm-5.3-flash"
+adapter = "omp"
+effort = "low"
+cost_basis = "billed"
+price = { input = 0.15, cached_input = 0.03, output = 0.50 }
+openrouter_id = "z-ai/glm-5.3-flash"
+label = "GLM-5.3 Flash (OpenRouter, smoke)"
+
+# ---------------------------------------------------------------- Claude Code (subscription: API-equivalent)
+
+[[models]]
+id = "opus"
+adapter = "claude"
+effort = "medium"
+cost_basis = "api-equivalent"
+price = { input = 4.00, cached_input = 0.20, cache_write = 8.00, output = 20.00 }
+openrouter_id = "anthropic/claude-opus-5.5"
+label = "Claude Opus (Claude Code)"
+
+[[models]]
+id = "sonnet"
+adapter = "claude"
+effort = "medium"
+cost_basis = "api-equivalent"
+price = { input = 2.00, cached_input = 0.20, cache_write = 2.50, output = 10.00 }
+openrouter_id = "anthropic/claude-sonnet-5.5"
+label = "Claude Sonnet (Claude Code; vision judge)"
+
+[[models]]
+id = "haiku"
+adapter = "claude"
+effort = "low"
+cost_basis = "api-equivalent"
+price = { input = 1.00, cached_input = 0.10, cache_write = 1.25, output = 5.00 }
+openrouter_id = "~anthropic/claude-haiku-latest"
+label = "Claude Haiku (Claude Code; text judge)"
+
+# ---------------------------------------------------------------- Codex CLI (subscription: equivalent cost)
+
+[[models]]
+id = "gpt-6.1-sol"
+adapter = "codex"
+effort = "medium"
+cost_basis = "equivalent"
+price = { input = 2.00, cached_input = 0.10, output = 10.00 }   # reasoning is inside output_tokens
+openrouter_id = "openai/gpt-6.1-sol"
+label = "GPT-6.1-Sol (Codex)"
+
+# ---------------------------------------------------------------- generic command adapter (example)
+# A tiny offline fake agent (examples/echo_agent.py): writes one file, prints an answer and a usage file.
+# `--models example-echo --no-judge` exercises the whole pipeline at zero cost; copy this block for a real CLI.
+
+[[models]]
+id = "example-echo"
+adapter = "command"
+model = "echo-1"
+effort = "none"
+cost_basis = "unknown"
+label = "Offline fake agent (command adapter example)"
+command = ["python3", "{evals_dir}/examples/echo_agent.py", "--model", "{model}", "--prompt-file", "{prompt_file}",
+           "--workdir", "{workdir}", "--usage", "{run_dir}/usage.json"]
+prompt_via = "arg"            # arg: the template carries {prompt_file}; stdin: the prompt file is fed on stdin
+answer = "stdout"             # stdout, or a path template such as "{run_dir}/answer.md"
+usage = "{run_dir}/usage.json"  # optional JSON {input, cached, cache_write, output, reasoning, cost_usd}
+skill_path = ".agents/skills"
+skill_args = ["--skill", "{skill_dir}"]
+baseline_args = []
+version_command = ["python3", "{evals_dir}/examples/echo_agent.py", "--version"]

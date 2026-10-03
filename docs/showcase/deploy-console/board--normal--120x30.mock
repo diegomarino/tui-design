@@ -1,0 +1,45 @@
+#! tui-mockup 1
+#! size: 120x30
+#! caps: attrs=bold,dim,underline,inverse colors=256 glyphs=unicode widgets=list,input source=assumed
+#! title: deploy — service health
+#! state: normal
+#! theme: catppuccin-mocha
+#! note: Concept B (dashboard): services × environments with health first; the selected service drills down.
+#! note: rubric 256: 15/16 (C1 1) · 16: 14/16 (C1 1, C4 1)
+#! note: Data is invented for the showcase (services, versions, people).
+#! region r1 header 0,0,120,1
+#! region r2 list 1,4,69,14 Services
+#! region r3 detail 72,2,48,27 payments
+#! region r4 keybar 0,29,120,1
+#! focus r2
+#! selected r2 6
+{accent.primary bold}  deploy  {/}{fg.muted}service health · prod                                     {/}{status.success}✓ {/}{fg.default bold}4 {/}{fg.muted}healthy  {/}{status.warning}▲ {/}{fg.default bold}1 {/}{fg.muted}degraded  {/}{status.error}✗ {/}{fg.default bold}1 {/}{fg.muted}failed  {/}{status.info}● {/}{fg.default bold}1 {/}{fg.muted}rolling{/}
+
+{fg.title bold}  Services  {/}{fg.muted}7 {/}{border.default}───────────────────────────────────────── {/}{fg.faint}staging → prod  {/}{on:bg.surface}                                                {/}
+{table.header bold}    SERVICE   STAGING   PROD       ERRORS 6h            P95 TEAM        {/}{fg.title bold on:bg.surface}  payments  {/}{fg.muted on:bg.surface}prod  {/}{status.warning on:bg.surface}▲ {/}{status.warning bold on:bg.surface}degraded      {/}{fg.faint on:bg.surface}billing team  {/}
+{fg.default}    web       v3.18.1   {/}{status.success}✓ {/}{fg.default}v3.18.0  {/}{fg.muted}▂▂▂▂▂▂▂▂▂▂▂▂ {/}{fg.default}0.3%  {/}{fg.muted}180ms {/}{fg.faint}storefront  {/}{on:bg.surface}                                                {/}
+{fg.faint}              8/8 pods · v3.18.1 rolling on staging                     {/}{fg.faint on:bg.surface}  version  {/}{fg.default on:bg.surface}v1.9.2  {/}{fg.faint on:bg.surface}since yesterday 18:12        {/}
+{fg.default}    api       v2.5.0    {/}{status.success}✓ {/}{fg.default}v2.4.1   {/}{fg.muted}▂▃▂▂▃▂▂▃▂▂▂▃ {/}{fg.default}0.5%  {/}{fg.muted}240ms {/}{fg.faint}platform    {/}{fg.faint on:bg.surface}  next     {/}{accent.primary on:bg.surface}◇ {/}{fg.default on:bg.surface}v1.9.3  {/}{fg.muted on:bg.surface}waits for 1 more approval  {/}
+{fg.faint}              6/6 pods · v2.5.0 waits for approval                      {/}{fg.faint on:bg.surface}  pods     {/}{fg.default on:bg.surface}6/6 {/}{fg.muted on:bg.surface}ready                            {/}
+{fg.default}    worker    {/}{fg.faint}v1.12.4   {/}{status.success}✓ {/}{fg.default}v1.12.4  {/}{fg.muted}▁▁▂▁▁▁▂▁▁▁▁▁ {/}{fg.default}0.1%   {/}{fg.muted}90ms {/}{fg.faint}platform    {/}{on:bg.surface}                                                {/}
+{fg.faint}              4/4 pods · in sync                                        {/}{fg.title bold on:bg.surface}  Error rate  {/}{fg.faint on:bg.surface}6h              {/}{status.warning bold on:bg.surface}1.8%  {/}{fg.faint on:bg.surface}alert 1.0%  {/}
+ {selection.fg bold on:selection.bg}   payments  {/}{selection.fg on:selection.bg}v1.9.3    ▲ v1.9.2   ▂▂▃▂▃▄▅▆▇▇▇▇ {/}{selection.fg bold on:selection.bg}1.8%  {/}{selection.fg on:selection.bg}412ms billing   {/}  {status.warning on:bg.surface}  ▂▂▂▂▂▂▂▂▂▂▂▃▂▃▃▂▂▂▂▃▃▂▃▃▃▃▃▃▃▃▄▅▅▅▅▇▇▇▇█▇▇▇▇  {/}
+ {selection.fg on:selection.bg}             6/6 pods · v1.9.3 waits for approval                    {/}  {on:bg.surface}                                                {/}
+{fg.default}    search    v0.14.0   {/}{status.info}● {/}{fg.default}v0.13.2  {/}{fg.muted}▂▂▂▂▂▂▂▂▂▂▂▂ {/}{fg.default}0.3%  {/}{fg.muted}310ms {/}{fg.faint}discovery   {/}{fg.title bold on:bg.surface}  p95 latency  {/}{fg.faint on:bg.surface}6h              {/}{fg.default bold on:bg.surface}412 ms  {/}{fg.faint on:bg.surface}was 240  {/}
+{fg.faint}              3/5 pods · rolling to prod, 3 of 5 pods                   {/}{fg.muted on:bg.surface}  ▄▃▄▄▄▄▃▃▃▄▄▄▄▄▄▃▄▄▃▄▃▃▄▄▃▃▄▃▄▄▄▄▅▅▅▆▆▇▇▇▇▇▆▆  {/}
+{fg.default}    auth      {/}{fg.faint}v4.2.1    {/}{status.success}✓ {/}{fg.default}v4.2.1   {/}{fg.muted}▁▁▁▁▁▂▁▁▁▁▁▁ {/}{fg.default}0.1%   {/}{fg.muted}60ms {/}{fg.faint}identity    {/}{on:bg.surface}                                                {/}
+{fg.faint}              4/4 pods · in sync                                        {/}{fg.title bold on:bg.surface}  Recent deploys  {/}{fg.muted on:bg.surface}3 {/}{border.default on:bg.surface}──────────────────────────  {/}
+{fg.default}    notify    v0.8.0    {/}{status.error}✗ {/}{fg.default}v0.7.9   {/}{fg.muted}▂▂▂▂▂▂▄▅▂▂▂▂ {/}{fg.default}0.2%  {/}{fg.muted}150ms {/}{fg.faint}messaging   {/}{status.success on:bg.surface}  ✓ {/}{fg.default on:bg.surface}v1.9.2  {/}{fg.muted on:bg.surface}yesterday 18:12                {/}{fg.faint on:bg.surface}sam  {/}
+{fg.faint}              4/4 pods · v0.8.0 failed in prod, rolled back             {/}{status.success on:bg.surface}  ✓ {/}{fg.default on:bg.surface}v1.9.1  {/}{fg.muted on:bg.surface}3 days ago                     {/}{fg.faint on:bg.surface}sam  {/}
+                                                                        {status.error on:bg.surface}  ✗ {/}{fg.default on:bg.surface}v1.9.0  {/}{fg.muted on:bg.surface}4 days ago, rolled back      {/}{fg.faint on:bg.surface}priya  {/}
+{fg.title bold}  Environments {/}{border.default}───────────────────────────────────────────────────────  {/}{on:bg.surface}                                                {/}
+{fg.muted}    staging   {/}{status.info}● {/}{status.success}✓ ✓ ✓ ✓ ✓ ✓   {/}{fg.muted}6 ok · 1 rolling                          {/}{fg.title bold on:bg.surface}  Next  {/}{fg.muted on:bg.surface}v1.9.3 on staging {/}{border.default on:bg.surface}────────────────────  {/}
+{fg.muted}    prod      {/}{status.success}✓ ✓ ✓ {/}{status.warning}▲ {/}{status.info}● {/}{status.success}✓ {/}{status.error}✗   {/}{fg.muted}4 ok · 1 degraded · 1 rolling · 1 failed  {/}{status.success on:bg.surface}  ✓ {/}{fg.default on:bg.surface}6/6 checks  {/}{fg.muted on:bg.surface}errors 0.2%  p95 380 ms         {/}
+                                                                        {accent.primary on:bg.surface}  ●○ {/}{fg.default on:bg.surface}1 of 2 approvals  {/}{fg.faint on:bg.surface}priya approved 20m ago   {/}
+{fg.title bold}  Alerts  {/}{fg.muted}2 {/}{border.default}──────────────────────────────────────────────────────────  {/}{on:bg.surface}                                                {/}
+{status.warning}    ▲ {/}{fg.default}payments prod error rate 1.8%, alert line 1.0%               {/}{fg.faint}52m  {/}{fg.muted on:bg.surface}  errors rose at 13:12, after auth v4.2.1 shi⋯  {/}
+{status.error}    ✗ {/}{fg.default}notify prod v0.8.0 failed health checks, rolled back         {/}{fg.faint}21m  {/}{on:bg.surface}                                                {/}
+                                                                        {on:bg.surface}                                                {/}
+                                                                        {on:bg.surface}                                                {/}
+                                                                        {on:bg.surface}                                                {/}
+{keyhint.key bold} ↑↓ {/}{keyhint.desc}service  {/}{keyhint.key bold}enter {/}{keyhint.desc}open  {/}{keyhint.key bold}e {/}{keyhint.desc}staging/prod  {/}{keyhint.key bold}l {/}{keyhint.desc}logs  {/}{keyhint.key bold}a {/}{keyhint.desc}approvals                                             {/}{keyhint.key bold}? {/}{keyhint.desc}help  {/}{keyhint.key bold}q {/}{keyhint.desc}quit{/}

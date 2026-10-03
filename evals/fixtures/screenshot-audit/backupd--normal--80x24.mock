@@ -1,0 +1,38 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: backupd — backup jobs monitor (screenshot audit ground truth)
+#! state: normal
+#! theme: tokyonight-night
+#! caps: attrs=bold,dim,inverse colors=truecolor glyphs=unicode source=assumed
+#! region r1 header 0,0,80,1
+#! region r2 table 2,2,76,11 Jobs (8)
+#! region r3 statusbar 0,21,80,1
+#! region r4 keybar 0,22,80,2
+#! focus r2
+#! selected r2 3
+#! note: deliberate flaws for the screenshot-audit eval: alarm-red title, double frame, [OK]/[FAIL] chips,
+#! note: constant REPO column, 7 blank rows inside the frame, F-key hints over two footer rows
+{status.error bold}BACKUPD MONITOR v2.1{/}{fg.muted}    host: nas-01   user: root   2026-10-02 09:14:07{/}         
+{border.default}╔══════════════════════════════════════════════════════════════════════════════╗{/}
+{border.default}║ {/}{border.focus}┌─ Jobs (8) ───────────────────────────────────────────────────────────────┐{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/}{table.header bold} STATUS JOB           TARGET            REPO      LAST RUN      SIZE      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/} {status.success bold}[OK]   {/}{fg.default}home-photos   nas-01:/photos    s3-main   03:00       412 GB      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/} {status.success bold}[OK]   {/}{fg.default}mail-archive  mx-02:/var/mail   s3-main   03:15        38 GB      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/}{on:selection.bg} {/}{status.error bold on:selection.bg}[FAIL] {/}{selection.fg on:selection.bg}db-dump       pg-01:/dumps      s3-main   03:30          0 B      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/} {status.success bold}[OK]   {/}{fg.default}wiki          web-03:/srv/wiki  s3-main   03:45       2.1 GB      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/} {status.warning bold}[WARN] {/}{fg.default}laptops       vpn:/home         s3-main   04:00        96 GB      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/} {status.success bold}[OK]   {/}{fg.default}git-mirror    git-01:/repos     s3-main   04:10        57 GB      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/} {status.success bold}[OK]   {/}{fg.default}configs       nas-01:/etc       s3-main   04:20        12 MB      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}│{/} {status.warning bold}[WARN] {/}{fg.default}media-cache   nas-01:/cache     s3-main   04:30       1.3 TB      {/}{border.focus}│{/}{border.default} ║{/}
+{border.default}║ {/}{border.focus}└──────────────────────────────────────────────────────────────────────────┘{/}{border.default} ║{/}
+{border.default}║                                                                              ║{/}
+{border.default}║                                                                              ║{/}
+{border.default}║                                                                              ║{/}
+{border.default}║                                                                              ║{/}
+{border.default}║                                                                              ║{/}
+{border.default}║                                                                              ║{/}
+{border.default}║                                                                              ║{/}
+{border.default}╚══════════════════════════════════════════════════════════════════════════════╝{/}
+{status.error} Last error: db-dump: connection refused (exit 2){/}{fg.faint}  · 5h41m ago{/}                  
+{keyhint.desc} [F1] Help  [F2] Run now  [F3] Logs  [F5] Refresh  [F8] Delete{/}                  
+{keyhint.desc} [F9] Settings  [F10] Quit  [Tab] Next pane  [/] Filter{/}                         

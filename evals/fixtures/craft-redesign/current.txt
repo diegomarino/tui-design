@@ -1,0 +1,30 @@
+RUNNERS - CI Fleet Manager v3.0 - org: acme-eng - refreshed 10:42:05
+====================================================================================================
+Total: 12 | Online: 10 | Offline: 1 | Degraded: 1 | Busy: 7 | Idle: 4 | Queue: 23 jobs waiting
+====================================================================================================
+NAME            STATE      ACTIVITY CURRENT JOB         ELAPSED  ARCH   CPUS  LOAD  LABELS          
+----------------------------------------------------------------------------------------------------
+linux-x64-01    online     busy     api#4812 test       12m      x64    16    62%   self-hosted     
+linux-x64-02    online     idle     -                   -        x64    16    4%    self-hosted     
+linux-x64-03    online     busy     web#2290 build      3m       x64    16    88%   self-hosted     
+linux-x64-04    offline    -        -                   -        x64    16    -     self-hosted     
+linux-arm-01    online     busy     api#4811 lint       1m       arm64  8     41%   self-hosted     
+linux-arm-02    online     idle     -                   -        arm64  8     2%    self-hosted     
+macos-m3-01     online     busy     ios#977 archive     27m      arm64  12    93%   self-hosted     
+macos-m3-02     online     busy     ios#978 test        9m       arm64  12    71%   self-hosted     
+win-x64-01      online     idle     -                   -        x64    8     6%    self-hosted     
+win-x64-02      degraded   busy     desktop#310 pkg     44m      x64    8     99%   self-hosted     
+gpu-a100-01     online     busy     ml#88 train         3h12m    x64    32    97%   self-hosted     
+gpu-a100-02     online     idle     -                   -        x64    32    1%    self-hosted     
+----------------------------------------------------------------------------------------------------
+QUEUE (next 5):
+  - api#4813 test (waiting 4m, needs linux)
+  - web#2291 e2e (waiting 3m, needs linux)
+  - ios#979 test (waiting 2m, needs macos)
+  - ml#89 eval (waiting 2m, needs gpu)
+  - docs#120 build (waiting 1m, needs linux)
+
+
+
+----------------------------------------------------------------------------------------------------
+Keys: [Up/Down] Select  [Enter] Details  [D] Drain  [R] Restart  [L] Logs  [Q] Quit

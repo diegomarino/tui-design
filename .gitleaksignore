@@ -1,0 +1,6 @@
+# Fake Langfuse keys in a unit test of the secret-redaction code (they are not real credentials).
+# tools/check_public.sh allows the same file and pattern (FAKE_SECRET_FILES / FAKE_SECRET_RX).
+# `gitleaks dir` fingerprint:
+tests/test_export_results.py:generic-api-key:41
+# `gitleaks git` fingerprint (commit that added the test):
+89f02905bea2e9cc3d4352603df1f3189e8ec5ab:tests/test_export_results.py:generic-api-key:41

@@ -1,0 +1,35 @@
+#! tui-mockup 1
+#! size: 80x24
+#! title: Files — Miller columns (parent | current | preview)
+#! state: normal
+#! region r1 header 0,0,80,1
+#! region r2 sidebar 0,1,10,21 parent
+#! region r3 list 11,1,39,21 webhook
+#! region r4 detail 51,1,29,21 preview retry.go
+#! region r5 statusbar 0,22,80,1
+#! region r6 keybar 0,23,80,1
+#! selected r3 4
+{on:statusbar.bg} {/}{fg.muted on:statusbar.bg}~/src/payments/internal/{/}{fg.default bold on:statusbar.bg}webhook{/}{on:statusbar.bg}                                         {/}{on:bg.raised} {/}{tab.active.fg bold on:bg.raised}1{/}{on:bg.raised} {/}{on:statusbar.bg} {/}{tab.inactive.fg on:statusbar.bg}2{/}{on:statusbar.bg}  {/}
+ {accent.primary}auth/    {/}{border.default}│ {/}{accent.primary}testdata/                             {/}{border.default}│  {/}{fg.faint}1 {/}{accent.secondary}package {/}{fg.default}webhook{/}
+ {accent.primary}billing/ {/}{border.default}│ {/}{fg.default}client.go                        {/}{fg.muted}3.2K {/}{border.default}│  {/}{fg.faint}2{/}
+ {accent.primary}config/  {/}{border.default}│ {/}{fg.default}client_test.go                   {/}{fg.muted}5.8K {/}{border.default}│  {/}{fg.faint}3 {/}{accent.secondary}import {/}{fg.default}({/}
+ {accent.primary}httpx/   {/}{border.default}│ {/}{fg.default}events.go                        {/}{fg.muted}1.9K {/}{border.default}│  {/}{fg.faint}4   {/}{fg.muted}"context"{/}
+ {accent.primary}ledger/  {/}{border.default}│{/}{on:selection.bg} {/}{selection.fg bold on:selection.bg}retry.go{/}{on:selection.bg}                         {/}{selection.fg on:selection.bg}4.1K{/}{on:selection.bg} {/}{border.default}│  {/}{fg.faint}5   {/}{fg.muted}"errors"{/}
+{on:selection.inactive.bg} {/}{accent.primary on:selection.inactive.bg}webhook/{/}{on:selection.inactive.bg} {/}{border.default}│ {/}{fg.default}retry_test.go                    {/}{fg.muted}6.4K {/}{border.default}│  {/}{fg.faint}6   {/}{fg.muted}"net/http"{/}
+ {accent.primary}worker/  {/}{border.default}│ {/}{fg.default}signer.go                        {/}{fg.muted}2.2K {/}{border.default}│  {/}{fg.faint}7   {/}{fg.muted}"time"{/}
+ {fg.default}doc.go   {/}{border.default}│ {/}{fg.default}signer_test.go                   {/}{fg.muted}3.0K {/}{border.default}│  {/}{fg.faint}8 {/}{fg.default}){/}
+ {fg.default}errors.… {/}{border.default}│ {/}{fg.default}README.md                        {/}{fg.muted}1.1K {/}{border.default}│  {/}{fg.faint}9{/}
+          {border.default}│                                       │ {/}{fg.faint}10 {/}{fg.faint italic}// Retry delivers ev an{/}{fg.faint}…{/}
+          {border.default}│                                       │ {/}{fg.faint}11 {/}{accent.secondary}func {/}{fg.default}(c *Client) {/}{accent.primary}Retry{/}{fg.default}({/}{fg.faint}…{/}
+          {border.default}│                                       │ {/}{fg.faint}12   {/}{fg.default}delay := c.base{/}
+          {border.default}│                                       │ {/}{fg.faint}13   {/}{accent.secondary}for {/}{fg.default}attempt := 1; att{/}{fg.faint}…{/}
+          {border.default}│                                       │ {/}{fg.faint}14     {/}{fg.default}res, err := c.send({/}{fg.faint}…{/}
+          {border.default}│                                       │ {/}{fg.faint}15     {/}{accent.secondary}if {/}{fg.default}err == nil && re{/}{fg.faint}…{/}
+          {border.default}│                                       │ {/}{fg.faint}16       {/}{accent.secondary}return {/}{fg.default}nil{/}
+          {border.default}│                                       │ {/}{fg.faint}17     {/}{fg.default}}}{/}
+          {border.default}│                                       │ {/}{fg.faint}18     {/}{accent.secondary}select {/}{fg.default}{{{/}
+          {border.default}│                                       │ {/}{fg.faint}19     {/}{accent.secondary}case {/}{fg.default}<-time.After(d{/}{fg.faint}…{/}
+          {border.default}│                                       │ {/}{fg.faint}20       {/}{fg.default}delay *= 2{/}
+          {border.default}│                                       │ {/}{fg.faint}21     {/}{accent.secondary}case {/}{fg.default}<-ctx.Done():{/}
+{accent.primary bold inverse on:statusbar.bg} NOR {/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}4.1{/}{on:statusbar.bg} {/}{statusbar.fg on:statusbar.bg}KiB{/}{on:statusbar.bg}  {/}{fg.default on:statusbar.bg}retry.go{/}{on:statusbar.bg}                                {/}{fg.muted on:statusbar.bg}-rw-r--r--{/}{on:statusbar.bg}  {/}{statusbar.fg on:statusbar.bg}Go{/}{on:statusbar.bg}  {/}{fg.default on:statusbar.bg}5/9{/}{on:statusbar.bg}  {/}{statusbar.fg on:statusbar.bg}Top{/}{on:statusbar.bg} {/}
+{on:statusbar.bg} {/}{keyhint.key bold on:statusbar.bg}h{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}parent{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}l{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}open{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}space{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}select{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}y{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}yank{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}d{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}trash{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}/{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}find{/}{on:statusbar.bg}        {/}{keyhint.key bold on:statusbar.bg}F1{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}help{/}{on:statusbar.bg}  {/}{keyhint.key bold on:statusbar.bg}q{/}{on:statusbar.bg} {/}{keyhint.desc on:statusbar.bg}quit{/}{on:statusbar.bg} {/}

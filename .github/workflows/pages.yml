@@ -1,0 +1,52 @@
+name: Publish the reference gallery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pages.yml
+      - skills/tui-design/assets/demo/**
+      - skills/tui-design/assets/mockups/**
+      - skills/tui-design/references/themes/**
+      - skills/tui-design/scripts/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build the gallery
+        run: |
+          mkdir -p _site
+          python3 skills/tui-design/scripts/gallery.py \
+            skills/tui-design/assets/demo \
+            skills/tui-design/assets/mockups \
+            --themes all \
+            --title "tui-design gallery" \
+            -o _site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

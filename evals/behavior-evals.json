@@ -1,0 +1,1864 @@
+{
+  "skill_name": "tui-design",
+  "notes": "Behavior evals: does an agent with the tui-design skill behave better than the same model without it? Cases come from failures seen in live design and review sessions (T1-T8 in each case's `source`), gaps found in a comparison with gfargo/tui-design-skill (gap-gfargo §n) and the skill's branches, one skill area each (field `area`). Neutral domains only. Assertions marked neutral=false check the skill's own artifact format or scripts (.mock frames, #! caps:, test_card.py), which a baseline cannot know; summary.md reports pass rates with and without them. Fixtures with `src` are files under evals/fixtures/ (binary or generated, see fixtures/gen_fixtures.py). Executed assertions (exec, tty_probe, frame_match) run the agent's code after the run; cases with depends_on=wave2 specify topics still being added to the references. See README.md.",
+  "banned_terms": ["herdr", "unnamed agents", "w51"],
+  "runner": "evals/run_behavior_evals.py",
+  "cases": [
+    {
+      "id": "plugin-caps-from-code",
+      "source": "T1.6, T1.9, T6.6, T7.5, T8.2: host capability profile copied from the current code (8 curses colors) instead of measured",
+      "lang": "es",
+      "area": "host",
+      "prompt": "Tengo un pequeño plugin (carpeta deploy_popup/) que se abre en un popup de tmux y muestra el último despliegue de cada servicio. Se ve muy pobre. Hazme una propuesta visual con mockups de cómo debería verse. No toques el código todavía.",
+      "fixtures": [
+        {
+          "path": "deploy_popup/ui.py",
+          "lines": [
+            "\"\"\"Deploy status popup.",
+            "",
+            "Opened from tmux with:  bind D display-popup -E -w 90 -h 24 'python3 ~/deploy_popup/ui.py'",
+            "\"\"\"",
+            "import curses",
+            "",
+            "# Stub until `deployctl status --json` is wired in.",
+            "DEPLOYS = [",
+            "    {\"service\": \"checkout-api\", \"env\": \"prod\", \"version\": \"v3.12.0\", \"status\": \"ok\", \"age\": \"4m\"},",
+            "    {\"service\": \"cart-svc\", \"env\": \"prod\", \"version\": \"v1.40.2\", \"status\": \"ok\", \"age\": \"1h\"},",
+            "    {\"service\": \"pricing\", \"env\": \"prod\", \"version\": \"v0.9.7\", \"status\": \"failed\", \"age\": \"12m\"},",
+            "    {\"service\": \"email-sender\", \"env\": \"staging\", \"version\": \"v2.3.0\", \"status\": \"rolling\", \"age\": \"1m\"},",
+            "    {\"service\": \"geo-lookup\", \"env\": \"prod\", \"version\": \"v5.0.1\", \"status\": \"ok\", \"age\": \"2d\"},",
+            "    {\"service\": \"img-proxy\", \"env\": \"staging\", \"version\": \"v1.2.9\", \"status\": \"ok\", \"age\": \"3h\"},",
+            "    {\"service\": \"ledger-sync\", \"env\": \"prod\", \"version\": \"v4.4.4\", \"status\": \"failed\", \"age\": \"40m\"},",
+            "]",
+            "",
+            "STATUS_PAIR = {\"ok\": 1, \"failed\": 2, \"rolling\": 3}",
+            "",
+            "",
+            "def main(stdscr):",
+            "    curses.start_color()",
+            "    curses.use_default_colors()",
+            "    curses.init_pair(1, curses.COLOR_GREEN, -1)",
+            "    curses.init_pair(2, curses.COLOR_RED, -1)",
+            "    curses.init_pair(3, curses.COLOR_YELLOW, -1)",
+            "    curses.init_pair(4, curses.COLOR_CYAN, -1)",
+            "    curses.curs_set(0)",
+            "    sel = 0",
+            "    while True:",
+            "        stdscr.erase()",
+            "        h, w = stdscr.getmaxyx()",
+            "        stdscr.addstr(0, 0, \"DEPLOYS\", curses.color_pair(4) | curses.A_BOLD)",
+            "        stdscr.addstr(1, 0, \"SERVICE          ENV      VERSION    STATUS   AGE\")",
+            "        for i, d in enumerate(DEPLOYS):",
+            "            attr = curses.A_REVERSE if i == sel else 0",
+            "            left = f\"{d['service']:<16} {d['env']:<8} {d['version']:<10} \"",
+            "            stdscr.addstr(2 + i, 0, left, attr)",
+            "            stdscr.addstr(2 + i, len(left), f\"{d['status']:<8} {d['age']}\",",
+            "                          attr | curses.color_pair(STATUS_PAIR.get(d[\"status\"], 0)))",
+            "        stdscr.addstr(h - 1, 0, \"j/k move  r rollback  l logs  q quit\")",
+            "        stdscr.refresh()",
+            "        key = stdscr.getch()",
+            "        if key in (ord(\"q\"), 27):",
+            "            return",
+            "        if key in (ord(\"j\"), curses.KEY_DOWN):",
+            "            sel = min(sel + 1, len(DEPLOYS) - 1)",
+            "        if key in (ord(\"k\"), curses.KEY_UP):",
+            "            sel = max(sel - 1, 0)",
+            "",
+            "",
+            "if __name__ == \"__main__\":",
+            "    curses.wrapper(main)"
+          ]
+        },
+        {
+          "path": "deploy_popup/README.md",
+          "lines": [
+            "# deploy_popup",
+            "",
+            "Shows the latest deploy of each service in a tmux popup. Bound in `~/.tmux.conf`:",
+            "",
+            "    bind D display-popup -E -w 90 -h 24 'python3 ~/deploy_popup/ui.py'",
+            "",
+            "Data will come from `deployctl status --json` (stubbed in `ui.py` for now)."
+          ]
+        }
+      ],
+      "judge_context": [
+        "**/*.mock",
+        "**/*.md",
+        "**/*.txt"
+      ],
+      "assertions": [
+        {
+          "id": "measure-or-assume",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer either ask the user to check what the tmux popup / terminal can actually render (color depth, attributes such as italic, glyphs), for example by running a probe or test card inside it, or explicitly label the color depth and attributes it designed for as an unverified assumption?"
+        },
+        {
+          "id": "not-limited-by-code",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer avoid treating the 8 basic curses colors that ui.py happens to use today as the limit of what the popup can draw (it does not say or imply 'the popup only supports 8/16 colors' because the code uses them)?"
+        },
+        {
+          "id": "caps-not-from-code",
+          "type": "mock_caps",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "forbid": {
+            "source": [
+              "code"
+            ]
+          },
+          "require_line": true,
+          "desc": "every .mock declares #! caps: and none says source=code"
+        },
+        {
+          "id": "mocks-lint-clean",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 1,
+          "desc": "real .mock frames exist and render_mockup.py --check reports 0 errors"
+        },
+        {
+          "id": "code-untouched",
+          "type": "fixture_unchanged",
+          "neutral": true,
+          "path": "deploy_popup/ui.py",
+          "desc": "the user said not to touch the code"
+        }
+      ]
+    },
+    {
+      "id": "sketch-80x24",
+      "source": "T1.3, T1.5, T2.3, T3.5: hand-typed sketches drift off the grid and do not match their stated size",
+      "lang": "en",
+      "area": "frames",
+      "prompt": "Quick one: sketch the layout of a two-pane log viewer for my cluster tool (pod list on the left, log stream on the right, a status line and key hints) at 80x24, so I can check the proportions before I code it.",
+      "fixtures": [],
+      "assertions": [
+        {
+          "id": "inline-sketch-on-grid",
+          "type": "answer_box_widths",
+          "neutral": true,
+          "max_width": 80,
+          "desc": "every box-drawn sketch in the answer has rows of equal display width, at most 80"
+        },
+        {
+          "id": "frame-file-80x24",
+          "type": "file_regex",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "pattern": "(?m)^#! size: 80x24\\s*$",
+          "mode": "any",
+          "desc": "a .mock frame declares size 80x24"
+        },
+        {
+          "id": "mocks-lint-clean",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 1,
+          "desc": "the frame passes render_mockup.py --check with 0 errors"
+        }
+      ]
+    },
+    {
+      "id": "gruvbox-roles-16",
+      "source": "working rule 'tokens, never raw colors'; screenshot audits must not invent colors (gap-gfargo §2.6, §3 color system)",
+      "lang": "es",
+      "area": "color",
+      "prompt": "Quiero que mi actualizador de paquetes hecho en Ratatui use Gruvbox dark. Dime qué color va en cada parte (lista, fila seleccionada, errores, avisos, barra de progreso, footer de atajos) y comprueba que todo se lee bien también en un terminal de 16 colores.",
+      "fixtures": [],
+      "assertions": [
+        {
+          "id": "no-invented-hex",
+          "type": "hex_known",
+          "neutral": true,
+          "scope": "both",
+          "sources": [
+            "references/schemes/gruvbox.md",
+            "references/themes/gruvbox-*.json"
+          ],
+          "desc": "every hex in the answer and in produced files is a real Gruvbox value (no invented colors)"
+        },
+        {
+          "id": "contrast-numbers",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "\\b\\d{1,2}(?:[.,]\\d{1,2})?\\s*:\\s*1\\b",
+          "min": 2,
+          "desc": "contrast is measured and reported as ratios (n:1), at least twice"
+        },
+        {
+          "id": "roles-named",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer assign colors to named UI roles (e.g. selection background, error, warning, muted text, key hint, or tokens like status.error) rather than only listing raw color values?"
+        },
+        {
+          "id": "sixteen-concrete",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer handle the 16-color case concretely: which ANSI color (0-15) or attribute each role falls back to, or a measured contrast result at 16 colors, not just a generic remark?"
+        }
+      ]
+    },
+    {
+      "id": "review-clutter-floor",
+      "source": "G2, T2.2, T5.1: clutter audit counted with numbers and the floor test at 80x24 and a 60-column split",
+      "lang": "en",
+      "area": "review",
+      "prompt": "Here's a plain-text dump of my cluster dashboard TUI as it looks today in a 120x30 terminal (screen.txt). How would you improve it?",
+      "fixtures": [
+        {
+          "path": "screen.txt",
+          "lines": [
+            "╔═══════════════════════════════════════════════════ KubeDash v0.9 ════════════════════════════════════════════════════╗",
+            "║ Cluster: prod-eu-1   Context: prod-eu-1   Namespace: default   User: admin   Time: 2026-10-02 14:03:11 UTC           ║",
+            "║ CPU: 62%   MEM: 71%   Pods: 14   Nodes: 3   Namespace: default                                                       ║",
+            "║ ┌─ Pods (14) ──────────────────────────────────────────────────────────────────────────────────────────────────────┐ ║",
+            "║ │ STATUS             NAME                    NAMESPACE            READY   RESTARTS   AGE    NODE                   │ ║",
+            "║ │ [OK] ✓ Running     api-7f9c-x2k            Namespace: default  1/1     0          3d     node-a                  │ ║",
+            "║ │ [OK] ✓ Running     api-7f9c-m8q            Namespace: default  1/1     0          3d     node-b                  │ ║",
+            "║ │ [OK] ✓ Running     web-55d1-a91            Namespace: default  1/1     1          6h     node-a                  │ ║",
+            "║ │ [OK] ✓ Running     cache-0                 Namespace: default  1/1     0          9d     node-c                  │ ║",
+            "║ │ [ERR] ✗ Failed     worker-5d8-q1           Namespace: default  0/1     12         3d     node-b                  │ ║",
+            "║ │ [WARN] ▲ Pending   batch-job-1             Namespace: default  0/1     0          2m     <none>                  │ ║",
+            "║ │ [WARN] ▲ Pending   batch-job-2             Namespace: default  0/1     0          2m     <none>                  │ ║",
+            "║ │ [WARN] ▲ Pending   batch-job-3             Namespace: default  0/1     0          2m     <none>                  │ ║",
+            "║ │ [WARN] ▲ Pending   batch-job-4             Namespace: default  0/1     0          2m     <none>                  │ ║",
+            "║ │ [WARN] ▲ Pending   batch-job-5             Namespace: default  0/1     0          2m     <none>                  │ ║",
+            "║ │ [WARN] ▲ Pending   batch-job-6             Namespace: default  0/1     0          2m     <none>                  │ ║",
+            "║ │ … 3 more (scroll)                                                                                                │ ║",
+            "║ └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ ║",
+            "║ ┌─ Events ─────────────────────────────────────────────────────────────────────────────────────────────────────────┐ ║",
+            "║ │ Warning  Unhealthy  pod/worker-5d8-q1  Readiness probe failed: HTTP probe failed with statuscode: 503            │ ║",
+            "║ │ Warning  Unhealthy  pod/worker-5d8-q1  Readiness probe failed: HTTP probe failed with statuscode: 503            │ ║",
+            "║ │ Warning  Unhealthy  pod/worker-5d8-q1  Readiness probe failed: HTTP probe failed with statuscode: 503            │ ║",
+            "║ │ Warning  Unhealthy  pod/worker-5d8-q1  Readiness probe failed: HTTP probe failed with statuscode: 503            │ ║",
+            "║ │ Warning  Unhealthy  pod/worker-5d8-q1  Readiness probe failed: HTTP probe failed with statuscode: 503            │ ║",
+            "║ └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ ║",
+            "║ [F1] Help  [F2] Rename  [F5] Refresh  [F10] Quit  [Tab] Next pane  [/] Filter  [d] Describe  [l] Logs  [e] Edit      ║",
+            "║ [s] Shell  [ctrl+d] Delete  [y] YAML  [n] Namespace  [c] Context  [?] Keys                                           ║",
+            "╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "clutter-counted",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "(?i)(\\b\\d+\\s*(?:/|of|de)\\s*\\d+\\s*(?:rows?|filas?|lines?|l[ií]neas?|pods?)\\b|\\b\\d+\\s*(?:rows?|filas?|lines?|l[ií]neas?|columns?|cols?|columnas?|cells?|celdas?|times|veces|boxes|cajas|borders?|bordes?|repeats?|duplicates?|copies)\\b|(?<!\\d)[×x]\\s?\\d+\\b|\\b\\d+(?:[.,]\\d+)?\\s*%)",
+          "min": 4,
+          "desc": "clutter is counted with numbers (rows, columns, ×N, percentages), at least 4 counts"
+        },
+        {
+          "id": "floor-80x24",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "(?i)\\b80\\s*[x×]\\s*24\\b",
+          "desc": "says what happens at 80x24"
+        },
+        {
+          "id": "floor-60-split",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "(?i)\\b60\\s*(?:[x×]\\s*\\d+|-?\\s*col(?:umn)?s?\\b|\\s*columnas?\\b|-column|-col)",
+          "desc": "says what happens in a 60-column split"
+        },
+        {
+          "id": "recommendation-first",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer open with its main recommendation (the one change that matters most, stated in the first paragraph or first bullet) before going through the detailed findings?"
+        },
+        {
+          "id": "names-what-to-fold",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer name specific elements to remove, merge or fold, with where they are in the dump (e.g. the 5 identical Events rows folded into one row with a count, the repeated 'Namespace: default' column, the double status markers like '[OK] ✓')?"
+        }
+      ]
+    },
+    {
+      "id": "quick-review-host-plugin",
+      "source": "T1.2, T1.6, T3.3, A3/C0: quick review = recommendation first, every suggestion names what it requires, host constraints asked",
+      "lang": "es",
+      "area": "review",
+      "prompt": "Esto es un plugin de alertas que corre dentro de un popup de mi multiplexor de terminal (popup.txt es lo que pinta hoy, NOTES.md tiene el contexto). Dame consejo rápido: ¿qué cambiarías? Nada de código ni mockups por ahora.",
+      "fixtures": [
+        {
+          "path": "popup.txt",
+          "lines": [
+            "ALERTS                                            updated 14:02:51",
+            "----------------------------------------------------------------------",
+            "SEV    SERVICE         ALERT                          SINCE   ACK",
+            "[!!]   payments-api    error rate > 5%                3m      no",
+            "[!!]   payments-api    error rate > 5%                3m      no",
+            "[!!]   payments-api    error rate > 5%                3m      no",
+            "[! ]   search          p95 latency > 800ms            12m     no",
+            "[! ]   checkout        queue depth > 10k              25m     no",
+            "[ i]   search          disk usage 81%                 1h      yes",
+            "[ i]   ingest          consumer lag 2.1k msgs         2h      yes",
+            "[ i]   ingest          consumer lag 2.1k msgs         2h      yes",
+            "[ i]   mailer          retry rate 2%                  5h      yes",
+            "",
+            "",
+            "",
+            "----------------------------------------------------------------------",
+            "Enter: details | a: ack | A: ack all | s: silence 1h | S: silence 24h",
+            "r: refresh | /: filter | q: quit"
+          ]
+        },
+        {
+          "path": "NOTES.md",
+          "lines": [
+            "# Contexto",
+            "",
+            "- Es un plugin de alertas para mi multiplexor de terminal: se abre en un popup flotante con un atajo.",
+            "- El host dibuja el marco y el título del popup; el plugin pinta solo su área (70x18 por defecto) con Python + curses.",
+            "- Lo uso para ver rápido qué está ardiendo y hacer ack o silenciar sin salir de lo que estoy haciendo."
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "recommendation-first",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer open with its main recommendation (the one change that matters most, stated in the first paragraph or first bullet) before the detailed list?"
+        },
+        {
+          "id": "requirements-named",
+          "type": "judge",
+          "neutral": true,
+          "question": "Do most of the suggestions (at least two thirds) state what they require from the host or terminal (e.g. 'needs italic', 'needs 256 colors', 'needs a text input widget', 'needs a second pane'), so the user can drop the ones the host cannot do?"
+        },
+        {
+          "id": "asks-host-constraints",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer ask about, or propose a way to check, what the host lets the plugin draw or receive (colors, attributes, widgets, keys the multiplexer already takes)?"
+        },
+        {
+          "id": "no-files-written",
+          "type": "no_new_files",
+          "neutral": true,
+          "desc": "the user asked for no code and no mockups"
+        }
+      ]
+    },
+    {
+      "id": "footer-keys-macos",
+      "source": "T8 iteration: F2 on macOS needs fn; key availability (interaction.md §Key availability)",
+      "lang": "en",
+      "area": "keys",
+      "prompt": "I'm on a MacBook with iTerm2. Design the keybindings and the footer hint line for my deploy console TUI (Textual): list deploys, approve, roll back, retry, view logs, rename an environment, and apply staged changes. My users come from Midnight Commander, so F2 to rename and F10 to apply feel natural.",
+      "fixtures": [],
+      "assertions": [
+        {
+          "id": "no-fkey-only",
+          "type": "judge",
+          "neutral": true,
+          "question": "In the proposed keymap, can every action be triggered without a function key (F1-F12)? Answer yes only if F-keys appear at most as aliases next to a letter or ctrl/other binding."
+        },
+        {
+          "id": "mac-fkey-caveat",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "(?i)(\\bfn\\b|media keys?|brightness|volume keys?|standard function keys|hardware keys)",
+          "desc": "mentions that macOS F-keys need fn / are media keys by default"
+        },
+        {
+          "id": "confirm-apply",
+          "type": "judge",
+          "neutral": true,
+          "question": "Do the batch or destructive actions (apply staged changes, roll back) go through a confirmation step that says what will happen (e.g. how many changes, which version)?"
+        }
+      ]
+    },
+    {
+      "id": "editor-handoff-bubbletea",
+      "source": "lifecycle LC3 (handoff: stop input, restore, run, re-enter, reload data the child changed: new mtime, new size; redraw) + LC5 (errors visible)",
+      "lang": "en",
+      "area": "lifecycle",
+      "prompt": "In my Bubble Tea config browser (main.go), pressing `e` opens $EDITOR, but vim looks garbled, some of my keystrokes go to the TUI instead, and after I quit vim the preview still shows the old contents of the file; the size and time next to the file don't change either. Also, when the editor fails to start or exits unsuccessfully (we had EDITOR pointing at an uninstalled `code`), the browser should say so and keep working. Fix main.go.",
+      "fixtures": [
+        {
+          "path": "main.go",
+          "lines": [
+            "package main",
+            "",
+            "import (",
+            "\t\"fmt\"",
+            "\t\"os\"",
+            "\t\"os/exec\"",
+            "\t\"path/filepath\"",
+            "\t\"strings\"",
+            "\t\"time\"",
+            "",
+            "\ttea \"github.com/charmbracelet/bubbletea\"",
+            ")",
+            "",
+            "type entry struct {",
+            "\tpath string",
+            "\tsize int64",
+            "\tmod  time.Time",
+            "}",
+            "",
+            "type model struct {",
+            "\tdir     string",
+            "\tfiles   []entry",
+            "\tcursor  int",
+            "\tpreview string",
+            "\terr     error",
+            "}",
+            "",
+            "func loadFiles(dir string) []entry {",
+            "\tmatches, _ := filepath.Glob(filepath.Join(dir, \"*.toml\"))",
+            "\tvar out []entry",
+            "\tfor _, p := range matches {",
+            "\t\tif fi, err := os.Stat(p); err == nil {",
+            "\t\t\tout = append(out, entry{path: p, size: fi.Size(), mod: fi.ModTime()})",
+            "\t\t}",
+            "\t}",
+            "\treturn out",
+            "}",
+            "",
+            "func readPreview(path string) string {",
+            "\tb, err := os.ReadFile(path)",
+            "\tif err != nil {",
+            "\t\treturn \"error: \" + err.Error()",
+            "\t}",
+            "\treturn string(b)",
+            "}",
+            "",
+            "func initialModel(dir string) model {",
+            "\tm := model{dir: dir, files: loadFiles(dir)}",
+            "\tif len(m.files) > 0 {",
+            "\t\tm.preview = readPreview(m.files[0].path)",
+            "\t}",
+            "\treturn m",
+            "}",
+            "",
+            "func (m model) Init() tea.Cmd { return nil }",
+            "",
+            "func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {",
+            "\tswitch msg := msg.(type) {",
+            "\tcase tea.KeyMsg:",
+            "\t\tswitch msg.String() {",
+            "\t\tcase \"q\", \"ctrl+c\":",
+            "\t\t\treturn m, tea.Quit",
+            "\t\tcase \"j\", \"down\":",
+            "\t\t\tif m.cursor < len(m.files)-1 {",
+            "\t\t\t\tm.cursor++",
+            "\t\t\t\tm.preview = readPreview(m.files[m.cursor].path)",
+            "\t\t\t}",
+            "\t\tcase \"k\", \"up\":",
+            "\t\t\tif m.cursor > 0 {",
+            "\t\t\t\tm.cursor--",
+            "\t\t\t\tm.preview = readPreview(m.files[m.cursor].path)",
+            "\t\t\t}",
+            "\t\tcase \"e\":",
+            "\t\t\tif len(m.files) == 0 {",
+            "\t\t\t\treturn m, nil",
+            "\t\t\t}",
+            "\t\t\teditor := os.Getenv(\"EDITOR\")",
+            "\t\t\tif editor == \"\" {",
+            "\t\t\t\teditor = \"vi\"",
+            "\t\t\t}",
+            "\t\t\tc := exec.Command(editor, m.files[m.cursor].path)",
+            "\t\t\tc.Stdin = os.Stdin",
+            "\t\t\tc.Stdout = os.Stdout",
+            "\t\t\tc.Stderr = os.Stderr",
+            "\t\t\tif err := c.Run(); err != nil {",
+            "\t\t\t\tm.err = err",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+            "\treturn m, nil",
+            "}",
+            "",
+            "func (m model) View() string {",
+            "\tvar b strings.Builder",
+            "\tb.WriteString(\"config browser - \" + m.dir + \"\\n\\n\")",
+            "\tfor i, f := range m.files {",
+            "\t\tcursor := \"  \"",
+            "\t\tif i == m.cursor {",
+            "\t\t\tcursor = \"> \"",
+            "\t\t}",
+            "\t\tb.WriteString(fmt.Sprintf(\"%s%-24s %6d B  %s\\n\", cursor, filepath.Base(f.path), f.size, f.mod.Format(\"15:04\")))",
+            "\t}",
+            "\tb.WriteString(\"\\n\" + m.preview + \"\\n\")",
+            "\tif m.err != nil {",
+            "\t\tb.WriteString(\"error: \" + m.err.Error() + \"\\n\")",
+            "\t}",
+            "\tb.WriteString(\"\\nj/k move  e edit  q quit\\n\")",
+            "\treturn b.String()",
+            "}",
+            "",
+            "func main() {",
+            "\tdir := \".\"",
+            "\tif len(os.Args) > 1 {",
+            "\t\tdir = os.Args[1]",
+            "\t}",
+            "\tp := tea.NewProgram(initialModel(dir), tea.WithAltScreen())",
+            "\tif _, err := p.Run(); err != nil {",
+            "\t\tfmt.Println(err)",
+            "\t\tos.Exit(1)",
+            "\t}",
+            "}"
+          ]
+        },
+        {
+          "path": "go.mod",
+          "lines": [
+            "module configbrowser",
+            "",
+            "go 1.22",
+            "",
+            "require github.com/charmbracelet/bubbletea v1.3.4"
+          ]
+        }
+      ],
+      "judge_context": [
+        "**/*.go"
+      ],
+      "assertions": [
+        {
+          "id": "handoff-managed",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the reachable edit action hand terminal ownership and input to the editor, wait for its completion, and restore the running TUI through Bubble Tea's managed execution API (tea.ExecProcess / tea.Exec) or an equivalent release/restore implementation? Do not accept comments or unused helpers as evidence. Do not reject a blocking Run method inside a framework-managed ExecCommand."
+        },
+        {
+          "id": "reloads-after-edit",
+          "type": "judge",
+          "neutral": true,
+          "question": "After a successful editor completion, does the reachable completion path re-read the edited file and update the displayed preview rather than repaint stale contents? Reloading after an unsuccessful exit is permitted but not required."
+        },
+        {
+          "id": "reloads-listing",
+          "type": "judge",
+          "neutral": true,
+          "question": "After a successful edit, does the reachable completion path obtain fresh filesystem size and modification time for the edited file and update the metadata actually displayed in the list? Accept either a full listing reload or an update to that entry. Updating only the preview or an unused variable does not count. Do not require the formatted time to visibly change when both timestamps fall within the same displayed minute."
+        },
+        {
+          "id": "editor-failure-visible",
+          "type": "judge",
+          "neutral": true,
+          "question": "When the editor cannot start or exits unsuccessfully, does the program show that error in the TUI (for example from the tea.ExecProcess callback's error) and keep running, instead of quitting, panicking or silently ignoring it? Do not reject reloading the file after a non-zero exit: an editor can save before failing."
+        }
+      ]
+    },
+    {
+      "id": "redesign-three-concepts",
+      "source": "T6.6, T7.4, T8.4: redesigns converge on 'the same table, improved'; A2 diverge into 3 concepts; T2.12 keep what works",
+      "lang": "es",
+      "area": "ambition",
+      "prompt": "Mi TUI para actualizar paquetes (así se ve hoy: current.txt, en un terminal de 100x28) se ve pobre y genérica, como una tabla más. Rediséñala con ambición; quiero ver opciones realmente distintas antes de elegir una.",
+      "fixtures": [
+        {
+          "path": "current.txt",
+          "lines": [
+            "pkgup 1.4 - 23 packages, 9 outdated",
+            "====================================================================================================",
+            "NAME            INSTALLED   LATEST      SOURCE     STATUS",
+            "ripgrep         14.1.0      14.1.1      brew       outdated",
+            "fd              10.1.0      10.2.0      brew       outdated",
+            "bat             0.24.0      0.24.0      brew       up to date",
+            "neovim          0.11.2      0.11.4      brew       outdated",
+            "jq              1.7.1       1.7.1       brew       up to date",
+            "node            22.9.0      22.11.0     mise       outdated",
+            "python          3.13.1      3.13.3      mise       outdated",
+            "go              1.23.4      1.23.4      mise       up to date",
+            "ruff            0.8.4       0.9.1       pipx       outdated",
+            "httpie          3.2.4       3.2.4       pipx       up to date",
+            "lazygit         0.44.1      0.45.0      brew       outdated",
+            "starship        1.21.1      1.21.1      brew       up to date",
+            "tmux            3.5a        3.5a        brew       up to date",
+            "gh              2.63.0      2.65.0      brew       outdated",
+            "uv              0.5.11      0.5.14      brew       outdated",
+            "... 8 more",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "----------------------------------------------------------------------------------------------------",
+            "[u] update selected  [U] update all  [space] select  [/] search  [q] quit"
+          ]
+        }
+      ],
+      "judge_context": [
+        "**/*.mock",
+        "**/*.md",
+        "**/*.txt"
+      ],
+      "assertions": [
+        {
+          "id": "three-distinct-concepts",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer present at least three genuinely different layout concepts (a different structure or organizing idea each, e.g. a queue, a grouped dashboard, a spotlight/palette), not three color or spacing variants of the same table?"
+        },
+        {
+          "id": "three-concept-frames",
+          "type": "mock_variants",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min": 3,
+          "desc": "at least 3 distinct concept variants exist as .mock frames"
+        },
+        {
+          "id": "mocks-lint-clean",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 1,
+          "desc": "frames pass render_mockup.py --check with 0 errors"
+        },
+        {
+          "id": "real-packages",
+          "type": "files_contain",
+          "neutral": true,
+          "glob": "**/*",
+          "strings": [
+            "ripgrep",
+            "neovim",
+            "lazygit",
+            "starship",
+            "ruff",
+            "httpie",
+            "python",
+            "node"
+          ],
+          "min_distinct": 4,
+          "desc": "the mockups reuse the real package names from current.txt"
+        },
+        {
+          "id": "keeps-what-works",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer name at least one thing from the current screen that works and is kept (e.g. aligned columns, installed vs latest versions, the search key), rather than silently discarding everything?"
+        }
+      ]
+    },
+    {
+      "id": "real-vs-invented-data",
+      "source": "T7.6, T8.1, T2.11: invented data presented as insight; invented values must be named",
+      "lang": "en",
+      "area": "data",
+      "prompt": "Mock up the main screen of my deploy console using this data (snapshot.json), at 120x30 and 80x24. I'd also like a column showing who triggered each deploy.",
+      "fixtures": [
+        {
+          "path": "snapshot.json",
+          "lines": [
+            "{",
+            "  \"generated_at\": \"2026-10-02T10:15:00Z\",",
+            "  \"cluster\": \"eu-west\",",
+            "  \"services\": [",
+            "    {",
+            "      \"name\": \"ledger-api\",",
+            "      \"env\": \"prod\",",
+            "      \"version\": \"2.8.1\",",
+            "      \"previous\": \"2.8.0\",",
+            "      \"status\": \"healthy\",",
+            "      \"deployed_at\": \"2026-10-02T09:41:00Z\",",
+            "      \"replicas\": \"6/6\"",
+            "    },",
+            "    {",
+            "      \"name\": \"invoice-worker\",",
+            "      \"env\": \"prod\",",
+            "      \"version\": \"1.19.0\",",
+            "      \"previous\": \"1.18.3\",",
+            "      \"status\": \"rolling\",",
+            "      \"deployed_at\": \"2026-10-02T10:12:00Z\",",
+            "      \"replicas\": \"2/4\"",
+            "    },",
+            "    {",
+            "      \"name\": \"auth-gateway\",",
+            "      \"env\": \"prod\",",
+            "      \"version\": \"5.2.0\",",
+            "      \"previous\": \"5.2.0\",",
+            "      \"status\": \"healthy\",",
+            "      \"deployed_at\": \"2026-09-28T16:05:00Z\",",
+            "      \"replicas\": \"3/3\"",
+            "    },",
+            "    {",
+            "      \"name\": \"notifier\",",
+            "      \"env\": \"prod\",",
+            "      \"version\": \"0.31.4\",",
+            "      \"previous\": \"0.31.2\",",
+            "      \"status\": \"failed\",",
+            "      \"deployed_at\": \"2026-10-02T08:57:00Z\",",
+            "      \"replicas\": \"0/2\"",
+            "    },",
+            "    {",
+            "      \"name\": \"search-indexer\",",
+            "      \"env\": \"staging\",",
+            "      \"version\": \"3.0.0-rc2\",",
+            "      \"previous\": \"3.0.0-rc1\",",
+            "      \"status\": \"healthy\",",
+            "      \"deployed_at\": \"2026-10-01T22:30:00Z\",",
+            "      \"replicas\": \"1/1\"",
+            "    },",
+            "    {",
+            "      \"name\": \"media-resizer\",",
+            "      \"env\": \"prod\",",
+            "      \"version\": \"4.7.2\",",
+            "      \"previous\": \"4.7.1\",",
+            "      \"status\": \"degraded\",",
+            "      \"deployed_at\": \"2026-10-02T07:20:00Z\",",
+            "      \"replicas\": \"3/5\"",
+            "    },",
+            "    {",
+            "      \"name\": \"report-cron\",",
+            "      \"env\": \"prod\",",
+            "      \"version\": \"1.0.9\",",
+            "      \"previous\": \"1.0.9\",",
+            "      \"status\": \"paused\",",
+            "      \"deployed_at\": \"2026-09-15T03:00:00Z\",",
+            "      \"replicas\": \"0/0\"",
+            "    },",
+            "    {",
+            "      \"name\": \"web-frontend\",",
+            "      \"env\": \"prod\",",
+            "      \"version\": \"12.4.0\",",
+            "      \"previous\": \"12.3.5\",",
+            "      \"status\": \"healthy\",",
+            "      \"deployed_at\": \"2026-10-02T09:02:00Z\",",
+            "      \"replicas\": \"8/8\"",
+            "    }",
+            "  ]",
+            "}"
+          ]
+        }
+      ],
+      "judge_context": [
+        "**/*.mock",
+        "**/*.md",
+        "**/*.txt"
+      ],
+      "assertions": [
+        {
+          "id": "uses-snapshot",
+          "type": "files_contain",
+          "neutral": true,
+          "glob": "**/*",
+          "strings": [
+            "ledger-api",
+            "invoice-worker",
+            "auth-gateway",
+            "notifier",
+            "search-indexer",
+            "media-resizer",
+            "report-cron",
+            "web-frontend"
+          ],
+          "min_distinct": 5,
+          "desc": "frames use at least 5 real service names from snapshot.json"
+        },
+        {
+          "id": "invented-declared",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "(?i)(invent|illustrative|placeholder|made[- ]up|fictional|fake|dummy|sample (data|values|names)|not (in|present in|part of|included in) (the )?(snapshot|data)|doesn'?t (have|include|contain)|no (triggered|trigger|actor|user) (field|data))",
+          "desc": "the answer says some values are invented / not in the data"
+        },
+        {
+          "id": "trigger-not-real",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer state explicitly that 'who triggered each deploy' is not in snapshot.json (so the values shown are invented/placeholders, or need a new data source), rather than presenting them as real data?"
+        },
+        {
+          "id": "size-120x30",
+          "type": "file_regex",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "pattern": "(?m)^#! size: 120x30\\s*$",
+          "mode": "any",
+          "desc": "a .mock frame at 120x30"
+        },
+        {
+          "id": "size-80x24",
+          "type": "file_regex",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "pattern": "(?m)^#! size: 80x24\\s*$",
+          "mode": "any",
+          "desc": "a .mock frame at 80x24"
+        },
+        {
+          "id": "mocks-lint-clean",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 2,
+          "desc": "frames pass render_mockup.py --check with 0 errors"
+        }
+      ]
+    },
+    {
+      "id": "floor-60-split",
+      "source": "G2 / D7: floor test at 80x24 and a 60-column split; which pane wins, what hides first, too-small",
+      "lang": "en",
+      "area": "frames",
+      "prompt": "My log viewer is designed for 160x45 (layout.md describes it). What happens at 80x24, and when someone runs it in a 60-column tmux split? Show me those screens.",
+      "fixtures": [
+        {
+          "path": "layout.md",
+          "lines": [
+            "# logview layout (designed for 160x45)",
+            "",
+            "Three panes side by side, one header row and one footer row.",
+            "",
+            "| Pane | Width | Content |",
+            "|---|---|---|",
+            "| Sources | 32 cols | 12 log sources (`api`, `worker`, `db`, `cron`, `edge-1`, `edge-2`, ...) with an unread count and an error count per source |",
+            "| Stream | flexible (about 80 cols at 160) | live log lines: `HH:MM:SS.mmm  LEVEL  source  message`, newest at the bottom, follows the tail unless the user scrolls |",
+            "| Details | 48 cols | fields of the selected line: timestamp, level, source, host, trace id, and the JSON payload pretty-printed |",
+            "",
+            "Header: app name, active filter, lines/s rate, \"following\" indicator.",
+            "Footer: `tab pane  / filter  f follow  enter details  c copy  ? help  q quit`.",
+            "Focus moves Sources -> Stream -> Details with tab. Built with Textual."
+          ]
+        }
+      ],
+      "judge_context": [
+        "**/*.mock",
+        "**/*.md",
+        "**/*.txt"
+      ],
+      "assertions": [
+        {
+          "id": "frame-60-cols",
+          "type": "file_regex",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "pattern": "(?m)^#! size: 60x\\d+\\s*$",
+          "mode": "any",
+          "desc": "a .mock frame 60 columns wide"
+        },
+        {
+          "id": "frame-80x24",
+          "type": "file_regex",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "pattern": "(?m)^#! size: 80x24\\s*$",
+          "mode": "any",
+          "desc": "a .mock frame at 80x24"
+        },
+        {
+          "id": "mocks-lint-clean",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 2,
+          "desc": "frames pass render_mockup.py --check with 0 errors"
+        },
+        {
+          "id": "inline-sketch-on-grid",
+          "type": "answer_box_widths",
+          "neutral": true,
+          "desc": "every box-drawn sketch in the answer has rows of equal display width"
+        },
+        {
+          "id": "pane-wins-hides",
+          "type": "judge",
+          "neutral": true,
+          "question": "For the 60-column case, does the answer say which pane stays whole (wins) and which panes are hidden or collapsed first?"
+        },
+        {
+          "id": "minimum-size",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer define a minimum size and what the app shows below it (a 'too small' message or a single-pane fallback)?"
+        }
+      ]
+    },
+    {
+      "id": "fix-broken-mock",
+      "source": "A4 / MR-02 / TC-10: frames must pass --check; no raw hex; respect the declared caps (no italic) instead of loosening them + interaction.md key availability (no F-key as the only binding on macOS) + SKILL.md Glyph + color (a status marker never contradicts its content)",
+      "lang": "en",
+      "area": "frames",
+      "prompt": "Before I show this mockup of our job queue (queue--normal--80x24.mock) to the team, check it and fix whatever is wrong, in place. The team uses Terminal.app on macOS. The job names and states in it are real data from our queue: keep them.",
+      "fixtures": [
+        {
+          "path": "queue--normal--80x24.mock",
+          "lines": [
+            "#! tui-mockup 1",
+            "#! size: 80x24",
+            "#! title: Job queue",
+            "#! state: normal",
+            "#! caps: attrs=bold,dim,inverse colors=256 glyphs=unicode source=docs",
+            "#! region r1 header 0,0,80,1",
+            "#! region r2 list 0,1,80,10 Jobs (6)",
+            "#! region r3 keybar 0,11,80,1",
+            "#! focus r2",
+            "{accent.primary bold} Queue {/}{fg.muted}· 6 jobs · 1 running · 2 failed{/}",
+            "{border.focus}╭─{/}{fg.title bold} Jobs (6) {/}{border.focus}───────────────────────────────────────────────────────────────────╮{/}",
+            "{border.focus}│{/} {status.success}●{/} {fg.default}nightly-backup {/} {fg.muted}running {/}  {fg.faint}00:04:12{/}                                         {border.focus}│{/}",
+            "{border.focus}│{/} {status.success}●{/} {fg.default}resize-images  {/} {fg.muted}failed  {/}  {fg.faint}00:01:55{/}                                         {border.focus}│{/}",
+            "{border.focus}│{/} {status.warning}▲{/} {fg.default}sync-mirrors   {/} {fg.muted}retrying{/}  {fg.faint}00:00:40{/}                                         {border.focus}│{/}",
+            "{border.focus}│{/} {#ff5555}✗{/} {fg.default}export-reports-quarterly {/} {fg.muted}failed  {/}  {fg.faint}00:12:03{/}                                         {border.focus}│{/}",
+            "{border.focus}│{/} {fg.faint}·{/} {fg.default italic}purge-cache    {/} {fg.muted}queued  {/}  {fg.faint}--:--:--{/}                                         {border.focus}│{/}",
+            "{border.focus}│{/} {fg.faint}·{/} {fg.default italic}rotate-keys    {/} {fg.muted}queued  {/}  {fg.faint}--:--:--{/}                                         {border.focus}│{/}",
+            "{border.focus}│{/}                                                                              {border.focus}│{/}",
+            "{border.focus}│{/}                                                                              {border.focus}│{/}",
+            "{border.focus}╰──────────────────────────────────────────────────────────────────────────────╯{/}",
+            "{fg.muted}j/k{/} {fg.default}move{/}  {fg.muted}F2{/} {fg.default}retry{/}  {fg.muted}d{/} {fg.default}delete{/}  {fg.muted}q{/} {fg.default}quit{/}"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "lint-clean",
+          "type": "mock_lint",
+          "neutral": true,
+          "glob": "queue--normal--80x24.mock",
+          "min_files": 1,
+          "desc": "the fixed file passes render_mockup.py --check with 0 errors"
+        },
+        {
+          "id": "no-hex",
+          "type": "file_regex",
+          "neutral": true,
+          "glob": "queue--normal--80x24.mock",
+          "pattern": "#[0-9a-fA-F]{6}\\b",
+          "mode": "none",
+          "desc": "no raw hex color left"
+        },
+        {
+          "id": "caps-kept",
+          "type": "file_regex",
+          "neutral": true,
+          "glob": "queue--normal--80x24.mock",
+          "pattern": "(?m)^#! caps: (?!.*italic).*attrs=",
+          "mode": "all",
+          "desc": "the caps line is kept and italic was not added to it"
+        },
+        {
+          "id": "content-kept",
+          "type": "file_regex",
+          "neutral": true,
+          "glob": "queue--normal--80x24.mock",
+          "pattern": "export-reports",
+          "mode": "all",
+          "desc": "the overflowing job row was fixed, not deleted"
+        },
+        {
+          "id": "lists-changes",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer list the problems it found and what it changed for each?"
+        },
+        {
+          "id": "retry-reachable",
+          "type": "judge",
+          "neutral": true,
+          "question": "In the visible footer of the fixed mock, is retry still offered with an unmodified letter key that does not conflict with another advertised action? F2 may remain as an alias. Accept equivalent hint formatting and any suitable letter; do not count notes, headers, or explanatory prose outside the displayed frame."
+        },
+        {
+          "id": "status-truthful",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the visible resize-images row of the fixed mock keep the job name and its failed state, with a failure marker styled with status.error instead of the original success marker? Accept ✗ or the documented [x] fallback. Do not count matching tokens or text elsewhere, removal of the row, or changing failed to another state."
+        }
+      ],
+      "judge_context": [
+        "queue--normal--80x24.mock"
+      ]
+    },
+    {
+      "id": "screenshot-audit",
+      "source": "SKILL.md branch C screenshot path; gap-gfargo §3 (colors from pixels, never from the model); T2/T4 screenshot reviews",
+      "lang": "en",
+      "area": "audit",
+      "tags": [
+        "screenshot"
+      ],
+      "prompt": "Here's a screenshot of my backup monitor TUI (screenshot.png). Audit it properly: I want to know exactly what is on screen and what is wrong with it, with evidence, not taste.",
+      "fixtures": [
+        {
+          "path": "screenshot.png",
+          "src": "screenshot-audit/screenshot.png"
+        }
+      ],
+      "judge_context": [
+        "**/*.md",
+        "**/*.mock"
+      ],
+      "judge_reference": [
+        "screenshot-audit/backupd--normal--80x24.mock"
+      ],
+      "assertions": [
+        {
+          "id": "describes-first",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer (or the audit report it wrote) first describe what is on the screen, region by region (title row, jobs table, status line, key footer) with their contents, before it gives judgments or recommendations?"
+        },
+        {
+          "id": "structure-matches",
+          "type": "judge",
+          "neutral": true,
+          "question": "Compared with the ground-truth mock, does the answer's description of the screen match its main structure: a title row, a framed jobs table of 8 jobs with columns STATUS JOB TARGET REPO LAST RUN SIZE, empty space below the table, a red 'Last error' line and key-hint rows at the bottom? Small omissions are fine; answer no if it misses most of these or describes regions, rows, values or colors that are not in the ground truth."
+        },
+        {
+          "id": "real-flaws",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer identify at least three of these real flaws: the frame inside a frame (double border), the blank band of empty rows inside the frame, the REPO column repeating 's3-main' on every row, the [OK]/[FAIL]/[WARN] bracket tags, the alarm-red title on normal content, the key hints spread over two footer rows or F-key-only bindings?"
+        },
+        {
+          "id": "colors-from-pixels",
+          "type": "hex_near",
+          "neutral": true,
+          "palette": "screenshot-audit/palette.json",
+          "scope": "both",
+          "files_glob": "**/*.md",
+          "max_dist": 30,
+          "min_hex": 0,
+          "desc": "every hex color reported (answer and report) is within 30 RGB of a color really in the screenshot: colors were sampled, not invented"
+        },
+        {
+          "id": "pixels-read",
+          "type": "transcript_regex",
+          "neutral": true,
+          "pattern": "sample_colors\\.py|getpixel|getcolors|Image\\.open|prep_screenshot\\.py",
+          "min": 1,
+          "desc": "the agent measured the image (pixel sampling or the screenshot prep script) instead of guessing"
+        }
+      ],
+      "timeout": 1500
+    },
+    {
+      "id": "live-capture-audit",
+      "serial": true,
+      "source": "lifecycle LC4 (never cache the startup size) + capture_tui.sh (later sizes resize the running app) + audit RS-05; perception separate from judgment",
+      "lang": "es",
+      "area": "audit",
+      "tags": [
+        "live-capture"
+      ],
+      "prompt": "Tengo un panel de tareas cron hecho con curses (`jobs_tui.py`, lee `jobs.json`; se lanza con `python3 jobs_tui.py`). Mis usuarios lo abren a pantalla completa (unos 160x45) y luego lo pasan a un split de tmux de 80x24. Audítalo tal como se ve de verdad en pantalla: compara esa sesión redimensionada con un arranque limpio a 80x24, guarda cada captura como volcado de texto de la pantalla (un .txt por condición) en `audit/` y dime qué falla, con pruebas.",
+      "fixtures": [
+        {
+          "path": "jobs_tui.py",
+          "src": "live-capture/jobs_tui.py"
+        },
+        {
+          "path": "jobs.json",
+          "src": "live-capture/jobs.json"
+        }
+      ],
+      "claude_tools": [
+        "Bash(.claude/skills/tui-design/scripts/capture_tui.sh:*)",
+        "Bash(bash:*)",
+        "Bash(mkdir:*)",
+        "Bash(sh:*)",
+        "Bash(sleep:*)",
+        "Bash(tmux:*)"
+      ],
+      "judge_context": [
+        "**/*.md",
+        "**/*.txt",
+        "audit/**"
+      ],
+      "assertions": [
+        {
+          "id": "capture-resized-kept",
+          "type": "file_regex",
+          "neutral": true,
+          "glob": "audit/**/*.txt",
+          "pattern": "(?m)^[ \\t]*NAME[ \\t]+SCHEDULE[ \\t]+LAST RUN[ \\t]+NEXT RUN\\b(?![^\\n]*STATUS)",
+          "strip_ansi": true,
+          "mode": "any",
+          "desc": "a capture of the session shrunk to 80 columns is kept: the startup header without STATUS"
+        },
+        {
+          "id": "capture-fresh-kept",
+          "type": "file_regex",
+          "neutral": true,
+          "glob": "audit/**/*.txt",
+          "pattern": "(?m)^[ \\t]*NAME[ \\t]+SCHEDULE[ \\t]+NEXT RUN[ \\t]+STATUS\\b",
+          "strip_ansi": true,
+          "mode": "any",
+          "desc": "a capture of a fresh launch at 80x24 is kept: the fitted header with STATUS"
+        },
+        {
+          "id": "stale-after-resize",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer identify that shrinking a running wide session to 80x24 leaves a stale column plan that hides STATUS, while a fresh launch at 80x24 fits its selected columns? Does it cite retained captures from both conditions, identifying their dimensions and concrete visible or missing headers? Accept equivalent measurements; do not require a particular coordinate convention or wording."
+        },
+        {
+          "id": "hidden-jobs",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer identify that some jobs are off-screen at 80x24, quantify the visible subset, and explain the missing viewport or overflow indication? Do not require claiming that the total job count is absent."
+        },
+        {
+          "id": "cites-measured",
+          "type": "judge",
+          "neutral": true,
+          "question": "Do the findings cite what was measured on the captured screen (row or column positions, counts of rows or cells, the exact text seen at a position) rather than only reasoning from the source code?"
+        },
+        {
+          "id": "code-untouched",
+          "type": "fixture_unchanged",
+          "neutral": true,
+          "path": "jobs_tui.py",
+          "desc": "an audit does not rewrite the app"
+        }
+      ],
+      "timeout": 1200
+    },
+    {
+      "id": "shell-contract-cli",
+      "source": "references/cli-contract.md CC1-CC2, §2-§3 (gap-gfargo §2.1): SIGPIPE, 130 on cancel, no escapes when stdout is not a TTY, usage error = 2",
+      "lang": "en",
+      "area": "shell",
+      "tags": [
+        "cli"
+      ],
+      "prompt": "Other people's scripts call my `pkgls.py` (a `list` mode and an interactive `pick` mode) and they keep reporting that it misbehaves in pipes, in redirects, when cancelled and when called with a wrong argument. Fix pkgls.py in place; keep the list format and the picker keys as they are.",
+      "fixtures": [
+        {
+          "path": "pkgls.py",
+          "src": "shell-contract/pkgls.py"
+        }
+      ],
+      "claude_tools": [
+        "Bash(bash:*)",
+        "Bash(head:*)",
+        "Bash(tmux:*)"
+      ],
+      "judge_context": [
+        "pkgls.py"
+      ],
+      "assertions": [
+        {
+          "id": "pipe-head-quiet",
+          "type": "exec",
+          "neutral": true,
+          "cmd": "python3 pkgls.py list | head -1",
+          "timeout": 30,
+          "expect_exit": [
+            0,
+            1,
+            141
+          ],
+          "stdout_regex": "alpha-utils-000",
+          "stderr_not_regex": "\\S",
+          "desc": "`list | head -1` ends silently: status 0, 141 or 1 (Python's documented recipe), nothing on stderr"
+        },
+        {
+          "id": "plain-when-redirected",
+          "type": "exec",
+          "neutral": true,
+          "cmd": "python3 pkgls.py list > out.txt",
+          "timeout": 30,
+          "expect_exit": [
+            0
+          ],
+          "files": [
+            {
+              "path": "out.txt",
+              "not_regex": "\\x1b\\[",
+              "regex": "alpha-utils-000\\s+1\\.0\\.0\\s+outdated",
+              "min_lines": 2400
+            }
+          ],
+          "desc": "no escape codes when stdout is a file; same format and all 2400 rows"
+        },
+        {
+          "id": "ctrl-c-130",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 pkgls.py pick",
+          "size": "80x24",
+          "ready": "alpha-utils-000",
+          "actions": [
+            {
+              "keys": "C-c"
+            }
+          ],
+          "expect_status": [
+            130
+          ],
+          "stty_restored": true,
+          "desc": "Ctrl-C in the picker exits 130 with the terminal restored"
+        },
+        {
+          "id": "pick-redirected",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 pkgls.py pick > choice.txt",
+          "size": "80x24",
+          "ready": "alpha-utils-000",
+          "actions": [
+            {
+              "keys": "Down"
+            },
+            {
+              "keys": "Enter"
+            }
+          ],
+          "expect_status": [
+            0
+          ],
+          "stty_restored": true,
+          "files": [
+            {
+              "path": "choice.txt",
+              "regex": "\\Abrotli-000\\n?\\Z"
+            }
+          ],
+          "desc": "with stdout redirected the picker still draws on the terminal and only the choice lands in the file"
+        },
+        {
+          "id": "usage-exit-2",
+          "type": "exec",
+          "neutral": true,
+          "cmd": "python3 pkgls.py frobnicate",
+          "timeout": 20,
+          "expect_exit": [
+            2
+          ],
+          "stdout_not_regex": "\\S",
+          "desc": "a usage error exits 2 with the message on stderr, nothing on stdout"
+        },
+        {
+          "id": "explains-contract",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer explain the fixes in terms of how the tool should behave in a shell (a closed pipe ends quietly, cancel returns 130 instead of 0, no color codes when stdout is not a terminal, the picker UI drawn on the terminal so only the choice goes to stdout)?"
+        }
+      ]
+    },
+    {
+      "id": "craft-rubric-redesign",
+      "source": "references/visual-craft.md aesthetic rubric C1-C8 (T6.6, T7.3, T8.5 scored by hand); craft lint CR1-CR7 (fix batch 4)",
+      "lang": "en",
+      "area": "ambition",
+      "tags": [
+        "visual"
+      ],
+      "prompt": "This is my CI runner dashboard as it looks today in a 100x30 terminal (current.txt). It works but it looks dull and cluttered. Redesign the main screen and give me the frame you would actually ship, at 100x30.",
+      "fixtures": [
+        {
+          "path": "current.txt",
+          "src": "craft-redesign/current.txt"
+        }
+      ],
+      "judge_context": [
+        "**/*.mock",
+        "**/*.md"
+      ],
+      "assertions": [
+        {
+          "id": "rubric-12",
+          "type": "vision_rubric",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "prefer": "--normal--",
+          "max_frames": 1,
+          "depths": [
+            "caps",
+            "16"
+          ],
+          "min_total": 12,
+          "desc": "the shipped frame, rendered to PNG at its caps depth and at 16 colors, scores >= 12/16 with no 0 on the visual-craft rubric (vision judge)"
+        },
+        {
+          "id": "no-craft-warnings",
+          "type": "mock_craft",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 1,
+          "desc": "render_mockup.py --check reports no unwaived craft CRn warning"
+        },
+        {
+          "id": "mocks-lint-clean",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 1,
+          "desc": "frames pass render_mockup.py --check with 0 errors"
+        },
+        {
+          "id": "size-100x30",
+          "type": "file_regex",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "pattern": "(?m)^#! size: 100x30\\s*$",
+          "mode": "any",
+          "desc": "a frame at the requested 100x30"
+        },
+        {
+          "id": "real-runners",
+          "type": "files_contain",
+          "neutral": true,
+          "glob": "**/*",
+          "strings": [
+            "linux-x64-01",
+            "linux-arm-01",
+            "macos-m3-01",
+            "win-x64-02",
+            "gpu-a100-01",
+            "api#4812",
+            "ios#977",
+            "ml#88"
+          ],
+          "min_distinct": 4,
+          "desc": "the frame uses the real runners and jobs from current.txt"
+        }
+      ]
+    },
+    {
+      "id": "host-verify-tools",
+      "source": "SKILL.md 'Measure the host' + A3 key availability; T7 (test card), T8 iteration (key availability gap)",
+      "lang": "es",
+      "area": "host",
+      "prompt": "Estoy haciendo un plugin para mi gestor de sesiones de terminal: se abre en un panel flotante dentro de la app (como un popup de tmux). En el diseño, el footer usa ctrl+enter para aplicar, shift+tab para volver y alt+flechas para reordenar, y los nombres van en cursiva con colores de 24 bits. Antes de escribir código: ¿cómo me aseguro de que todo eso funciona de verdad dentro del host? Dime qué tengo que hacer yo.",
+      "fixtures": [],
+      "assertions": [
+        {
+          "id": "asks-test-card",
+          "type": "answer_regex",
+          "neutral": false,
+          "pattern": "test_card\\.py",
+          "desc": "asks the user to run the skill's test card inside the host"
+        },
+        {
+          "id": "asks-key-probe",
+          "type": "answer_regex",
+          "neutral": false,
+          "pattern": "key_probe\\.py",
+          "desc": "asks the user to run the skill's key probe inside the host"
+        },
+        {
+          "id": "keys-checked-in-host",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer tell the user to check, inside the host panel itself, which of the footer keys (ctrl+enter, shift+tab, alt+arrows) actually reach the plugin, with a concrete way to do it (a key-probe script, `cat -v`, showkey or similar), rather than only asserting that they work?"
+        },
+        {
+          "id": "render-checked-in-host",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer tell the user to check inside the host whether italic and 24-bit color actually render (e.g. a test card or test pattern and a screenshot to compare against a reference), rather than assuming the host passes them through?"
+        },
+        {
+          "id": "ctrl-enter-fallback",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer warn that ctrl+enter (or alt+arrows) is often indistinguishable from a plain key or taken by the terminal or host, and propose a fallback key?"
+        }
+      ]
+    },
+    {
+      "id": "theme-export-textual",
+      "source": "SKILL.md branch D (pick, contrast_check at both depths, export_theme.py); working rule 'tokens, never raw colors'",
+      "lang": "en",
+      "area": "color",
+      "prompt": "For my Textual log viewer, pick a dark color scheme that stays readable when people run it in a 16-color terminal, and write the theme as Python I can import (theme.py, defining a Textual Theme). Tell me why you chose that scheme.",
+      "fixtures": [],
+      "judge_context": [
+        "theme.py"
+      ],
+      "assertions": [
+        {
+          "id": "theme-parses",
+          "type": "exec",
+          "neutral": true,
+          "cmd": "python3 -c \"import ast; ast.parse(open('theme.py').read())\"",
+          "timeout": 20,
+          "expect_exit": [
+            0
+          ],
+          "desc": "theme.py exists and is valid Python"
+        },
+        {
+          "id": "textual-theme",
+          "type": "file_regex",
+          "neutral": true,
+          "glob": "theme.py",
+          "pattern": "\\bTheme\\s*\\(",
+          "mode": "all",
+          "desc": "theme.py defines a Textual Theme"
+        },
+        {
+          "id": "one-real-scheme-passing",
+          "type": "hex_known",
+          "neutral": true,
+          "sources": [
+            "references/themes/*.json"
+          ],
+          "scope": "files",
+          "files_glob": "theme.py",
+          "min_used": 6,
+          "same_source": true,
+          "contrast": true,
+          "desc": "every hex in theme.py comes from one real scheme variant, and that variant passes contrast_check.py at truecolor and at 16 colors"
+        },
+        {
+          "id": "contrast-ratios",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "\\b\\d{1,2}(?:[.,]\\d{1,2})?\\s*:\\s*1\\b",
+          "min": 1,
+          "desc": "the choice is backed by measured contrast ratios (n:1)"
+        }
+      ]
+    },
+    {
+      "id": "build-textual-from-mock",
+      "source": "SKILL.md branch B (proto-starter frame mode, export_theme, compare.py against the mock)",
+      "lang": "en",
+      "area": "build",
+      "tags": [
+        "textual"
+      ],
+      "prompt": "Build this screen (design/jobs--normal--80x24.mock) in Textual as app.py. Besides running interactively, it must print one frame without a terminal: `uv run --with textual python app.py --frame --cols 80 --rows 24 > frame.ansi` should write exactly that screen as ANSI text. Use the job data shown in the design.",
+      "fixtures": [
+        {
+          "path": "design/jobs--normal--80x24.mock",
+          "src": "build-textual/jobs--normal--80x24.mock"
+        }
+      ],
+      "requires": [
+        {
+          "cmd": "uv run --offline --no-project --with textual python -c 'import textual'",
+          "why": "Textual is not installed (not in the uv cache)"
+        }
+      ],
+      "judge_context": [
+        "app.py"
+      ],
+      "assertions": [
+        {
+          "id": "frame-renders",
+          "type": "exec",
+          "neutral": true,
+          "cmd": "uv run --offline --no-project --with textual python app.py --frame --cols 80 --rows 24 > frame.ansi",
+          "timeout": 180,
+          "expect_exit": [
+            0
+          ],
+          "files": [
+            {
+              "path": "frame.ansi",
+              "regex": "geo-import",
+              "min_lines": 20
+            }
+          ],
+          "desc": "app.py prints one 80x24 frame headless"
+        },
+        {
+          "id": "matches-design",
+          "type": "frame_match",
+          "neutral": true,
+          "mock": "design/jobs--normal--80x24.mock",
+          "frame": "frame.ansi",
+          "max_text_pct": 25,
+          "desc": "compare.py: at most 25% of the text cells differ from the design"
+        },
+        {
+          "id": "is-textual",
+          "type": "file_regex",
+          "neutral": true,
+          "glob": "app.py",
+          "pattern": "from textual|import textual",
+          "mode": "all",
+          "desc": "app.py is a Textual app"
+        },
+        {
+          "id": "colors-match-design",
+          "type": "frame_match",
+          "neutral": false,
+          "mock": "design/jobs--normal--80x24.mock",
+          "frame": "frame.ansi",
+          "max_text_pct": 25,
+          "max_any_pct": 30,
+          "desc": "text and colors: at most 30% of cells differ in any way from the design rendered with its default theme (the skill's theme export)"
+        }
+      ]
+    },
+    {
+      "id": "inline-picker-branch",
+      "source": "layout-archetypes.md archetype J (inline picker: stdout = choice, UI on /dev/tty, no alt screen) + cli-contract.md CC1 + SKILL.md artifacts rule (keep existing inputs)",
+      "lang": "es",
+      "area": "archetypes",
+      "tags": [
+        "cli"
+      ],
+      "prompt": "Quiero un selector tipo fzf para elegir una rama y usarlo así: `git switch \"$(python3 pickbranch.py)\"`. Escríbelo en Python sin dependencias (pickbranch.py); de momento que lea las ramas de branches.txt. Flechas para moverse, Enter elige, Esc o Ctrl-C cancela.",
+      "fixtures": [
+        {
+          "path": "branches.txt",
+          "src": "inline-picker/branches.txt"
+        }
+      ],
+      "claude_tools": [
+        "Bash(bash:*)",
+        "Bash(tmux:*)"
+      ],
+      "judge_context": [
+        "pickbranch.py"
+      ],
+      "assertions": [
+        {
+          "id": "branches-untouched",
+          "type": "fixture_unchanged",
+          "neutral": true,
+          "path": "branches.txt",
+          "desc": "the input file the user named is read and kept, not replaced with sample data"
+        },
+        {
+          "id": "choice-on-stdout-inline",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 pickbranch.py > choice.txt",
+          "size": "80x24",
+          "ready": "feature/csv-export",
+          "actions": [
+            {
+              "keys": "Down"
+            },
+            {
+              "keys": "Enter"
+            }
+          ],
+          "expect_status": [
+            0
+          ],
+          "stty_restored": true,
+          "alt_screen_during": false,
+          "files": [
+            {
+              "path": "choice.txt",
+              "regex": "\\A(main|develop|release/2026\\.10|feature/csv\\-export|feature/dark\\-header|feature/retry\\-backoff|fix/login\\-timeout|fix/null\\-avatar|chore/bump\\-deps|docs/install\\-guide)\\n?\\Z"
+            }
+          ],
+          "desc": "with stdout captured the picker still draws on the terminal, inline (no alternate screen); stdout gets only the branch name",
+          "blocked_by": [
+            "branches-untouched"
+          ]
+        },
+        {
+          "id": "cancel-nonzero",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 pickbranch.py",
+          "size": "80x24",
+          "ready": "feature/csv-export",
+          "actions": [
+            {
+              "keys": "Escape"
+            }
+          ],
+          "expect_status": [
+            1,
+            130
+          ],
+          "stty_restored": true,
+          "desc": "Esc cancels with a non-zero status (130 or 1) and the terminal restored",
+          "blocked_by": [
+            "branches-untouched"
+          ]
+        },
+        {
+          "id": "ctrl-c-130",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 pickbranch.py",
+          "size": "80x24",
+          "ready": "feature/csv-export",
+          "actions": [
+            {
+              "keys": "C-c"
+            }
+          ],
+          "expect_status": [
+            130
+          ],
+          "stty_restored": true,
+          "desc": "Ctrl-C cancels with 130 and the terminal restored",
+          "blocked_by": [
+            "branches-untouched"
+          ]
+        },
+        {
+          "id": "explains-contract",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer explain the output contract: only the chosen branch on stdout, the UI drawn on the terminal (/dev/tty or stderr) so that $(...) captures only the choice, and a non-zero exit on cancel? Any claim it makes about cancelling inside `git switch \"$(...)\"` must be correct: the shell still runs git switch with an empty name unless the call is guarded (for example `b=$(...) && git switch \"$b\"`); an answer that says the bare form is safe on cancel fails."
+        }
+      ]
+    },
+    {
+      "id": "sigterm-restore",
+      "serial": true,
+      "source": "references/lifecycle.md LC9-LC10 (SIGTERM: same cleanup as quit, then 143) and the restore check; gap-gfargo §2.4",
+      "lang": "en",
+      "area": "lifecycle",
+      "prompt": "When `watch.py` gets stopped by `timeout` or by our supervisor, the shell it ran in is left broken: nothing I type is echoed and the screen stays on the app's view. Fix watch.py so that every way it can stop leaves the terminal clean.",
+      "fixtures": [
+        {
+          "path": "watch.py",
+          "src": "sigterm/watch.py"
+        }
+      ],
+      "claude_tools": [
+        "Bash(bash:*)",
+        "Bash(tmux:*)",
+        "Bash(kill:*)",
+        "Bash(timeout:*)"
+      ],
+      "judge_context": [
+        "watch.py"
+      ],
+      "assertions": [
+        {
+          "id": "sigterm-clean-143",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 watch.py",
+          "size": "80x24",
+          "ready": "QUEUEWATCH",
+          "actions": [
+            {
+              "signal": "TERM"
+            }
+          ],
+          "expect_status": [
+            143
+          ],
+          "stty_restored": true,
+          "alt_screen_after": false,
+          "desc": "after kill -TERM: exit 143, stty shows icanon echo isig, alternate screen off"
+        },
+        {
+          "id": "quit-clean",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 watch.py",
+          "size": "80x24",
+          "ready": "QUEUEWATCH",
+          "actions": [
+            {
+              "keys": "q"
+            }
+          ],
+          "expect_status": [
+            0
+          ],
+          "stty_restored": true,
+          "alt_screen_after": false,
+          "desc": "q still quits with 0 and a clean terminal"
+        },
+        {
+          "id": "ctrl-c-clean",
+          "type": "tty_probe",
+          "neutral": true,
+          "cmd": "python3 watch.py",
+          "size": "80x24",
+          "ready": "QUEUEWATCH",
+          "actions": [
+            {
+              "keys": "C-c"
+            }
+          ],
+          "expect_status": [
+            130
+          ],
+          "stty_restored": true,
+          "alt_screen_after": false,
+          "desc": "Ctrl-C exits 130 with a clean terminal"
+        },
+        {
+          "id": "explains-143",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer say that on SIGTERM the app must run the same cleanup as a normal quit and then exit with status 143 (128+15), rather than exiting 0 or only restoring the terminal?"
+        }
+      ]
+    },
+    {
+      "id": "chat-session-design",
+      "source": "gap-gfargo §2.9 chat / agent session archetype (being added to layout-archetypes.md in wave 2)",
+      "lang": "en",
+      "area": "archetypes",
+      "depends_on": "wave2",
+      "prompt": "Design the main screen of my terminal coding assistant: the conversation history with streaming replies, the tool calls it runs, an approval prompt before it edits files, and the input box. Show me mockups at 100x30 and 80x24, including the moment it is waiting for my approval.",
+      "fixtures": [],
+      "judge_context": [
+        "**/*.mock",
+        "**/*.md"
+      ],
+      "assertions": [
+        {
+          "id": "input-below-history",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the design put the input box at the bottom with the conversation history above it, append-only with the newest turn nearest the input?"
+        },
+        {
+          "id": "approval-state",
+          "type": "judge",
+          "neutral": true,
+          "question": "Is there a frame (or an explicit description) of the awaiting-approval state that shows the pending action (e.g. which file will be edited and how), the keys to approve or deny, and that the stream is paused while it waits?"
+        },
+        {
+          "id": "streaming-state",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the design show how a reply looks while it is still streaming (a live tail, a spinner or cursor, a stop/interrupt key), distinct from finished turns?"
+        },
+        {
+          "id": "scrollback-decision",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer decide between inline rendering (finished turns go to the terminal's scrollback) and a full-screen alternate-screen view, and give a reason (scrollback, copy-paste, screen readers)?"
+        },
+        {
+          "id": "frames-lint",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 2,
+          "desc": "frames pass render_mockup.py --check"
+        },
+        {
+          "id": "approval-frame",
+          "type": "file_glob",
+          "neutral": false,
+          "glob": "**/*--*approv*--*.mock",
+          "min": 1,
+          "desc": "a frame named for the approval state"
+        }
+      ]
+    },
+    {
+      "id": "settings-screen",
+      "source": "gap-gfargo §2.8 settings screens: validation timing, required fields, conditional fields, persistence (wave 2)",
+      "lang": "es",
+      "area": "archetypes",
+      "depends_on": "wave2",
+      "prompt": "Diseña la pantalla de ajustes de mi cliente de correo para terminal: unos 12 campos (cuenta, servidor IMAP y SMTP, puertos, usar TLS, usuario, contraseña, firma, intervalo de sincronización…); los campos de login SMTP solo aplican si 'SMTP requiere login' está activado. Necesito saber cuándo validar, cómo marcar los obligatorios y cómo se guardan los cambios. Con mockups.",
+      "fixtures": [],
+      "judge_context": [
+        "**/*.mock",
+        "**/*.md"
+      ],
+      "assertions": [
+        {
+          "id": "validation-timing",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer validate when the user leaves a field and/or on submit, not on every keystroke, and say where the error message appears?"
+        },
+        {
+          "id": "required-marking",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it mark required fields with something other than color alone (a word or a glyph explained once), distinct from how errors are marked?"
+        },
+        {
+          "id": "persistence-model",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it choose an explicit persistence model (apply live, explicit save/cancel with a visible unsaved-changes marker, or editing a config file) and say what Esc does when there are unsaved changes?"
+        },
+        {
+          "id": "conditional-fields",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it say how the SMTP login fields behave when 'SMTP requiere login' is off (hidden or shown disabled) and whether their values are kept?"
+        },
+        {
+          "id": "mocks-lint",
+          "type": "mock_lint",
+          "neutral": false,
+          "glob": "**/*.mock",
+          "min_files": 1,
+          "desc": "frames pass render_mockup.py --check"
+        }
+      ]
+    },
+    {
+      "id": "picker-startup-budget",
+      "source": "gap-gfargo §2.10 startup-time budget (summon-to-first-frame <= 100 ms; Ink cold start) (wave 2)",
+      "lang": "en",
+      "area": "build",
+      "depends_on": "wave2",
+      "prompt": "I'm building an fzf-like snippet picker that people will summon about 50 times a day from a shell keybinding. I'm torn between Ink (my team knows React) and Bubble Tea. Which one, and what should I watch out for?",
+      "fixtures": [],
+      "assertions": [
+        {
+          "id": "startup-budget",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does the answer treat startup time (keypress to first frame) as a key constraint for this tool, with a concrete budget of about 100 ms or less?"
+        },
+        {
+          "id": "ink-cold-start",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it say that Ink (Node + React + Yoga) pays a noticeable cold-start cost, on the order of 100 ms or more, compared with a compiled Go binary?"
+        },
+        {
+          "id": "measure-startup",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it propose measuring startup time on the user's machine (e.g. hyperfine, or timing repeated runs) rather than only asserting it?"
+        },
+        {
+          "id": "inline-shape",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it recommend an inline picker shape (no alternate screen, the choice on stdout, the UI on /dev/tty or stderr) for a summon-and-choose tool?"
+        }
+      ]
+    },
+    {
+      "id": "profile-slow-render",
+      "source": "gap-gfargo §2.5 debugging and profiling recipes per framework (py-spy --idle for Textual) (wave 2)",
+      "lang": "es",
+      "area": "build",
+      "depends_on": "wave2",
+      "prompt": "Mi app en Textual tiene un DataTable con unas 50.000 filas y el scroll va lentísimo. ¿Cómo averiguo qué es lo lento? Dame el procedimiento concreto.",
+      "fixtures": [],
+      "assertions": [
+        {
+          "id": "sampling-profiler",
+          "type": "answer_regex",
+          "neutral": true,
+          "pattern": "(?i)py-spy",
+          "desc": "names a sampling profiler that attaches to the running app"
+        },
+        {
+          "id": "profile-without-breaking-tui",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it explain how to profile the running TUI without breaking its screen, e.g. py-spy attached to the PID from another terminal (with --idle or a note about time spent waiting in the event loop), and logs to a file or `textual console` instead of print to stdout?"
+        },
+        {
+          "id": "likely-causes",
+          "type": "judge",
+          "neutral": true,
+          "question": "Does it name likely causes specific to a 50k-row DataTable (adding rows one at a time, heavy per-cell Rich renderables or styles, no lazy loading or virtualization) and how to confirm each from the profile?"
+        }
+      ]
+    }
+  ]
+}
