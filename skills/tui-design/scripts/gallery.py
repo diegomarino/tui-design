@@ -339,7 +339,8 @@ PAGE = r"""<meta charset="utf-8">
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;padding-inline:16px}
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px 8px;border-bottom:1px solid var(--line)}
-h1{font-size:16px;margin:0 0 8px;font-weight:650}
+.heading{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:8px}
+h1{font-size:16px;margin:0;font-weight:650}
 .bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:flex-end}
 label{display:flex;flex-direction:column;font-size:11px;color:var(--muted);gap:2px;text-transform:uppercase;letter-spacing:.04em}
 select,button{font:inherit;font-size:13px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 8px;min-height:32px}
@@ -351,7 +352,7 @@ main{padding-block:14px 32px}
 .panes.split{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:760px){.panes.split{grid-template-columns:1fr}}
 .pane{min-width:0}
-.pane .sub{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pane .sub{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;align-items:flex-end}
 .stage{background:var(--stage);border:1px solid var(--line);border-radius:10px;padding:14px;overflow:auto;display:flex;justify-content:center}
 .stage svg{display:block;height:auto;flex:none}
 .cap{margin-top:8px;font-size:13px}.cap .t{font-weight:600}.cap .m{color:var(--muted);font-size:12px;margin-top:2px;word-break:break-word}
@@ -359,12 +360,12 @@ main{padding-block:14px 32px}
 .chip.err{color:var(--err)}.chip.warn{color:var(--warn)}.chip.ok{color:var(--ok)}
 .opt-off{color:var(--muted)}
 .count{font-size:12px;color:var(--muted);align-self:center}
-.ex{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.ex{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto;align-items:center;justify-content:flex-end}
 .ex button{min-height:26px;font-size:12px;padding:2px 8px}
 .ex .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 </style>
 <header>
-  <h1 id="ttl"></h1>
+  <div class="heading"><h1 id="ttl"></h1><div class="ex" id="exports-a" role="group" aria-label="Export left frame"></div></div>
   <div class="bar" role="toolbar" aria-label="Frame selectors">
     <label>Design<select id="sel-d"></select></label>
     <label>Variant<select id="sel-v"></select></label>
@@ -381,7 +382,7 @@ main{padding-block:14px 32px}
 <main><div class="panes" id="panes">
   <section class="pane" id="pane-a"><div class="stage" id="stage-a"></div><div class="cap" id="cap-a"></div></section>
   <section class="pane" id="pane-b" hidden>
-    <div class="sub"><label>Variant<select id="sel-v2"></select></label><label>State<select id="sel-s2"></select></label></div>
+    <div class="sub"><label>Variant<select id="sel-v2"></select></label><label>State<select id="sel-s2"></select></label><div class="ex" id="exports-b" role="group" aria-label="Export right frame"></div></div>
     <div class="stage" id="stage-b"></div><div class="cap" id="cap-b"></div></section>
 </div></main>
 <script type="application/json" id="data">__DATA__</script>
@@ -418,6 +419,7 @@ function exportFrame(f,kind){if(kind==="txt")dl(baseName(f)+".txt",TEXT[f.svg]||
 var DIMS=["d","v","s","z","t"], LABEL={d:"Design",v:"Variant",s:"State",z:"Size",t:"Theme"};
 var KEEP={d:16,t:8,z:4,s:2,v:1};           // when snapping, which selections matter most
 var cur=pick(F[0]), split=false, right={v:null,s:null}, scale="fit";
+var preferredSize=cur.z;                   // only an explicit size choice replaces this
 document.getElementById("ttl").textContent=DATA.title;
 function pick(f){return {d:f.d,v:f.v,s:f.s,z:f.z,t:f.t};}
 function matches(f,sel,skip){for(var i=0;i<DIMS.length;i++){var k=DIMS[i];if(k!==skip&&sel[k]!==undefined&&sel[k]!==null&&f[k]!==sel[k])return false;}return true;}
@@ -425,12 +427,18 @@ function exact(sel){for(var i=0;i<F.length;i++)if(matches(F[i],sel))return F[i];
 function snap(sel,dim,val){                 // closest existing frame with sel[dim]=val
   var best=null,bs=-1;
   for(var i=0;i<F.length;i++){var f=F[i];if(f[dim]!==val)continue;if(dim!=="d"&&f.d!==sel.d)continue;
+    if(dim!=="d"&&dim!=="v"&&f.v!==sel.v)continue;
     var sc=0;for(var j=0;j<DIMS.length;j++){var k=DIMS[j];if(k!==dim&&f[k]===sel[k])sc+=KEEP[k];}
     if(sc>bs){bs=sc;best=f;}}
   return best?pick(best):sel;}
-function values(dim,sel){                   // values existing in the current design, in canonical order
-  var seen={};F.forEach(function(f){if(f.d===sel.d||dim==="d")seen[f[dim]]=1;});
+function values(dim,sel){                   // states, sizes and themes stay within the current variant
+  var seen={};F.forEach(function(f){if((f.d===sel.d||dim==="d")&&
+    (dim==="d"||dim==="v"||f.v===sel.v))seen[f[dim]]=1;});
   return ORD[dim].filter(function(v){return seen[v];});}
+function choose(dim,val){
+  var want=Object.assign({},cur,{z:preferredSize}),next=snap(want,dim,val);
+  if(exact(next)){cur=next;if(dim==="z")preferredSize=val;}
+  render();}
 function fill(el,dim,sel){
   var vals=values(dim,sel),probe=Object.assign({},sel);
   el.innerHTML="";
@@ -453,10 +461,12 @@ function show(f,stage,cap,note){
   h+=esc(f.d+" / "+f.v+" / "+f.s+" / "+f.z+" · "+f.t+" · "+c.src)+(note?" · "+esc(note):"")+'</div><div class="m">';
   if("errors" in l){h+=chip(l.errors?"err":"ok",l.errors+" error"+(l.errors===1?"":"s"))+chip(l.warnings?"warn":"ok",l.warnings+" warning"+(l.warnings===1?"":"s"))+chip("",l.info+" info")+" lint (render_mockup --check)";}
   else h+=chip("","ANSI frame")+" no lint";
-  h+='</div><div class="ex"><span class="lbl">Export</span><button type="button" data-x="txt">TXT</button><button type="button" data-x="ansi">ANSI</button>'
+  h+='</div>';cap.innerHTML=h;
+  var ex=document.getElementById(stage.id==="stage-a"?"exports-a":"exports-b");
+  ex.innerHTML='<span class="lbl">Export</span><button type="button" data-x="txt">TXT</button><button type="button" data-x="ansi">ANSI</button>'
     +'<button type="button" data-x="svg">SVG</button><button type="button" data-x="png">PNG</button>'
-    +'<button type="button" data-x="copy-txt">Copy text</button><button type="button" data-x="copy-ansi">Copy ANSI</button></div>';
-  cap.innerHTML=h;cap.__frame=f;}
+    +'<button type="button" data-x="copy-txt">Copy text</button><button type="button" data-x="copy-ansi">Copy ANSI</button>';
+  ex.__frame=f;}
 function render(){
   var a=exact(cur)||F[0];cur=pick(a);
   ["d","v","s","z","t"].forEach(function(k){fill(document.getElementById("sel-"+k),k,cur);});
@@ -465,9 +475,10 @@ function render(){
   document.getElementById("panes").className="panes"+(split?" split":"");
   document.getElementById("btn-split").setAttribute("aria-pressed",split?"true":"false");
   if(split){
-    var vs=values("v",cur),ss=values("s",cur);
+    var vs=values("v",cur);
     if(!right.v||vs.indexOf(right.v)<0)right.v=vs[(vs.indexOf(cur.v)+1)%vs.length];
-    if(!right.s||ss.indexOf(right.s)<0)right.s=cur.s;
+    var ss=values("s",Object.assign({},cur,{v:right.v}));
+    if(!right.s||ss.indexOf(right.s)<0)right.s=ss.indexOf(cur.s)>=0?cur.s:ss[0];
     var want={d:cur.d,v:right.v,s:right.s,z:cur.z,t:cur.t},b=exact(want),note="";
     if(!b){var p=snap(want,"v",right.v);b=exact(p)||a;note="closest match: "+DIMS.filter(function(k){return p[k]!==want[k];}).map(function(k){return LABEL[k].toLowerCase()+" "+p[k];}).join(", ");}
     var s2=document.getElementById("sel-s2"),v2=document.getElementById("sel-v2");
@@ -476,15 +487,15 @@ function render(){
     show(b,document.getElementById("stage-b"),document.getElementById("cap-b"),note);}
   document.getElementById("count").textContent=F.filter(function(f){return f.d===cur.d&&f.t===cur.t;}).length+" frames in "+cur.d;}
 DIMS.forEach(function(k){document.getElementById("sel-"+k).addEventListener("change",function(e){
-  cur=k==="d"?snap(cur,"d",e.target.value):snap(cur,k,e.target.value);render();e.target.blur();});});
+  choose(k,e.target.value);e.target.blur();});});
 document.getElementById("sel-scale").addEventListener("change",function(e){scale=e.target.value;render();});
 document.getElementById("sel-v2").addEventListener("change",function(e){right.v=e.target.value;render();});
 document.getElementById("sel-s2").addEventListener("change",function(e){right.s=e.target.value;render();});
 document.getElementById("btn-split").addEventListener("click",function(){split=!split;render();});
-document.getElementById("panes").addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button[data-x]");if(!b)return;
-  var cap=b.closest(".cap");if(cap&&cap.__frame)exportFrame(cap.__frame,b.getAttribute("data-x"));});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button[data-x]");if(!b)return;
+  var ex=b.closest(".ex");if(ex&&ex.__frame)exportFrame(ex.__frame,b.getAttribute("data-x"));});
 function step(dim,delta){var vs=values(dim,cur),i=vs.indexOf(cur[dim]);if(vs.length<2)return;
-  cur=snap(cur,dim,vs[(i+delta+vs.length)%vs.length]);render();}
+  choose(dim,vs[(i+delta+vs.length)%vs.length]);}
 document.addEventListener("keydown",function(e){
   if(e.altKey||e.ctrlKey||e.metaKey)return;var tg=e.target&&e.target.tagName;if(tg==="INPUT"||tg==="TEXTAREA")return;
   var k=e.key,used=true;

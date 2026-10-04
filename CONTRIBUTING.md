@@ -6,10 +6,11 @@ tested and linted. Docs, evals, tests and tools live outside it and are never in
 
 ## Before a pull request
 
-From the repository root (Python 3.11+, standard library only for the tests; `tmux` for the capture tests):
+From the repository root (Python 3.11+, `jsonschema` for schema validation, NumPy and Pillow for screenshot
+tools; `tmux` for the capture tests):
 
 ```bash
-python3 -m unittest discover -s tests -p 'test_*.py'     # skill scripts, eval harness, docs links; no model calls
+uv run --no-project --with jsonschema --with 'numpy>=1.26' --with 'pillow>=10.1' python -m unittest discover -s tests -p 'test_*.py'  # no model calls
 bash tests/test_capture.sh                               # live capture through a private tmux server
 python3 tools/check_links.py                             # relative links; nothing in the skill links outside it
 python3 tools/gen_toc.py                                 # after editing a reference: its Sections line ranges
@@ -17,6 +18,13 @@ bash tools/check_public.sh                               # pre-publish check: mu
 python3 evals/run_behavior_evals.py --validate-cases     # if you touched evals/
 python3 skills/tui-design/scripts/render_mockup.py path/to/frame.mock --check   # every .mock you touched: 0 errors
 ```
+
+Run these checks from a host shell. A restricted agent sandbox can prevent macOS `sandbox-exec` from
+starting, block private tmux probes, or change font rendering and report the screenshot fixture as stale.
+Agents should request host execution for these checks, keeping the harness's own confinement enabled.
+The `uv` command supplies the Python dependencies in an isolated environment; the same unittest command
+also works with `python3` when that interpreter already has those dependencies installed. The optional gallery
+browser tests require an installed Playwright with a launchable browser and otherwise report a skip.
 
 If a change affects what the docs show, regenerate the images with `uv run tools/make_screenshots.py` and look at
 them before committing.

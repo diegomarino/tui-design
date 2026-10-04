@@ -28,11 +28,20 @@ const {chromium}=require("playwright");const fs=require("fs");
  o.cap_theme=await p.textContent("#cap-a .m");
  o.state0=await val("#sel-s");await p.keyboard.press("ArrowDown");o.state1=await val("#sel-s");
  o.variant0=await val("#sel-v");await p.keyboard.press("ArrowRight");o.variant1=await val("#sel-v");
+ o.sizes=[];
+ await p.selectOption("#sel-v","alpha");await p.selectOption("#sel-s","normal");await p.selectOption("#sel-z","30x4");
+ for(const key of ["ArrowRight","ArrowRight","ArrowLeft","ArrowLeft"]){await p.keyboard.press(key);o.sizes.push(await val("#sel-z"));}
+ await p.selectOption("#sel-s","error");o.state_size=await val("#sel-z");
+ await p.selectOption("#sel-s","normal");o.restored_state_size=await val("#sel-z");
+ await p.selectOption("#sel-v","gamma");await p.keyboard.press("ArrowDown");await p.keyboard.press("ArrowUp");
+ o.state_variant=await val("#sel-v");await p.selectOption("#sel-v","alpha");await p.selectOption("#sel-z","20x3");
+ o.explicit_size=await val("#sel-z");
+ await p.selectOption("#sel-v","beta");
  await p.keyboard.press("s");o.split_hidden=await p.$eval("#pane-b",e=>e.hidden);
  o.split_pressed=await p.getAttribute("#btn-split","aria-pressed");
  o.downloads=[];
  for(const kind of ["txt","png"]){
-   const [d]=await Promise.all([p.waitForEvent("download",{timeout:10000}),p.click(`#cap-a button[data-x="${kind}"]`)]);
+   const [d]=await Promise.all([p.waitForEvent("download",{timeout:10000}),p.click(`#exports-a button[data-x="${kind}"]`)]);
    const path=dir+"/"+d.suggestedFilename();await d.saveAs(path);
    o.downloads.push({name:d.suggestedFilename(),path});}
  o.url_after=p.url();o.pages=c.pages().length;
@@ -58,13 +67,32 @@ def python_scenario(url: str, out: str) -> dict:
         o["variant0"] = val("#sel-v")
         p.keyboard.press("ArrowRight")
         o["variant1"] = val("#sel-v")
+        o["sizes"] = []
+        p.select_option("#sel-v", "alpha")
+        p.select_option("#sel-s", "normal")
+        p.select_option("#sel-z", "30x4")
+        for key in ("ArrowRight", "ArrowRight", "ArrowLeft", "ArrowLeft"):
+            p.keyboard.press(key)
+            o["sizes"].append(val("#sel-z"))
+        p.select_option("#sel-s", "error")
+        o["state_size"] = val("#sel-z")
+        p.select_option("#sel-s", "normal")
+        o["restored_state_size"] = val("#sel-z")
+        p.select_option("#sel-v", "gamma")
+        p.keyboard.press("ArrowDown")
+        p.keyboard.press("ArrowUp")
+        o["state_variant"] = val("#sel-v")
+        p.select_option("#sel-v", "alpha")
+        p.select_option("#sel-z", "20x3")
+        o["explicit_size"] = val("#sel-z")
+        p.select_option("#sel-v", "beta")
         p.keyboard.press("s")
         o["split_hidden"] = p.eval_on_selector("#pane-b", "e => e.hidden")
         o["split_pressed"] = p.get_attribute("#btn-split", "aria-pressed")
         o["downloads"] = []
         for kind in ("txt", "png"):
             with p.expect_download(timeout=10000) as info:
-                p.click(f'#cap-a button[data-x="{kind}"]')
+                p.click(f'#exports-a button[data-x="{kind}"]')
             d = info.value
             path = str(Path(out) / d.suggested_filename)
             d.save_as(path)
@@ -88,6 +116,9 @@ class GalleryBrowserTests(unittest.TestCase):
         (d / "alpha--error--20x3.mock").write_text(MOCK.format("A", "error"))
         (d / "beta--normal--20x3.mock").write_text(MOCK.format("B", "normal"))
         (d / "beta--error--20x3.mock").write_text(MOCK.format("B", "error"))
+        for variant in ("alpha", "beta"):
+            (d / f"{variant}--normal--30x4.mock").write_text(MOCK.format(variant, "normal").replace("20x3", "30x4"))
+        (d / "gamma--normal--20x3.mock").write_text(MOCK.format("G", "normal"))
         page = cls.tmp / "gallery.html"
         r = subprocess.run([sys.executable, str(SCRIPTS / "gallery.py"), str(d), "--themes", THEMES, "-o", str(page)],
                            capture_output=True, text=True)
@@ -110,6 +141,19 @@ class GalleryBrowserTests(unittest.TestCase):
         self.assertNotEqual(self.obs["state0"], self.obs["state1"])
         self.assertEqual({self.obs["state0"], self.obs["state1"]}, {"normal", "error"})
         self.assertEqual((self.obs["variant0"], self.obs["variant1"]), ("alpha", "beta"))
+
+    def test_state_arrows_do_not_switch_variant(self):
+        self.assertEqual(self.obs["state_variant"], "gamma")
+
+    def test_size_survives_variants_without_the_selected_size(self):
+        self.assertEqual(self.obs["sizes"], ["30x4", "20x3", "30x4", "30x4"])
+
+    def test_size_survives_states_without_the_selected_size(self):
+        self.assertEqual(self.obs["state_size"], "20x3")
+        self.assertEqual(self.obs["restored_state_size"], "30x4")
+
+    def test_explicit_size_replaces_the_remembered_preference(self):
+        self.assertEqual(self.obs["explicit_size"], "20x3")
 
     def test_s_toggles_side_by_side(self):
         self.assertFalse(self.obs["split_hidden"])

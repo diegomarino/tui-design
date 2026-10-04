@@ -31,8 +31,11 @@ python3 skills/tui-design/scripts/gallery.py design/ proto/ --themes all --title
 | Side by side | `s` |
 | Scale: fit to the window or 1x | `f` (the Scale selector also offers 1.5x and 2x) |
 
-A selector value that exists in the design but not with your other choices is marked with a dot; choosing it snaps
-the other selectors to the closest frame that exists, so every selection shows a real frame. Under each frame the
+State, size and theme options belong to the current variant: changing a state never switches variants.
+A selector value that exists in the variant but not with your other choices is marked with a dot; choosing it snaps
+the other selectors to the closest frame that exists, so every selection shows a real frame. The chosen size is
+remembered: if a variant or state needs a different size, the chosen size returns as soon as it is available again.
+Choosing a size explicitly (with the selector or `z`) replaces that preference. Under each frame the
 caption gives its title, source file and lint summary (the same linter as `render_mockup.py --check`).
 
 ## Side by side
@@ -44,7 +47,8 @@ pane has its own variant and state selectors: compare two concepts, or one conce
 
 ## Export
 
-Each frame has **TXT**, **ANSI**, **SVG** and **PNG** buttons (the file is named
+The toolbar at the top right of the header exports the current frame (the left frame in side-by-side mode).
+The right pane has its own export toolbar next to its selectors. Each toolbar has **TXT**, **ANSI**, **SVG** and **PNG** buttons (the file is named
 `<design>--<variant>--<state>--<size>--<theme>`), plus **Copy text** and **Copy ANSI**. ANSI files carry the
 frame's escape sequences in the chosen theme, so `cat frame.ansi` shows it in a terminal.
 
