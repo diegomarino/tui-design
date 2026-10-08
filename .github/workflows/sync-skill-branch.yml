@@ -1,0 +1,28 @@
+name: Publish skill payload
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - skills/tui-design/**
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-skill-payload
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+      - name: Split installable skill
+        run: git subtree split --prefix=skills/tui-design --branch=skill/tui-design
+      - name: Push skill payload branch
+        run: git push origin skill/tui-design

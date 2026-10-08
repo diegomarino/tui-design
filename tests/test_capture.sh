@@ -76,7 +76,24 @@ fi
 "$CAP" -s bad -- true >/dev/null 2>&1; [ $? = 2 ]; ok $? "bad size exits 2"
 "$CAP" --help | grep -q Examples; ok $? "--help has examples"
 
-# 5. cleanup: no sockets or servers of ours left behind
+# 5. fresh sizes: each restart must terminate the preceding private session
+cat > "$TMP/fresh-app.sh" <<'SH'
+#!/bin/sh
+pid_file=$1
+if [ -f "$pid_file" ] && kill -0 "$(cat "$pid_file")" 2>/dev/null; then
+  printf '\033[H already-running\n'
+  exit 7
+fi
+printf '%s\n' "$$" > "$pid_file"
+trap 'rm -f "$pid_file"; exit 0' EXIT HUP INT TERM
+while :; do printf '\033[H running\n'; sleep 0.1; done
+SH
+chmod +x "$TMP/fresh-app.sh"
+"$CAP" -f -s 20x3 -s 21x3 -w 0.5 -o "$TMP/f" -- "$TMP/fresh-app.sh" "$TMP/fresh.pid" >/dev/null
+grep -q 'running' "$TMP/f/21x3.txt" && ! grep -q 'already-running' "$TMP/f/21x3.txt"
+ok $? "fresh sizes stop the prior session before restart"
+
+# 6. cleanup: no sockets or servers of ours left behind
 sleep 0.3
 after=$(ls "${TMUX_TMPDIR:-/tmp}"/tmux-"$(id -u)" 2>/dev/null | grep -c '^tui-capture-')
 [ "$after" = "$before" ]; ok $? "no tui-capture sockets left"
