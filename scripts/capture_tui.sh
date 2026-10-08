@@ -358,6 +358,7 @@ N=${#SIZES[@]}
 i=0
 for s in "${SIZES[@]}"; do
   if [ "$i" -eq 0 ] || [ "$FRESH" = 1 ]; then
+    [ "$i" -eq 0 ] || T kill-session -t "$SESS" || die "kill-session failed for $SESS"
     start_session "$s"
     wait_stable
     send_keys
